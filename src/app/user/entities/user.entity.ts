@@ -8,13 +8,19 @@ export class User {
     id: string;
 
     @Column()
-    firstName: string;
-
-    @Column()
-    lastName: string;
+    name: string;
 
     @Column()
     cpf: string;
+
+    @Column()
+    idProf: string;
+
+    @Column()
+    role: string;
+
+    @Column()
+    active: Date;
 
     @Column()
     birthday: Date;

@@ -17,6 +17,9 @@ export class Address {
     cep: number;
 
     @Column()
+    num: number;
+
+    @Column()
     state: string;
 
     @OneToOne(() => User, (user) => user.address)

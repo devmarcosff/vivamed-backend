@@ -27,8 +27,10 @@ export class OrderService {
     const product = await this.productRepository.findOne({ where: { id: createOrderDto.productId }, relations: { stocks: true } })
     const user: User = {
       id: currentUser.id,
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
+      name: currentUser.name,
+      active: new Date,
+      idProf: currentUser.idProf,
+      role: currentUser.role,
       cpf: currentUser.cpf,
       birthday: new Date(currentUser.birthday),
       username: currentUser.username,

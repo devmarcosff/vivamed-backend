@@ -10,6 +10,9 @@ export class CreateAddressDto {
     @IsNumber()
     cep: number;
 
+    @IsNumber()
+    num: number;
+
     @IsString()
     ubs: string;
 

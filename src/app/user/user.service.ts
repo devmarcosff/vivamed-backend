@@ -23,10 +23,12 @@ export class UserService {
     const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
     const novoUser = {
-      firstName: createUserDto.firstName,
-      lastName: createUserDto.lastName,
+      name: createUserDto.name,
       cpf: createUserDto.cpf,
       birthday: createUserDto.birthday,
+      active: new Date,
+      role: createUserDto.role,
+      idProf: createUserDto.idProf,
       username: createUserDto.username,
       password: hash,
     } as User

@@ -4,18 +4,23 @@ import { Address } from "src/app/address/entities/address.entity";
 export class CreateUserDto {
     @IsString()
     @IsNotEmpty({ message: 'Campo obrigatório' })
-    firstName: string;
-
-    @IsString()
-    @IsNotEmpty({ message: 'Campo obrigatório' })
-    lastName: string;
+    name: string;
 
     @IsString()
     @IsNotEmpty({ message: 'Campo obrigatório' })
     @MaxLength(11, { message: 'O cpf deve conter no mínimo 11 digitos' })
     cpf: string;
 
+    @IsString()
+    @IsNotEmpty({ message: 'Campo obrigatório' })
+    idProf: string;
+
+    @IsString()
+    @IsNotEmpty({ message: 'Campo obrigatório' })
+    role: string;
+
     @IsDate()
+    @IsNotEmpty({ message: 'Campo obrigatório' })
     birthday: Date;
 
     @IsString()

@@ -22,7 +22,7 @@ export class AddressService {
     const bdUser = await this.userRepository.findOne({
       relations: { address: true },
       where: {
-        id: userId
+        cpf: userId
       }
     })
     if (!bdUser) throw new NotFoundException(`O usuário com o cpf ${userId} não foi identificado`)
@@ -40,17 +40,17 @@ export class AddressService {
     return newAddress;
   }
 
-  async createAddressCidadao({ userId, cep, city, state, street }: CreateAddressDto) {
+  async createAddressCidadao({ userId, cep, city, state, street, num }: CreateAddressDto) {
     const bdCidadao = await this.cidadaoRepository.findOne({
       relations: { address: true },
       where: {
-        id: userId
+        prontuario: userId
       }
     })
     if (!bdCidadao) throw new NotFoundException(`O usuário com o cpf ${userId} não identificado`)
     if (bdCidadao.address) throw new NotFoundException('Já existe um endereço cadastrado para este usuário.')
 
-    const newAddress = await this.addressRepository.create({ cep, city, state, street });
+    const newAddress = await this.addressRepository.create({ cep, city, state, street, num });
     newAddress.cidadao = bdCidadao;
     bdCidadao.address = newAddress;
 
@@ -64,11 +64,6 @@ export class AddressService {
 
   async findAllAddress() {
     const bdAddress = await this.addressRepository.find();
-
-    // return bdAddress.map(address => {
-    //   const { id, ...result } = address;
-    //   return result
-    // })
 
     return bdAddress;
   }
