@@ -47,7 +47,7 @@ export class CidadaoService {
   }
 
   async findByProntuario(prontuario: any) {
-    const cidadoes = await this.cidadaoRepository.findOne({ where: { prontuario }, relations: { consultas: true } });
+    const cidadoes = await this.cidadaoRepository.findOne({ where: { id: prontuario }, relations: { consultas: true } });
 
     if (!cidadoes) throw new NotFoundException(`Prontuário ${prontuario} não encontrado.`)
 

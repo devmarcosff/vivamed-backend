@@ -42,7 +42,7 @@ export class ConsultaService {
   }
 
   async findOne(id: string) {
-    const consulta = await this.consultaRepository.findOne({ where: { id: id } })
+    const consulta = await this.consultaRepository.findOne({ where: { id: id }, relations: { medicamentos: true } })
     if (!consulta) throw new NotFoundException(`Consulta não encontrada.`)
     return consulta;
   }

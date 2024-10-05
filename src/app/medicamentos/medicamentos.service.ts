@@ -20,9 +20,9 @@ export class MedicamentosService {
 
   async create(createMedicamentoDto: CreateMedicamentoDto) {
 
-    const prontuario = await this.consultaRepository.findOne({ where: { prontuario: createMedicamentoDto.cidadao } });
+    const id = await this.consultaRepository.findOne({ where: { id: createMedicamentoDto.cidadao } });
 
-    if (!prontuario) {
+    if (!id) {
       throw new Error('Consulta não indentificada.');
     }
 
@@ -30,7 +30,7 @@ export class MedicamentosService {
       prescricao: createMedicamentoDto.prescricao,
       cidadao: createMedicamentoDto.cidadao,
       quantidade: createMedicamentoDto.quantidade,
-      consultas: prontuario
+      consultas: id
     })
 
     return "Medicamento adicionado com sucesso.";

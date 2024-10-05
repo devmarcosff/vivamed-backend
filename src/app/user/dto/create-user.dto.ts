@@ -33,5 +33,5 @@ export class CreateUserDto {
     password: string;
 
     @IsString()
-    address: Address
+    address: Address;
 }
