@@ -14,6 +14,9 @@ export class Medicamento {
     quantidade: number;
 
     @Column()
+    use: string;
+
+    @Column()
     cidadao: string;
 
     @ManyToOne(() => Consulta, consulta => consulta.medicamentos)

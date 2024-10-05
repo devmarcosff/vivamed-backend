@@ -25,6 +25,7 @@ export class CidadaoService {
     const novoCidadao = {
       prontuario: createCidadaoDto.prontuario,
       name: createCidadaoDto.name,
+      frequencia: createCidadaoDto.frequencia,
       cpf: createCidadaoDto.cpf,
       birthday: createCidadaoDto.birthday,
       caps: createCidadaoDto.caps,

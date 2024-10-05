@@ -11,6 +11,10 @@ export class CreateCidadaoDto {
 
     @IsString()
     // @IsNotEmpty({ message: 'Campo obrigatório' })
+    frequencia: string;
+
+    @IsString()
+    // @IsNotEmpty({ message: 'Campo obrigatório' })
     cpf: string;
 
     @IsDate()

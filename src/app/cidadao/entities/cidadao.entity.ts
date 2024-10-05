@@ -14,6 +14,9 @@ export class Cidadao {
     name: string;
 
     @Column()
+    frequencia: string;
+
+    @Column()
     cpf: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

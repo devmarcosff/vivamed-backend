@@ -8,6 +8,9 @@ export class CreateMedicamentoDto {
     quantidade: number;
 
     @IsString()
+    use: string;
+
+    @IsString()
     cidadao: string;
 
     @IsString()

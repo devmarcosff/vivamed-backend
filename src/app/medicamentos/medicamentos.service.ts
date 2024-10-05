@@ -29,6 +29,7 @@ export class MedicamentosService {
     await this.medicamentoRepository.save({
       prescricao: createMedicamentoDto.prescricao,
       cidadao: createMedicamentoDto.cidadao,
+      use: createMedicamentoDto.use,
       quantidade: createMedicamentoDto.quantidade,
       consultas: id
     })
