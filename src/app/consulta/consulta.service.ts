@@ -23,7 +23,7 @@ export class ConsultaService {
       throw new Error('Paciente não encontrado');
     }
 
-    await this.consultaRepository.save({
+    const createConsulta = await this.consultaRepository.save({
       createAt: new Date(),
       descricao: createConsultaDto.descricao,
       prontuario: createConsultaDto.prontuario,
@@ -33,7 +33,7 @@ export class ConsultaService {
       cidadao: prontuario
     })
 
-    return 'Consulta cadastrada com sucesso.';
+    return createConsulta.id;
   }
 
   async findAll() {
