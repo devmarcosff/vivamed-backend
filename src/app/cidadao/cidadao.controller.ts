@@ -3,6 +3,7 @@ import { CidadaoService } from './cidadao.service';
 import { CreateCidadaoDto } from './dto/create-cidadao.dto';
 import { UpdateCidadaoDto } from './dto/update-cidadao.dto';
 
+// @UseGuards(AuthGuard)
 @Controller('cidadao')
 export class CidadaoController {
   constructor(private readonly cidadaoService: CidadaoService) { }

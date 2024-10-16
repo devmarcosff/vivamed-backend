@@ -23,11 +23,32 @@ export class CidadaoService {
     const hash = await bcrypt.hash(createCidadaoDto.password, saltOrRounds);
 
     const novoCidadao = {
+      createAt: new Date(),
+      nome: createCidadaoDto.nome,
+      nascimento: createCidadaoDto.nascimento,
+      mae: createCidadaoDto.mae,
+      pai: createCidadaoDto.pai,
       prontuario: createCidadaoDto.prontuario,
-      name: createCidadaoDto.name,
-      frequencia: createCidadaoDto.frequencia,
       cpf: createCidadaoDto.cpf,
-      birthday: createCidadaoDto.birthday,
+      inicioTratamento: createCidadaoDto.inicioTratamento,
+      escolaridade: createCidadaoDto.escolaridade,
+      conjuge: createCidadaoDto.conjuge,
+      cns: createCidadaoDto.cns,
+      telContato: createCidadaoDto.telContato,
+      cor: createCidadaoDto.cor,
+      genero: createCidadaoDto.genero,
+      motivoAcolhimento: createCidadaoDto.motivoAcolhimento,
+      servicoEncaminhado: createCidadaoDto.servicoEncaminhado,
+      drogas: createCidadaoDto.drogas,
+      doenca: createCidadaoDto.doenca,
+      usaMedicacao: createCidadaoDto.usaMedicacao,
+      alergiaMedicamento: createCidadaoDto.alergiaMedicamento,
+      cid: createCidadaoDto.cid,
+      familiaVuneravel: createCidadaoDto.familiaVuneravel,
+      beneficioSocial: createCidadaoDto.beneficioSocial,
+      condutaImediata: createCidadaoDto.condutaImediata,
+      tecResponsavel: createCidadaoDto.tecResponsavel,
+      frequencia: createCidadaoDto.frequencia,
       caps: createCidadaoDto.caps,
       password: hash
     } as Cidadao
@@ -35,7 +56,7 @@ export class CidadaoService {
     await this.cidadaoRepository.save(novoCidadao);
 
     novoCidadao.password = undefined;
-    return 'Usuário cadastrado com sucesso.';
+    return 'Usuário cadastrado com sucesso.'
   }
 
   async findAll() {

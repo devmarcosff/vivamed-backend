@@ -27,7 +27,7 @@ export class ConsultaService {
       createAt: new Date(),
       descricao: createConsultaDto.descricao,
       prontuario: createConsultaDto.prontuario,
-      paciente: `${prontuario.name}`,
+      paciente: `${prontuario.nome}`,
       respTec: createConsultaDto.respTec,
       role: createConsultaDto.role,
       cidadao: prontuario
