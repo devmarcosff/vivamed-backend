@@ -16,8 +16,10 @@ export class CidadaoService {
   async create(createCidadaoDto: CreateCidadaoDto) {
     const isCidadaoCpf = await this.cidadaoRepository.existsBy({ cpf: createCidadaoDto.cpf })
     const isCidadaoProntuario = await this.cidadaoRepository.existsBy({ prontuario: createCidadaoDto.prontuario })
-    if (!!isCidadaoCpf) return 'Cidadão já está cadastrado.';
-    if (!!isCidadaoProntuario) return 'Cidadão já está cadastrado.';
+    if (!!isCidadaoCpf) throw new NotFoundException(`Cidadão já está cadastrado.`)
+    if (!!isCidadaoProntuario) throw new NotFoundException(`Cidadão já está cadastrado.`)
+    // if (!!isCidadaoCpf) return 'Cidadão já está cadastrado.';
+    // if (!!isCidadaoProntuario) return 'Cidadão já está cadastrado.';
 
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(createCidadaoDto.password, saltOrRounds);
