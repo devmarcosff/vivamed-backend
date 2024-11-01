@@ -16,8 +16,8 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     let eCpf = await this.userRepository.existsBy({ cpf: createUserDto.cpf });
     let eUsername = await this.userRepository.existsBy({ username: createUserDto.username });
-    if (eCpf) return 'CPF já está em uso.';
-    if (eUsername) return 'Nome de usuário já cadastrado, escolha um nome de usuário diferente.';
+    if (eCpf) throw new NotFoundException('CPF já está em uso.')
+    if (eUsername) throw new NotFoundException('Nome de usuário já cadastrado, escolha um nome de usuário diferente.')
 
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
