@@ -57,12 +57,20 @@ export class UserService {
     return result;
   }
 
-  async update(cpf: string, updateUserDto: UpdateUserDto) {
-    const eUserByCpf = await this.userRepository.findOne({ where: { cpf } });
-
-    if (!eUserByCpf) throw new NotFoundException(`O usuário com o cpf ${cpf} não foi identificado`)
-
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const eUserByCpf = await this.userRepository.findOne({ where: { id } });
+    if (!eUserByCpf) throw new NotFoundException(`O usuário com o id ${id} não foi identificado`)
     this.userRepository.update(eUserByCpf.id, updateUserDto);
+
+    return `Usuário atualizado com sucesso`
+  }
+
+  async updateActive(username: string) {
+    const eUserById = await this.userRepository.findOne({ where: { username } });
+    if (!eUserById) throw new NotFoundException(`O usuário ${username} não foi identificado`)
+    this.userRepository.update(eUserById.id, {
+      active: new Date
+    });
 
     return `Usuário atualizado com sucesso`
   }

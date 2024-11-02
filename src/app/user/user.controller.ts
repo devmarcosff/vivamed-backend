@@ -22,7 +22,7 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    if (!createUserDto.username || !createUserDto.password) throw new BadRequestException('Os campos usuario e senha são obrigatórios.');
+    if (!createUserDto.username || !createUserDto.password) throw new BadRequestException('Usuário ou senha incorreto');
     return this.userService.create(createUserDto);
   }
 
@@ -30,6 +30,11 @@ export class UserController {
   @Patch(':cpf')
   update(@Param('cpf') cpf: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(cpf, updateUserDto);
+  }
+
+  @Patch('active/:username')
+  updateActive(@Param('username') username: string) {
+    return this.userService.updateActive(username);
   }
 
   @UseGuards(AuthGuard)
