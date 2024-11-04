@@ -1,11 +1,12 @@
 import { Address } from "src/app/address/entities/address.entity";
+import { AgendarConsulta } from "src/app/agendar-consulta/entities/agendar-consulta.entity";
 import { Consulta } from "src/app/consulta/entities/consulta.entity";
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Cidadao {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id: any;
 
     @Column()
     createAt: Date;
@@ -96,4 +97,7 @@ export class Cidadao {
 
     @OneToMany(() => Consulta, consulta => consulta.cidadao)
     consultas: Consulta[];
+
+    @OneToMany(() => AgendarConsulta, agendaConsulta => agendaConsulta.cidadao)
+    agendaConsultas: AgendarConsulta[];
 }

@@ -20,7 +20,7 @@ export class CidadaoController {
 
   @Get(':prontuario')
   findByProntuario(@Param('prontuario') prontuario: string) {
-    return this.cidadaoService.findByProntuario(+prontuario);
+    return this.cidadaoService.findByProntuario(prontuario);
   }
 
   @Patch(':id')

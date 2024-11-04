@@ -16,12 +16,8 @@ export class ConsultaService {
   ) { }
 
   async create(createConsultaDto: CreateConsultaDto) {
-
     const prontuario = await this.cidadaoRepository.findOne({ where: { prontuario: createConsultaDto.prontuario } });
-
-    if (!prontuario) {
-      throw new Error('Paciente não encontrado');
-    }
+    if (!prontuario) throw new NotFoundException('Paciente não encontrado');
 
     const createConsulta = await this.consultaRepository.save({
       createAt: new Date(),

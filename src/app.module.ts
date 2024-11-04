@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AddressModule } from './app/address/address.module';
+import { AgendarConsultaModule } from './app/agendar-consulta/agendar-consulta.module';
 import { AuthCidadaoModule } from './app/auth-cidadao/auth-cidadao.module';
 import { AuthModule } from './app/auth/auth.module';
 import { CidadaoModule } from './app/cidadao/cidadao.module';
@@ -55,7 +56,8 @@ import { UserModule } from './app/user/user.module';
     OrderItemsModule,
     CidadaoModule,
     ConsultaModule,
-    MedicamentosModule
+    MedicamentosModule,
+    AgendarConsultaModule
   ],
   controllers: [AppController],
   providers: [AppService],
