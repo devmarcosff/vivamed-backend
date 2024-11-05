@@ -21,7 +21,7 @@ export class AgendarConsultaService {
   async create(createAgendarConsultaDto: CreateAgendarConsultaDto) {
     const prontuario = await this.cidadaoRepository.findOne({ where: { prontuario: createAgendarConsultaDto.prontuario }, relations: { agendaConsultas: true } });
     const paciente = await this.cidadaoRepository.findOne({ where: { prontuario: createAgendarConsultaDto.prontuario } });
-    const tecResponsavel = await this.userRepository.findOne({ where: { id: createAgendarConsultaDto.tecResponsavel } });
+    const tecResponsavel = await this.userRepository.findOne({ where: { id: createAgendarConsultaDto.idTecResponsavel } });
     const ishoraConsulta = await this.angedarConsultaRepository.findOne({ where: { horaconsulta: createAgendarConsultaDto.horaconsulta } });
     const isDataConsulta = await this.angedarConsultaRepository.findOne({ where: { dataconsulta: createAgendarConsultaDto.dataconsulta } });
     if (!prontuario) throw new NotFoundException('Paciente não encontrado');
@@ -35,7 +35,8 @@ export class AgendarConsultaService {
       dataconsulta: createAgendarConsultaDto.dataconsulta,
       horaconsulta: createAgendarConsultaDto.horaconsulta,
       recorrente: createAgendarConsultaDto.recorrente,
-      tecResponsavel: createAgendarConsultaDto.tecResponsavel,
+      tecResponsavel: tecResponsavel.name,
+      idTecResponsavel: createAgendarConsultaDto.idTecResponsavel,
       cidadao: prontuario
     } as AgendarConsulta
 
@@ -63,7 +64,16 @@ export class AgendarConsultaService {
     return `This action updates a #${id} agendarConsulta`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} agendarConsulta`;
+  // remove(id: number) {
+  //   return `This action removes a #${id} agendarConsulta`;
+  // }
+  async remove(id: string) {
+    const userById = await this.angedarConsultaRepository.findOne({ where: { id } });
+
+    if (!userById) throw new NotFoundException(`O usuário com o id ${id} não foi identificado`)
+
+    await this.angedarConsultaRepository.delete({ id });
+
+    return `Agendamento da consulta deletado.`;
   }
 }

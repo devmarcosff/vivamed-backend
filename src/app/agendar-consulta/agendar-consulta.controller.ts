@@ -29,6 +29,6 @@ export class AgendarConsultaController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.agendarConsultaService.remove(+id);
+    return this.agendarConsultaService.remove(id);
   }
 }

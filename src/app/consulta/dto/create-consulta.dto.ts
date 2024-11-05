@@ -8,7 +8,10 @@ export class CreateConsultaDto {
     descricao: string;
 
     @IsString()
-    respTec: string;
+    respTec?: string;
+
+    @IsString()
+    idRespTec: string;
 
     @IsString()
     role: string;

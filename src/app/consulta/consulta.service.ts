@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cidadao } from '../cidadao/entities/cidadao.entity';
+import { User } from '../user/entities/user.entity';
 import { CreateConsultaDto } from './dto/create-consulta.dto';
 import { UpdateConsultaDto } from './dto/update-consulta.dto';
 import { Consulta } from './entities/consulta.entity';
@@ -12,11 +13,15 @@ export class ConsultaService {
     @InjectRepository(Consulta)
     private consultaRepository: Repository<Consulta>,
     @InjectRepository(Cidadao)
-    private cidadaoRepository: Repository<Cidadao>
+    private cidadaoRepository: Repository<Cidadao>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
   ) { }
 
   async create(createConsultaDto: CreateConsultaDto) {
     const prontuario = await this.cidadaoRepository.findOne({ where: { prontuario: createConsultaDto.prontuario } });
+    const idRespTec = await this.consultaRepository.findOne({ where: { respTec: createConsultaDto.idRespTec } });
+    const tecResponsavel = await this.userRepository.findOne({ where: { id: createConsultaDto.idRespTec } });
     if (!prontuario) throw new NotFoundException('Paciente não encontrado');
 
     const createConsulta = await this.consultaRepository.save({
@@ -24,7 +29,8 @@ export class ConsultaService {
       descricao: createConsultaDto.descricao,
       prontuario: createConsultaDto.prontuario,
       paciente: `${prontuario.nome}`,
-      respTec: createConsultaDto.respTec,
+      respTec: tecResponsavel.name,
+      idRespTec: createConsultaDto.idRespTec,
       role: createConsultaDto.role,
       cidadao: prontuario
     })

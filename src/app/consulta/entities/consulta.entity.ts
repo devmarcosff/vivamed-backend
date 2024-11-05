@@ -8,7 +8,10 @@ export class Consulta {
     id: string;
 
     @Column()
-    respTec: string;
+    respTec?: string;
+
+    @Column({ nullable: true })
+    idRespTec: string;
 
     @Column()
     role: string;
