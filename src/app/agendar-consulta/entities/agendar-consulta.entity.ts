@@ -21,6 +21,12 @@ export class AgendarConsulta {
     @Column()
     prontuario?: string;
 
+    @Column({ nullable: true })
+    paciente?: string;
+
+    @Column({ nullable: true })
+    tecResponsavel?: string;
+
     @ManyToOne(() => Cidadao, cidadao => cidadao.agendaConsultas)
     cidadao: Cidadao;
 }

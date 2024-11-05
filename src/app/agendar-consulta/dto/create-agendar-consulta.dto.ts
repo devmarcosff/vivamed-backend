@@ -7,6 +7,14 @@ export class CreateAgendarConsultaDto {
 
     @IsString()
     @IsNotEmpty({ message: 'Campo obrigatório' })
+    paciente?: string;
+
+    @IsString()
+    @IsNotEmpty({ message: 'Campo obrigatório' })
+    tecResponsavel?: string;
+
+    @IsString()
+    @IsNotEmpty({ message: 'Campo obrigatório' })
     dataconsulta?: Date;
 
     @IsString()
