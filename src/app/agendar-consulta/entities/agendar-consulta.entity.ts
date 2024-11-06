@@ -28,6 +28,9 @@ export class AgendarConsulta {
     tecResponsavel?: string;
 
     @Column({ nullable: true })
+    status?: string;
+
+    @Column({ nullable: true })
     idTecResponsavel?: string;
 
     @ManyToOne(() => Cidadao, cidadao => cidadao.agendaConsultas)

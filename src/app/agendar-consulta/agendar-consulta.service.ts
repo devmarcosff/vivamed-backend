@@ -35,8 +35,9 @@ export class AgendarConsultaService {
       dataconsulta: createAgendarConsultaDto.dataconsulta,
       horaconsulta: createAgendarConsultaDto.horaconsulta,
       recorrente: createAgendarConsultaDto.recorrente,
-      tecResponsavel: tecResponsavel.name,
+      status: createAgendarConsultaDto.status,
       idTecResponsavel: createAgendarConsultaDto.idTecResponsavel,
+      tecResponsavel: tecResponsavel.name,
       cidadao: prontuario
     } as AgendarConsulta
 
