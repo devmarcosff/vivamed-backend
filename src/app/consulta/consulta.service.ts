@@ -61,11 +61,11 @@ export class ConsultaService {
     return consulta;
   }
 
-  async remove(prontuario: string) {
-    const consultas = await this.consultaRepository.findOne({ where: { prontuario: prontuario } });
+  async remove(id: string) {
+    const consultas = await this.consultaRepository.findOne({ where: { id: id } });
     if (!consultas) throw new NotFoundException(`Consulta não foi identificada.`)
 
-    this.consultaRepository.delete({ prontuario });
+    this.consultaRepository.delete({ id });
 
     return `Consulta deletada com sucesso.`
   }

@@ -32,8 +32,8 @@ export class ConsultaController {
     return this.consultaService.update(prontuario, updateConsultaDto);
   }
 
-  @Delete(':prontuario')
-  remove(@Param('prontuario') prontuario: string) {
-    return this.consultaService.remove(prontuario);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.consultaService.remove(id);
   }
 }
