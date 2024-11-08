@@ -30,7 +30,7 @@ export class ConsultaService {
       prontuario: createConsultaDto.prontuario,
       paciente: `${prontuario.nome}`,
       respTec: tecResponsavel.name,
-      idRespTec: createConsultaDto.idRespTec,
+      idRespTec: tecResponsavel.id,
       role: createConsultaDto.role,
       cidadao: prontuario
     })

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Cidadao } from '../cidadao/entities/cidadao.entity';
 import { Consulta } from '../consulta/entities/consulta.entity';
 import { CreateMedicamentoDto } from './dto/create-medicamento.dto';
@@ -51,7 +51,21 @@ export class MedicamentosService {
     return `This action updates a #${id} medicamento`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medicamento`;
+  async remove(id: string) {
+    const medicamentoById = await this.medicamentoRepository.findOne({ where: { id } })
+    if (!medicamentoById) throw new NotFoundException(`O medicamento com o id: ${id} não foi identificado`)
+    await this.medicamentoRepository.delete({ id });
+
+    return `Medicamento excluído com sucesso`;
+  }
+
+  async removeMany(ids: string[]) {
+    const medicamentoById = await this.medicamentoRepository.findBy({ id: In(ids) })
+    const foundIds = medicamentoById.map(med => med.id);
+    const notFoundIds = ids.filter(id => !foundIds.includes(id));
+    if (notFoundIds.length > 0) throw new NotFoundException(`Medicamentos com os seguintes IDs não foram encontrados: ${notFoundIds.join(', ')}`);
+    await this.medicamentoRepository.delete(ids);
+
+    return `${medicamentoById.length} medicamentos excluídos com sucesso`;
   }
 }

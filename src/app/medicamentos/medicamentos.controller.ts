@@ -27,8 +27,15 @@ export class MedicamentosController {
     return this.medicamentosService.update(prontuario, updateMedicamentoDto);
   }
 
-  @Delete(':prontuario')
-  remove(@Param('prontuario') prontuario: number) {
-    return this.medicamentosService.remove(prontuario);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.medicamentosService.remove(id);
+  }
+
+  @Delete('/deletemany/:ids')
+  removeMany(@Param('ids') ids: string) {
+    // Divide a string de IDs em um array, considerando que os IDs estão separados por vírgulas
+    const idArray = ids.split(',');
+    return this.medicamentosService.removeMany(idArray);
   }
 }

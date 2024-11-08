@@ -48,12 +48,12 @@ export class UserService {
     })
   }
 
-  async findByCpf(cpf: string) {
-    const eUserByCpf = await this.userRepository.findOne({ where: { cpf }, relations: { address: true } });
+  async findById(id: string) {
+    const eUserById = await this.userRepository.findOne({ where: { id }, relations: { address: true } });
 
-    if (!eUserByCpf) throw new NotFoundException(`O usuário com o cpf ${cpf} não foi identificado`)
+    if (!eUserById) throw new NotFoundException(`O usuário com o id ${id} não foi identificado`)
 
-    const { password, ...result } = eUserByCpf;
+    const { password, ...result } = eUserById;
     return result;
   }
 

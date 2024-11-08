@@ -15,9 +15,9 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Get(':cpf')
-  findByCpf(@Param('cpf') cpf: string) {
-    return this.userService.findByCpf(cpf);
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.userService.findById(id);
   }
 
   @Post()
