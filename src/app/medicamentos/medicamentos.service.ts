@@ -18,23 +18,43 @@ export class MedicamentosService {
     private cidadaoRepository: Repository<Cidadao>
   ) { }
 
-  async create(createMedicamentoDto: CreateMedicamentoDto) {
+  // async create(createMedicamentoDto: CreateMedicamentoDto) {
 
-    const id = await this.consultaRepository.findOne({ where: { id: createMedicamentoDto.cidadao } });
+  //   const id = await this.consultaRepository.findOne({ where: { id: createMedicamentoDto.consulta } });
 
-    if (!id) {
-      throw new Error('Consulta não indentificada.');
-    }
+  //   if (!id) {
+  //     throw new Error('Consulta não indentificada.');
+  //   }
 
-    await this.medicamentoRepository.save({
-      prescricao: createMedicamentoDto.prescricao,
-      cidadao: createMedicamentoDto.cidadao,
-      use: createMedicamentoDto.use,
-      quantidade: createMedicamentoDto.quantidade,
-      consultas: id
-    })
+  //   await this.medicamentoRepository.save({
+  //     prescricao: createMedicamentoDto.prescricao,
+  //     consulta: createMedicamentoDto.consulta,
+  //     use: createMedicamentoDto.use,
+  //     quantidade: createMedicamentoDto.quantidade,
+  //     consultas: id
+  //   })
 
-    return "Medicamento adicionado com sucesso.";
+  //   return "Medicamento adicionado com sucesso.";
+  // }
+
+  async create(createMedicamentoDto: CreateMedicamentoDto[]) {
+    const ids = createMedicamentoDto.map((consulta) => consulta.consulta)
+    const createById = await this.consultaRepository.findBy({ id: In(ids) })
+    const foundIds = createById.map(med => med.id);
+
+    const medicamentos = createMedicamentoDto.map(dto => this.medicamentoRepository.create({
+      name: dto.name,
+      manha: dto.manha,
+      tarde: dto.tarde,
+      noite: dto.noite,
+      consulta: dto.consulta,
+      consultas: foundIds[0]
+    }));
+
+    // Salva todos de uma vez
+    await this.medicamentoRepository.save(medicamentos);
+
+    return `${medicamentos.length > 1 ? `${medicamentos.length} medicamentos inseridos com sucesso` : `${medicamentos.length} medicamento inserido com sucesso`}`;
   }
 
   async findAll() {
@@ -66,6 +86,7 @@ export class MedicamentosService {
     if (notFoundIds.length > 0) throw new NotFoundException(`Medicamentos com os seguintes IDs não foram encontrados: ${notFoundIds.join(', ')}`);
     await this.medicamentoRepository.delete(ids);
 
-    return `${medicamentoById.length} medicamentos excluídos com sucesso`;
+    // return `${medicamentoById.length} medicamentos excluídos com sucesso`;
+    return `${medicamentoById.length > 1 ? `${medicamentoById.length} medicamentos excluídos com sucesso` : `${medicamentoById.length} medicamento excluído com sucesso`}`;
   }
 }

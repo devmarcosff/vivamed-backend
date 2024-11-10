@@ -8,9 +8,14 @@ export class MedicamentosController {
   constructor(private readonly medicamentosService: MedicamentosService) { }
 
   @Post()
-  create(@Body() createMedicamentoDto: CreateMedicamentoDto) {
+  create(@Body() createMedicamentoDto: CreateMedicamentoDto[]) {
     return this.medicamentosService.create(createMedicamentoDto);
   }
+
+  // @Post('create-multiple')
+  // async createMultiple(@Body() createMedicamentoDto: CreateMedicamentoDto[]) {
+  //   return await this.medicamentosService.createMultipleMedicamentos(createMedicamentoDto);
+  // }
 
   @Get()
   findAll() {

@@ -5,7 +5,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 @Entity()
 export class Consulta {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id: any;
 
     @Column()
     respTec?: string;

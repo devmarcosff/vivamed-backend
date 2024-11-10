@@ -26,12 +26,12 @@ export class ConsultaService {
 
     const createConsulta = await this.consultaRepository.save({
       createAt: new Date(),
-      descricao: createConsultaDto.descricao,
       prontuario: createConsultaDto.prontuario,
+      role: createConsultaDto.role,
+      descricao: createConsultaDto.descricao,
       paciente: `${prontuario.nome}`,
       respTec: tecResponsavel.name,
       idRespTec: tecResponsavel.id,
-      role: createConsultaDto.role,
       cidadao: prontuario
     })
 

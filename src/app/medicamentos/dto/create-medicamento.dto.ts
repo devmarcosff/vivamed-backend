@@ -2,17 +2,20 @@ import { IsNumber, IsString } from "class-validator";
 
 export class CreateMedicamentoDto {
     @IsString()
-    prescricao: string;
+    name: string;
 
     @IsNumber()
-    quantidade: number;
+    manha: string;
 
     @IsString()
-    use: string;
+    tarde: string;
 
     @IsString()
-    cidadao: string;
+    noite: string;
 
     @IsString()
     consulta: string;
+
+    @IsString()
+    consultas: any;
 }

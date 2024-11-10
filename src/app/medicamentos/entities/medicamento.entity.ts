@@ -8,16 +8,19 @@ export class Medicamento {
     id: string;
 
     @Column()
-    prescricao: string;
+    name: string;
 
     @Column()
-    quantidade: number;
+    manha: string;
 
     @Column()
-    use: string;
+    tarde: string;
 
     @Column()
-    cidadao: string;
+    noite: string;
+
+    @Column()
+    consulta: string;
 
     @ManyToOne(() => Consulta, consulta => consulta.medicamentos)
     consultas: Consulta;
