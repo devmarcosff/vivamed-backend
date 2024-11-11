@@ -48,7 +48,7 @@ export class AgendarConsultaService {
   }
 
   async findAll() {
-    const isAgendaConsulta = await this.angedarConsultaRepository.find();
+    const isAgendaConsulta = await this.angedarConsultaRepository.find({ order: { createAt: 'DESC' }, });
 
     return isAgendaConsulta
   }

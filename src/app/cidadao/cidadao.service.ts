@@ -62,7 +62,7 @@ export class CidadaoService {
   }
 
   async findAll() {
-    const cidadoes = await this.cidadaoRepository.find({ relations: { consultas: true, address: true, agendaConsultas: true } });
+    const cidadoes = await this.cidadaoRepository.find({ order: { createAt: 'DESC' }, relations: { consultas: true, address: true, agendaConsultas: true } });
 
     return cidadoes.map(user => {
       const { password, ...result } = user;
@@ -71,7 +71,7 @@ export class CidadaoService {
   }
 
   async findByProntuario(prontuario: any) {
-    const cidadoes = await this.cidadaoRepository.findOne({ where: { prontuario: prontuario }, relations: { address: true, consultas: true, agendaConsultas: true } });
+    const cidadoes = await this.cidadaoRepository.findOne({ order: { createAt: 'DESC' }, where: { prontuario: prontuario }, relations: { address: true, consultas: true, agendaConsultas: true } });
 
     if (!cidadoes) throw new NotFoundException(`Prontuário ${prontuario} não encontrado.`)
 

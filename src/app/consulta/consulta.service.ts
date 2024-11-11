@@ -39,12 +39,12 @@ export class ConsultaService {
   }
 
   async findAll() {
-    const consulta = await this.consultaRepository.find({ relations: { medicamentos: true } })
+    const consulta = await this.consultaRepository.find({ order: { createAt: 'DESC' }, relations: { medicamentos: true } })
     return consulta;
   }
 
   async findOne(id: string) {
-    const consulta = await this.consultaRepository.findOne({ where: { id: id }, relations: { medicamentos: true } })
+    const consulta = await this.consultaRepository.findOne({ order: { createAt: 'DESC' }, where: { id: id }, relations: { medicamentos: true } })
     if (!consulta) throw new NotFoundException(`Consulta não encontrada.`)
     return consulta;
   }
