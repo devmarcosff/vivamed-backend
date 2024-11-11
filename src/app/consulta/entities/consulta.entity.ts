@@ -11,26 +11,29 @@ export class Consulta {
     respTec?: string;
 
     @Column({ nullable: true })
-    idRespTec: string;
+    idRespTec?: string;
 
     @Column()
-    role: string;
+    role?: string;
 
     @Column()
-    prontuario: string;
+    prontuario?: string;
 
     @Column()
-    paciente: string;
+    paciente?: string;
 
     @Column()
-    createAt: Date;
+    createAt?: Date;
 
     @Column()
-    descricao: string;
+    descricao?: string;
+
+    @Column()
+    idConsulta?: string;
 
     @ManyToOne(() => Cidadao, cidadao => cidadao.consultas)
     cidadao: Cidadao;
 
     @OneToMany(() => Medicamento, medicamentos => medicamentos.consultas)
-    medicamentos: Medicamento[];
+    medicamentos?: Medicamento[];
 }

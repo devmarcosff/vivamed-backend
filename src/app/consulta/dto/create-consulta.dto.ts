@@ -2,23 +2,23 @@ import { IsString } from "class-validator";
 
 export class CreateConsultaDto {
     @IsString()
-    createAt: Date;
+    createAt?: Date;
 
     @IsString()
-    descricao: string;
+    descricao?: string;
 
     @IsString()
     respTec?: string;
 
     @IsString()
-    idRespTec: string;
+    idRespTec?: string;
 
     @IsString()
-    role: string;
+    role?: string;
 
     @IsString()
-    prontuario: string;
+    prontuario?: string;
 
     @IsString()
-    medicamento: string;
+    medicamento?: string;
 }

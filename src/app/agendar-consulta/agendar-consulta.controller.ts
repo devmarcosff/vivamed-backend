@@ -17,9 +17,24 @@ export class AgendarConsultaController {
     return this.agendarConsultaService.findAll();
   }
 
+  @Get('/todos')
+  findAllAgendamentosDia() {
+    return this.agendarConsultaService.findAllAgendamentosDia();
+  }
+
+  @Get('/todos/:prontuario')
+  buscarTodosAgendamentosDia(@Param('prontuario') prontuario: string) {
+    return this.agendarConsultaService.buscarTodosAgendamentosDia(prontuario);
+  }
+
   @Get(':id')
   findByProntuario(@Param('id') id: string) {
     return this.agendarConsultaService.findByProntuario(id);
+  }
+
+  @Get('/hoje/:prontuario')
+  buscarAgendamentoDia(@Param('prontuario') prontuario: string) {
+    return this.agendarConsultaService.buscarAgendamentoDia(prontuario);
   }
 
   @Patch(':id')

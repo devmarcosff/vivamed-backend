@@ -41,8 +41,6 @@ export class AgendarConsultaService {
       cidadao: prontuario
     } as AgendarConsulta
 
-
-
     await this.angedarConsultaRepository.save(agendarConsulta);
     return `Consulta agendada com sucesso. Data: ${createAgendarConsultaDto.dataconsulta} as ${createAgendarConsultaDto.horaconsulta}`;
   }
@@ -53,12 +51,52 @@ export class AgendarConsultaService {
     return isAgendaConsulta
   }
 
+  async findAllAgendamentosDia() {
+    const agendamentoConsulta = await this.angedarConsultaRepository.find({ order: { status: 'DESC' } })
+    if (!agendamentoConsulta) throw new NotFoundException(`Nenhum agendamento para este dia`)
+
+    const dataAtual = new Date();
+    const dataAtualFormatada = dataAtual.toISOString().split('T')[0]
+    const dataTodosAgendamentoConsulta = agendamentoConsulta.map((item) => {
+      const dataAgendamentoFormatada = item.dataconsulta.toISOString().split('T')[0]
+      if (dataAgendamentoFormatada === dataAtualFormatada) return item;
+    })
+
+    return dataTodosAgendamentoConsulta.filter(agendamentosDia => agendamentosDia != null)
+  }
+
   async findByProntuario(id: string) {
     const isCidadoes = await this.angedarConsultaRepository.findOne({ where: { prontuario: id } });
 
     if (!isCidadoes) throw new NotFoundException(`Prontuário ${id} não encontrado.`)
 
     return isCidadoes;
+  }
+
+  async buscarAgendamentoDia(prontuario: string) {
+    const agendamentoConsulta = await this.angedarConsultaRepository.findOne({ where: { prontuario: prontuario } })
+    if (!agendamentoConsulta) throw new NotFoundException(`Agendamento de consulta não encontrada.`)
+
+    const dataAtual = new Date();
+    const dataAgendamentoFormatada = agendamentoConsulta.dataconsulta.toISOString().split('T')[0]
+    const dataAtualFormatada = dataAtual.toISOString().split('T')[0]
+
+    if (dataAgendamentoFormatada === dataAtualFormatada) return agendamentoConsulta;
+
+    throw new NotFoundException('Nenhum agendamento para este paciente')
+  }
+
+  async buscarTodosAgendamentosDia(prontuario: string) {
+    const agendamentoConsulta = await this.angedarConsultaRepository.find({ where: { prontuario: prontuario } })
+    if (!agendamentoConsulta) throw new NotFoundException(`Agendamento de consulta não encontrada.`)
+
+    const dataAtual = new Date();
+    const dataAtualFormatada = dataAtual.toISOString().split('T')[0]
+    const dataTodosAgendamentoConsulta = agendamentoConsulta.map((item) => {
+      const dataAgendamentoFormatada = item.dataconsulta.toISOString().split('T')[0]
+      if (dataAgendamentoFormatada === dataAtualFormatada) return item;
+    })
+    return dataTodosAgendamentoConsulta.filter(agendamentosDia => agendamentosDia != null)
   }
 
   update(id: number, updateAgendarConsultaDto: UpdateAgendarConsultaDto) {
