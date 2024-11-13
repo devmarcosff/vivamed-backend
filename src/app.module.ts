@@ -13,6 +13,7 @@ import { ConsultaModule } from './app/consulta/consulta.module';
 import { MedicamentosModule } from './app/medicamentos/medicamentos.module';
 import { OrderItemsModule } from './app/order-items/order-items.module';
 import { OrderModule } from './app/order/order.module';
+import { PainelAtendimentoModule } from './app/painel-atendimento/painel-atendimento.module';
 import { ProductModule } from './app/product/product.module';
 import { StockModule } from './app/stock/stock.module';
 import { jwtConstants } from './app/user/jwtConstants';
@@ -57,7 +58,8 @@ import { UserModule } from './app/user/user.module';
     CidadaoModule,
     ConsultaModule,
     MedicamentosModule,
-    AgendarConsultaModule
+    AgendarConsultaModule,
+    PainelAtendimentoModule
   ],
   controllers: [AppController],
   providers: [AppService],
