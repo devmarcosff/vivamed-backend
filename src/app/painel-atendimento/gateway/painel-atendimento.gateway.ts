@@ -9,7 +9,7 @@ import { PainelAtendimentoService } from '../painel-atendimento.service';
 
 @WebSocketGateway({
     cors: {
-        origin: 'https://vivamed.stevanini.com.br, https://vivamedapi.stevanini.com.br', // Ajuste o CORS conforme necessário
+        origin: '*', // Ajuste o CORS conforme necessário
     },
 })
 export class PainelAtendimentoGateway {
