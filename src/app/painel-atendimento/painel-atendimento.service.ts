@@ -32,7 +32,7 @@ export class PainelAtendimentoService {
   }
 
   async finishAttendance(id: string): Promise<PainelAtendimento> {
-    const atendimento = await this.painelAtendimentoRepository.findOne({ where: { id } });
+    const atendimento = await this.painelAtendimentoRepository.findOne({ where: { id }, order: { finalAtendimento: 'ASC' } });
     if (atendimento) {
       atendimento.finalAtendimento = new Date();
       await this.painelAtendimentoRepository.save(atendimento);
@@ -42,9 +42,13 @@ export class PainelAtendimentoService {
 
   async getAllTickets(): Promise<PainelAtendimento[]> {
     return await this.painelAtendimentoRepository.find({
-      order: { createdAt: 'DESC' },
+      // order: { createdAt: 'DESC' },
     });
   }
+
+  // async imprimir() {
+
+  // }
 
   findAll() {
     return `This action returns all painelAtendimento`;

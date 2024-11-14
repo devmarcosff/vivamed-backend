@@ -41,9 +41,7 @@ import { UserModule } from './app/user/user.module';
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: true,
-        ssl: {
-          rejectUnauthorized: false, // Isto ignora a verificação do certificado, útil em ambientes de desenvolvimento
-        },
+        ssl: false
       }),
       inject: [ConfigService],
     }),

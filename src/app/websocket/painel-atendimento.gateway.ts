@@ -5,7 +5,7 @@ import {
     WebSocketServer
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { PainelAtendimentoService } from '../painel-atendimento.service';
+import { PainelAtendimentoService } from '../painel-atendimento/painel-atendimento.service';
 
 @WebSocketGateway({
     cors: {
@@ -31,13 +31,6 @@ export class PainelAtendimentoGateway {
         this.server.emit('ticketListUpdated', await this.painelService.getAllTickets());
         return atendimento;
     }
-
-    // @SubscribeMessage('startAttendance')
-    // async handleStartAttendance(@MessageBody() createPainelAtendimentoDto: CreatePainelAtendimentoDto) {
-    //     const atendimento = await this.painelService.startAttendance(createPainelAtendimentoDto);
-    //     this.server.emit('ticketListUpdated', await this.painelService.getAllTickets());
-    //     return atendimento;
-    // }
 
     @SubscribeMessage('finishAttendance')
     async handleFinishAttendance(@MessageBody() data: { id: string }) {
