@@ -1,7 +1,6 @@
-import { Address } from "src/app/address/entities/address.entity";
 import { AgendarConsulta } from "src/app/agendar-consulta/entities/agendar-consulta.entity";
 import { Consulta } from "src/app/consulta/entities/consulta.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Cidadao {
@@ -17,7 +16,7 @@ export class Cidadao {
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     nascimento: Date;
 
-    @Column()
+    @Column({ nullable: true })
     mae: string;
 
     @Column()
@@ -92,8 +91,8 @@ export class Cidadao {
     @Column()
     password: string;
 
-    @OneToOne(() => Address, (address) => address.cidadao)
-    address: Address;
+    // @OneToOne(() => Address, (address) => address.cidadao)
+    // address: Address;
 
     @OneToMany(() => Consulta, consulta => consulta.cidadao)
     consultas: Consulta[];

@@ -46,10 +46,6 @@ export class PainelAtendimentoService {
     });
   }
 
-  // async imprimir() {
-
-  // }
-
   findAll() {
     return `This action returns all painelAtendimento`;
   }

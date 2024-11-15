@@ -10,6 +10,7 @@ import { AuthCidadaoModule } from './app/auth-cidadao/auth-cidadao.module';
 import { AuthModule } from './app/auth/auth.module';
 import { CidadaoModule } from './app/cidadao/cidadao.module';
 import { ConsultaModule } from './app/consulta/consulta.module';
+import { FornecedorModule } from './app/fornecedor/fornecedor.module';
 import { MedicamentosModule } from './app/medicamentos/medicamentos.module';
 import { OrderItemsModule } from './app/order-items/order-items.module';
 import { OrderModule } from './app/order/order.module';
@@ -57,7 +58,8 @@ import { UserModule } from './app/user/user.module';
     ConsultaModule,
     MedicamentosModule,
     AgendarConsultaModule,
-    PainelAtendimentoModule
+    PainelAtendimentoModule,
+    FornecedorModule
   ],
   controllers: [AppController],
   providers: [AppService],

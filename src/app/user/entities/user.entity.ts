@@ -31,7 +31,7 @@ export class User {
     @Column()
     password: string;
 
-    @OneToOne(() => Address, (address) => address.user)
+    @OneToOne(() => Address, (address) => address.userId)
     address: Address;
 
     @OneToMany(() => Order, (order) => order.user)

@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cidadao } from '../cidadao/entities/cidadao.entity';
+import { Fornecedor } from '../fornecedor/entities/fornecedor.entity';
 import { User } from '../user/entities/user.entity';
 import { CreateAddressDto } from './dto/create-address.dto';
-import { UpdateAddressDto } from './dto/update-address.dto';
 import { Address } from './entities/address.entity';
 
 @Injectable()
@@ -14,60 +14,116 @@ export class AddressService {
     private userRepository: Repository<User>,
     @InjectRepository(Address)
     private addressRepository: Repository<Address>,
+    @InjectRepository(Fornecedor)
+    private fornecedorRepository: Repository<Fornecedor>,
+    // private addressRep:ository: Repository<Address>,
     @InjectRepository(Cidadao)
     private cidadaoRepository: Repository<Cidadao>
   ) { }
 
-  async create({ userId, cep, city, state, street }: CreateAddressDto) {
-    const bdUser = await this.userRepository.findOne({
-      relations: { address: true },
-      where: {
-        cpf: userId
-      }
-    })
-    if (!bdUser) throw new NotFoundException(`O usuário com o cpf ${userId} não foi identificado`)
-    if (bdUser.address) throw new NotFoundException('Já existe um endereço cadastrado para este usuário.')
+  // Criar Endereço para o Funcionario
+  async create({ userId, cep, city, state, street, num }: CreateAddressDto) {
+    // Verifique se o usuário existe
+    const isUser = await this.userRepository.findOne({
+      where: { cpf: userId },
+    });
 
-    const newAddress = await this.addressRepository.create({ cep, city, state, street });
-    newAddress.user = bdUser;
-    bdUser.address = newAddress;
+    console.log('ENDEREÇO DO COLABORADOR')
 
-    await this.addressRepository.save(newAddress)
-    await this.userRepository.save(bdUser)
+    if (!isUser) {
+      throw new NotFoundException(`O usuário com o CPF ${userId} não foi identificado`);
+    }
 
-    newAddress.user = undefined;
+    // Verifique se o usuário já possui um endereço (opcional, depende do caso de uso)
+    const existingAddress = await this.addressRepository.findOne({
+      where: { userId: isUser },
+    });
+
+    if (existingAddress) {
+      throw new ConflictException(`O usuário com o CPF ${userId} já possui um endereço cadastrado`);
+    }
+    const newAddress = await this.addressRepository.save({
+      street,
+      city,
+      state,
+      cep,
+      num,
+      userId: isUser, // Relacione com o objeto do usuário
+    });
 
     return newAddress;
   }
-
+  // Criar Endereço para o Cidadao CAPS
   async createAddressCidadao({ userId, cep, city, state, street, num }: CreateAddressDto) {
-    const bdCidadao = await this.cidadaoRepository.findOne({
-      relations: { address: true },
-      where: {
-        prontuario: userId
-      }
-    })
-    if (!bdCidadao) throw new NotFoundException(`O usuário com o cpf ${userId} não identificado`)
-    if (bdCidadao.address) throw new NotFoundException('Já existe um endereço cadastrado para este usuário.')
+    // Verifique se o usuário existe
+    const isUser = await this.cidadaoRepository.findOne({
+      where: { cpf: userId },
+    });
+    console.log('ENDEREÇO DO CIDADÃO CAPS')
 
-    const newAddress = await this.addressRepository.create({ cep, city, state, street, num });
-    newAddress.cidadao = bdCidadao;
-    bdCidadao.address = newAddress;
+    if (!isUser) {
+      throw new NotFoundException(`O usuário com o CPF ${userId} não foi identificado`);
+    }
 
-    await this.addressRepository.save(newAddress)
-    await this.cidadaoRepository.save(bdCidadao)
+    // Verifique se o usuário já possui um endereço (opcional, depende do caso de uso)
+    const existingAddress = await this.addressRepository.findOne({
+      where: { userId: isUser },
+    });
 
-    newAddress.cidadao = undefined;
+    if (existingAddress) {
+      throw new ConflictException(`O usuário com o CPF ${userId} já possui um endereço cadastrado`);
+    }
+    const newAddress = await this.addressRepository.save({
+      street,
+      city,
+      state,
+      cep,
+      num,
+      userId: isUser, // Relacione com o objeto do usuário
+    });
 
     return newAddress;
   }
+  // Criar Endereço para o Fornecedor
+  async createAddressFornecedor({ userId, cep, city, state, street, num }: CreateAddressDto) {
+    // Verifique se o usuário existe
+    const isUser = await this.fornecedorRepository.findOne({
+      where: { cnpj: userId },
+    });
 
+    console.log('ENDEREÇO DO FORNECEDOR')
+
+    if (!isUser) {
+      throw new NotFoundException(`O usuário com o CPF ${userId} não foi identificado`);
+    }
+
+    // Verifique se o usuário já possui um endereço (opcional, depende do caso de uso)
+    const existingAddress = await this.addressRepository.findOne({
+      where: { userId: isUser },
+    });
+
+    if (existingAddress) {
+      throw new ConflictException(`O usuário com o CPF ${userId} já possui um endereço cadastrado`);
+    }
+    const newAddress = await this.addressRepository.save({
+      createdAt: new Date(),
+      street,
+      city,
+      state,
+      cep,
+      num,
+      userId: isUser, // Relacione com o objeto do usuário
+    });
+
+    return newAddress;
+  }
+  // Listar todos os endereços
   async findAllAddress() {
-    const bdAddress = await this.addressRepository.find();
+    const bdAddress = await this.addressRepository.find({ relations: { userId: true } });
 
     return bdAddress;
   }
-
+  // Listar 1 endereço
   async findOneAddress(id) {
     const oneAddress = await this.addressRepository.findOne({ where: { id: id } });
 
@@ -76,15 +132,15 @@ export class AddressService {
     return oneAddress;
   }
 
-  async update(id: number, updateAddressDto: UpdateAddressDto) {
-    const addressById = await this.addressRepository.findOne({ where: { id: id } })
-    if (!addressById) throw new NotFoundException(`Endereço não identificado.`)
+  // async update(id: number, updateAddressDto: UpdateAddressDto) {
+  //   const addressById = await this.addressRepository.findOne({ where: { id: id } })
+  //   if (!addressById) throw new NotFoundException(`Endereço não identificado.`)
 
-    this.addressRepository.update(addressById.id, updateAddressDto)
+  //   this.addressRepository.update(addressById.id, updateAddressDto)
 
-    return `Produto atualizado com sucesso.`;
-  }
-
+  //   return `Produto atualizado com sucesso.`;
+  // }
+  // Listar o endereço do ID
   async remove(id: number) {
     const addressById = await this.addressRepository.findOne({ where: { id: id } })
     if (!addressById) throw new NotFoundException(`Endereço não identificado.`)

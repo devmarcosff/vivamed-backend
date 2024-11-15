@@ -14,8 +14,8 @@ export class ProductService {
 
   async create(createProductDto: CreateProductDto) {
     const novoProduct = {
-      name: 'Dipirona',
-      price: 10
+      name: 'Rivotril',
+      price: 32
     } as Product
 
     await this.productRepository.save(novoProduct)

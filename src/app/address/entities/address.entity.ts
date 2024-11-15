@@ -1,11 +1,13 @@
-import { Cidadao } from "src/app/cidadao/entities/cidadao.entity";
-import { User } from "src/app/user/entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Fornecedor } from "src/app/fornecedor/entities/fornecedor.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Address {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @CreateDateColumn()
+    createdAt: Date;
 
     @Column()
     street: string;
@@ -14,19 +16,26 @@ export class Address {
     city: string;
 
     @Column()
-    cep: number;
+    cep: string;
 
     @Column()
-    num: number;
+    num: string;
 
     @Column()
     state: string;
 
-    @OneToOne(() => User, (user) => user.address)
-    @JoinColumn()
-    user: User;
+    // @ManyToOne(() => User, user => user.address, { eager: true })
+    // userId: User; // Referência ao usuário
 
-    @OneToOne(() => Cidadao, (cidadao) => cidadao.address)
+    // @OneToOne(() => User, (user) => user.address, { nullable: true })
+    // @JoinColumn()
+    // userId?: User;
+
+    @OneToOne(() => Fornecedor, (fornecedor) => fornecedor.address, { nullable: true })
     @JoinColumn()
-    cidadao: Cidadao;
+    userId?: Fornecedor;
+
+    // @OneToOne(() => Cidadao, (cidadao) => cidadao.address)
+    // @JoinColumn()
+    // cidadao: Cidadao;
 } 

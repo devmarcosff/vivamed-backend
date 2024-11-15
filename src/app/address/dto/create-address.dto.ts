@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsString } from "class-validator";
 
 export class CreateAddressDto {
     @IsString()
@@ -7,18 +7,15 @@ export class CreateAddressDto {
     @IsString()
     city: string;
 
-    @IsNumber()
-    cep: number;
-
-    @IsNumber()
-    num: number;
+    @IsString()
+    cep: string;
 
     @IsString()
-    ubs: string;
+    num: string;
 
     @IsString()
     state: string;
 
     @IsString()
-    userId: string;
+    userId?: string;
 }

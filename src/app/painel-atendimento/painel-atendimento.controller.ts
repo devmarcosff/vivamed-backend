@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UpdatePainelAtendimentoDto } from './dto/update-painel-atendimento.dto';
+import { PainelAtendimento } from './entities/painel-atendimento.entity';
 import { PainelAtendimentoService } from './painel-atendimento.service';
 
 const escpos = require('escpos');
@@ -17,7 +18,7 @@ export class PainelAtendimentoController {
   }
 
   @Post('/imprimir')
-  async imprimir(@Res() res: Response) {
+  async imprimir(@Body() imprimir: PainelAtendimento, @Res() res: Response) {
     try {
       const device = new escpos.USB();
       const printer = new escpos.Printer(device);

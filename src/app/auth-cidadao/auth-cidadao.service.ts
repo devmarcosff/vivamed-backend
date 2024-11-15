@@ -17,7 +17,7 @@ export class AuthCidadaoService {
   async create(createAuthCidadaoDto: CreateAuthCidadaoDto) {
     const { prontuario } = createAuthCidadaoDto
     try {
-      const userDB = await this.cidadaoRepository.findOne({ where: { prontuario }, relations: { consultas: true, address: true } });
+      const userDB = await this.cidadaoRepository.findOne({ where: { prontuario }, relations: { consultas: true } });
       const validPass = await bcrypt.compare(createAuthCidadaoDto.password, userDB.password)
       if (!validPass) throw new NotFoundException(`Usuário ou senha incorretos`);
 
