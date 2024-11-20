@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AddressModule } from './app/address/address.module';
+import { AgendamentoTransporteModule } from './app/agendamento-transporte/agendamento-transporte.module';
 import { AgendarConsultaModule } from './app/agendar-consulta/agendar-consulta.module';
 import { AuthCidadaoModule } from './app/auth-cidadao/auth-cidadao.module';
 import { AuthModule } from './app/auth/auth.module';
@@ -59,7 +60,8 @@ import { UserModule } from './app/user/user.module';
     MedicamentosModule,
     AgendarConsultaModule,
     PainelAtendimentoModule,
-    FornecedorModule
+    FornecedorModule,
+    AgendamentoTransporteModule
   ],
   controllers: [AppController],
   providers: [AppService],
