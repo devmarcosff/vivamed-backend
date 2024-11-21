@@ -1,6 +1,6 @@
-import { OrderItem } from "src/app/order-items/entities/order-item.entity";
-import { Stock } from "src/app/stock/entities/stock.entity";
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { OrderItem } from "../../order-items/entities/order-item.entity";
+import { Stock } from "../../stock/entities/stock.entity";
 
 @Entity()
 export class Product {

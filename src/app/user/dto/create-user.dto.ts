@@ -1,5 +1,5 @@
 import { IsDate, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
-import { Address } from "src/app/address/entities/address.entity";
+import { Address } from "../../address/entities/address.entity";
 
 export class CreateUserDto {
     @IsString()

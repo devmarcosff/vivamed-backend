@@ -1,5 +1,5 @@
-import { Address } from "src/app/address/entities/address.entity";
-import { Order } from "src/app/order/entities/order.entity";
+import { Address } from "../../app/address/entities/address.entity";
+import { Order } from "../../app/order/entities/order.entity";
 
 export interface IUser {
     sub: string,

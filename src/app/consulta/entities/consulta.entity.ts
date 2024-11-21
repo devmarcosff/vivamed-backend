@@ -1,6 +1,6 @@
-import { Cidadao } from "src/app/cidadao/entities/cidadao.entity";
-import { Medicamento } from "src/app/medicamentos/entities/medicamento.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Cidadao } from "../../cidadao/entities/cidadao.entity";
+import { Medicamento } from "../../medicamentos/entities/medicamento.entity";
 
 @Entity()
 export class Consulta {

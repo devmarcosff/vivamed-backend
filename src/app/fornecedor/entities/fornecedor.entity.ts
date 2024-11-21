@@ -1,5 +1,5 @@
-import { Address } from "src/app/address/entities/address.entity";
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Address } from "../../address/entities/address.entity";
 
 @Entity('fornecedor')
 export class Fornecedor {

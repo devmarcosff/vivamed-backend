@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from 'src/shared/interfaces/user.interface';
 import { Repository } from 'typeorm';
+import { IUser } from '../../shared/interfaces/user.interface';
 import { OrderItem } from '../order-items/entities/order-item.entity';
 import { Product } from '../product/entities/product.entity';
 import { Stock } from '../stock/entities/stock.entity';

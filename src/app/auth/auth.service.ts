@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/app/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Cidadao } from '../cidadao/entities/cidadao.entity';
+import { User } from '../user/entities/user.entity';
 import { CreateAuthDto } from './dto/create-auth.dto';
 
 @Injectable()

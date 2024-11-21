@@ -1,7 +1,7 @@
-import { OrderItem } from "src/app/order-items/entities/order-item.entity";
-import { User } from "src/app/user/entities/user.entity";
-import { PaymentStatus } from "src/shared/constants/order.constants";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { PaymentStatus } from "../../../shared/constants/order.constants";
+import { OrderItem } from "../../order-items/entities/order-item.entity";
+import { User } from "../../user/entities/user.entity";
 
 @Entity()
 export class Order {

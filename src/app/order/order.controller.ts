@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { CurrentUser } from 'src/shared/decorators/current_user.decorator';
-import { IUser } from 'src/shared/interfaces/user.interface';
+import { CurrentUser } from '../../shared/decorators/current_user.decorator';
+import { IUser } from '../../shared/interfaces/user.interface';
 import { AuthGuard } from '../user/auth.guard';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';

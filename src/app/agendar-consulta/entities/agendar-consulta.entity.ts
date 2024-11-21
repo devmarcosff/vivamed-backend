@@ -1,5 +1,5 @@
-import { Cidadao } from "src/app/cidadao/entities/cidadao.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Cidadao } from "../../cidadao/entities/cidadao.entity";
 
 @Entity()
 export class AgendarConsulta {

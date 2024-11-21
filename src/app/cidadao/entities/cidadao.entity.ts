@@ -1,6 +1,6 @@
-import { AgendarConsulta } from "src/app/agendar-consulta/entities/agendar-consulta.entity";
-import { Consulta } from "src/app/consulta/entities/consulta.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AgendarConsulta } from "../../agendar-consulta/entities/agendar-consulta.entity";
+import { Consulta } from "../../consulta/entities/consulta.entity";
 
 @Entity()
 export class Cidadao {

@@ -1,6 +1,6 @@
 
-import { Consulta } from "src/app/consulta/entities/consulta.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Consulta } from "../../consulta/entities/consulta.entity";
 
 @Entity()
 export class Medicamento {

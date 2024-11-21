@@ -1,5 +1,5 @@
-import { Fornecedor } from "src/app/fornecedor/entities/fornecedor.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Fornecedor } from '../../fornecedor/entities/fornecedor.entity';
 
 @Entity()
 export class Address {
