@@ -7,9 +7,8 @@ import { AddressService } from './address.service';
 import { Address } from './entities/address.entity';
 
 @Module({
-  // Conexão com o repository do TypeORM
-  imports: [TypeOrmModule.forFeature([Address, User, Cidadao])],
-  controllers: [AddressController],
-  providers: [AddressService],
+    imports: [TypeOrmModule.forFeature([Address, User, Cidadao])],
+    controllers: [AddressController],
+    providers: [AddressService],
 })
 export class AddressModule { }

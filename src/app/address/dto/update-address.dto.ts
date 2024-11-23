@@ -3,18 +3,23 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateAddressDto } from './create-address.dto';
 
 export class UpdateAddressDto extends PartialType(CreateAddressDto) {
-    @IsString() @IsOptional()
+    @IsOptional()
+    @IsString()
     street: string;
 
-    @IsString() @IsOptional()
+    @IsOptional()
+    @IsString()
     city: string;
 
-    @IsNumber() @IsOptional()
+    @IsOptional()
+    @IsNumber()
     cep: number;
 
-    @IsNumber() @IsOptional()
+    @IsOptional()
+    @IsNumber()
     num: number;
 
-    @IsString() @IsOptional()
+    @IsOptional()
+    @IsString()
     state: string;
 }

@@ -1,32 +1,24 @@
-import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
 
-export class CreateAddressDto {
-    @ApiProperty()
+export class AddressDto {
     @IsString()
     street: string;
 
-    @ApiProperty()
     @IsString()
     city: string;
 
-    @ApiProperty()
     @IsNumber()
     cep: number;
 
-    @ApiProperty()
     @IsNumber()
     num: number;
 
-    @ApiProperty()
     @IsString()
     state: string;
 
-    @ApiProperty()
     @IsString()
-    userId: string;
+    userId?: string;
 
-    @ApiProperty()
     @IsString()
     citizenId?: string;
 }
