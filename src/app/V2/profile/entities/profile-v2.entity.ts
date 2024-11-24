@@ -10,24 +10,24 @@ export class ProfileV2 extends VivamedBaseEntity {
     @Column()
     name: string;
 
-    @Column()
-    birthday: Date;
+    @Column({ nullable: true })
+    birthday?: Date;
 
     @Column({ nullable: true })
-    picture: string;
+    picture?: string;
 
-    @OneToOne(() => UserV2, user => user.profile)
+    @OneToOne(() => UserV2, user => user.profile, { cascade: false })
     @JoinColumn()
     user: UserV2;
 
-    @OneToOne(() => AddressV2, address => address.profile, { cascade: true })
+    @OneToOne(() => AddressV2, address => address.profile, { cascade: false })
     address: AddressV2;
 
     public toDto(): ProfileV2Dto {
         return plainToClass(ProfileV2Dto, {
             id: this.id,
             name: this.name,
-            birthday: this.birthday,
+            birthday: this.birthday ?? undefined,
             picture: this.picture,
             user: this.user?.toDto() ?? undefined,
             address: this.address?.toDto() ?? undefined,

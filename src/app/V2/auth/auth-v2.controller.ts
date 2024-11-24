@@ -2,6 +2,7 @@ import { Body, Controller, Post, Req } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthV2Service } from './auth-v2.service';
 import { AuthV2Dto } from './dto/auth.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RequestResetPasswordDto, ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Auth')
@@ -32,10 +33,8 @@ export class AuthV2Controller {
     }
 
     @Post('refresh')
-    async refreshTokens(@Req() req) {
-        const userId = req.user.sub;
-        const refreshToken = req.user.refreshToken;
-        return this.authV2Service.refresh(userId, refreshToken);
+    async refreshToken(@Body() dto: RefreshTokenDto) {
+        return this.authV2Service.refresh(dto);
     }
 
     @Post('logout')

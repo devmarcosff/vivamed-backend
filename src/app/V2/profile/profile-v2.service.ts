@@ -1,7 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AddressV2 } from '../address/entities/address-v2.entity';
+import { DataSource, Repository } from 'typeorm';
+import { UserV2 } from '../user/entities/user-v2.entity';
+import { CreateProfileV2Dto } from './dto/create-profile-v2.dto';
+import { ProfileV2Dto } from './dto/profile-v2.dto';
 import { UpdateProfileV2Dto } from './dto/update-profile-v2.dto';
 import { ProfileV2 } from './entities/profile-v2.entity';
 
@@ -10,30 +16,68 @@ export class ProfileV2Service {
     constructor(
         @InjectRepository(ProfileV2)
         private profileRepository: Repository<ProfileV2>,
-        @InjectRepository(AddressV2)
-        private addressRepository: Repository<AddressV2>,
+        private dataSource: DataSource,
     ) { }
 
-    async update(id: string, updateProfileDto: UpdateProfileV2Dto) {
-        const profileDb = await this.profileRepository.findOne({
-            where: { id: id },
-            relations: ['address']
+    async findById(id: string): Promise<ProfileV2Dto> {
+        const profile = await this.profileRepository.findOne({
+            where: { id },
+            relations: ['address'],
         });
 
-        if (!profileDb) {
-            throw new BadRequestException('Perfil não encontrado');
+        if (!profile) {
+            throw new NotFoundException('Perfil não encontrado');
         }
 
-        Object.assign(profileDb, updateProfileDto);
-
-        if (updateProfileDto.address) {
-            if (profileDb.address) {
-                Object.assign(profileDb.address, updateProfileDto.address);
-            } else {
-                profileDb.address = this.addressRepository.create(updateProfileDto.address);
-            }
-        }
-
-        return this.profileRepository.save(profileDb);
+        return profile.toDto();
     }
+
+    async create(dto: CreateProfileV2Dto): Promise<ProfileV2Dto> {
+        return this.dataSource.transaction(async (manager) => {
+            const profileRepository = manager.getRepository(ProfileV2);
+            const userRepository = manager.getRepository(UserV2);
+
+            const userDb = await userRepository.findOne({
+                relations: { profile: true },
+                where: { id: dto.userId }
+            });
+
+            if (userDb && userDb.profile) {
+                return userDb.profile.toDto();
+            }
+
+            const newProfile = profileRepository.create({
+                name: dto.name,
+                birthday: dto.birthday,
+                picture: dto.picture,
+                user: userDb
+            });
+
+            var profileDb = await profileRepository.save(newProfile);
+
+            return profileDb.toDto();
+        });
+    }
+
+    async update(id: string, dto: UpdateProfileV2Dto): Promise<ProfileV2Dto> {
+        return this.dataSource.transaction(async (manager) => {
+            const profileRepository = manager.getRepository(ProfileV2);
+
+            const profileDb = await profileRepository.findOne({
+                where: { id },
+                lock: { mode: 'pessimistic_write' },
+            });
+
+            if (!profileDb) {
+                throw new BadRequestException('Perfil não encontrado');
+            }
+
+            Object.assign(profileDb, dto);
+            console.log('first')
+            await profileRepository.update(id, profileDb);
+
+            return profileDb.toDto();
+        });
+    }
+
 }

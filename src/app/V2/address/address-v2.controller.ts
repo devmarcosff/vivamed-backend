@@ -15,6 +15,14 @@ import { UpdateAddressV2Dto } from './dto/update-address-v2.dto';
 export class AddressV2Controller {
     constructor(private readonly addressV2Service: AddressV2Service) { }
 
+    @Get(':id')
+    @ApiOperation({ summary: "Fetch a address", description: "Fetches a address by ID." })
+    @ApiOkResponse({ description: "Address retrieved successfully." })
+    @ApiUnauthorizedResponse({ description: "Unauthorized access." })
+    findOne(@Param('id') id: string) {
+        return this.addressV2Service.findOne(id);
+    }
+
     @Get()
     @ApiOperation({ summary: "Address filter", description: "Fetches all addresses based on the filter passed to the endpoint." })
     @ApiOkResponse({ description: "Addresses retrieved successfully." })

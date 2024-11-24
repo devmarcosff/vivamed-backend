@@ -43,6 +43,7 @@ export class AddressV2 extends VivamedBaseEntity {
 
     public toDto(): AddressV2Dto {
         return plainToClass(AddressV2Dto, {
+            id: this.id,
             zipcode: this.zipcode,
             street: this.street,
             number: this.number,

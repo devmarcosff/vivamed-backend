@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Pagination } from 'src/shared/types/pagination.type';
-import { ILike, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { ProfileV2 } from '../profile/entities/profile-v2.entity';
 import { CreateUserV2Dto } from './dto/create-user-v2.dto';
 import { UserV2FilterDto } from './dto/filter-user-v2.dto';
@@ -13,75 +13,62 @@ import { UserV2 } from './entities/user-v2.entity';
 export class UserV2Service {
     constructor(
         @InjectRepository(UserV2)
-        private userRepository: Repository<UserV2>,
-        @InjectRepository(ProfileV2)
-        private profileRepository: Repository<ProfileV2>,
+        private readonly userRepository: Repository<UserV2>,
+        @InjectDataSource()
+        private readonly dataSource: DataSource,
     ) { }
 
-    async create(createUserV2Dto: CreateUserV2Dto): Promise<UserV2> {
-        try {
-            let eCpf = await this.userRepository.existsBy({ cpf: createUserV2Dto.cpf });
-            if (eCpf) throw new BadRequestException('CPF já está em uso.');
+    async create(dto: CreateUserV2Dto): Promise<UserV2Dto> {
+        return await this.dataSource.transaction(async (manager) => {
+            const userRepository = manager.getRepository(UserV2);
+            const profileRepository = manager.getRepository(ProfileV2);
 
-            let eEmail = await this.userRepository.existsBy({ email: createUserV2Dto.email });
-            if (eEmail) throw new BadRequestException('E-mail já cadastrado, escolha um e-mail de usuário diferente.');
+            const eCpf = await userRepository.findOne({ where: { cpf: dto.cpf } });
+            if (eCpf) {
+                throw new BadRequestException('CPF já está em uso.');
+            }
 
-            const hashedPassword = await bcrypt.hash(createUserV2Dto.password, 10);
+            const eEmail = await userRepository.findOne({ where: { email: dto.email } });
+            if (eEmail) {
+                throw new BadRequestException('E-mail já cadastrado, escolha um e-mail de usuário diferente.');
+            }
 
-            const newUser = {
-                cpf: createUserV2Dto.cpf,
-                email: createUserV2Dto.email,
-                role: createUserV2Dto.role
-            } as UserV2;
+            const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-            const user = this.userRepository.create({
-                ...newUser,
-                password: hashedPassword
+            const newUser = userRepository.create({
+                cpf: dto.cpf,
+                email: dto.email,
+                role: dto.role,
+                password: hashedPassword,
             });
 
-            let userDb;
-            try {
-                userDb = await this.userRepository.save(user);
-            } catch (error) {
-                throw new BadRequestException('Erro ao salvar usuário no banco de dados.');
-            }
+            const userDb = await userRepository.save(newUser);
 
-            //#region Profile
-            try {
-                let newProfile = {
-                    name: createUserV2Dto.nome,
-                    user: userDb
-                } as ProfileV2;
-                await this.profileRepository.save(newProfile);
-            } catch (error) {
-                throw new BadRequestException('Erro ao salvar o perfil do usuário no banco de dados.');
-            }
-            //#endregion
+            const newProfile = profileRepository.create({
+                name: dto.nome,
+                user: userDb,
+            });
 
-            return userDb;
-        } catch (error) {
-            if (error instanceof BadRequestException || error instanceof BadRequestException) {
-                throw error;
-            }
-            throw new BadRequestException('Erro interno ao criar o usuário.');
-        }
+            await profileRepository.save(newProfile);
+
+            return userDb.toDto();
+        });
     }
 
-
-    async findAll(filter: UserV2FilterDto): Promise<Pagination<UserV2Dto>> {
+    async findAll(dto: UserV2FilterDto): Promise<Pagination<UserV2Dto>> {
         const where: any = {};
-        const page = filter.page || 1;
-        const limit = filter.limit || 10;
+        const page = dto.page || 1;
+        const limit = dto.limit || 10;
         const skip = (page - 1) * limit;
 
-        if (filter.name) {
-            where.profile = { name: ILike(`%${filter.name}%`) };
+        if (dto.name) {
+            where.profile = { name: ILike(`%${dto.name}%`) };
         }
-        if (filter.email) {
-            where.email = ILike(`%${filter.email}%`);
+        if (dto.email) {
+            where.email = ILike(`%${dto.email}%`);
         }
-        if (filter.cpf) {
-            where.cpf = ILike(`%${filter.cpf}%`);
+        if (dto.cpf) {
+            where.cpf = ILike(`%${dto.cpf}%`);
         }
 
         const [items, total] = await this.userRepository.findAndCount({
@@ -90,11 +77,11 @@ export class UserV2Service {
             take: limit,
             skip: skip,
             order: {
-                createdAt: 'ASC'
-            }
+                createdAt: 'ASC',
+            },
         });
 
-        const userDtos = items.map(user => user.toDto());
+        const userDtos = items.map((user) => user.toDto());
 
         return {
             items: userDtos,
@@ -102,21 +89,21 @@ export class UserV2Service {
                 total,
                 page,
                 limit,
-                totalPages: Math.ceil(total / limit)
-            }
+                totalPages: Math.ceil(total / limit),
+            },
         };
     }
 
-    async findOne(id: string): Promise<UserV2> {
+    async findOne(id: string): Promise<UserV2Dto> {
         const user = await this.userRepository.findOne({
             where: { id },
-            relations: ['profile', 'profile.address']
+            relations: ['profile', 'profile.address'],
         });
 
         if (!user) {
-            throw new NotFoundException(`User with ID ${id} not found`);
+            throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
         }
 
-        return user;
+        return user.toDto();
     }
 }

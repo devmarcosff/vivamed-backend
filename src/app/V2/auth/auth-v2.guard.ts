@@ -11,9 +11,7 @@ import { UserV2JwtPayload } from './interfaces/user-v2-jwt.interface';
 export class AuthV2Guard {
 
     private readonly accessTokenSecret = process.env.JWT_SECRET_KEY;
-    private readonly accessTokenExpiration = process.env.JWT_ACCESS_EXPIRATION || '15m';
     private readonly refreshTokenSecret = process.env.JWT_REFRESH_SECRET_KEY;
-    private readonly refreshTokenExpiration = process.env.JWT_REFRESH_EXPIRATION || '7d';
 
     constructor(private vivamedJwtService: VivamedJwtService) { }
 
@@ -26,20 +24,18 @@ export class AuthV2Guard {
         }
 
         try {
-            const isExpired = await this.vivamedJwtService.verifyAccessTokenExpires<UserV2JwtPayload>(token, this.accessTokenSecret);
+            const isExpired = await this.vivamedJwtService.verifyTokenExpires<UserV2JwtPayload>(token, this.accessTokenSecret);
 
             if (isExpired) {
                 throw new UnauthorizedException('Token inválido');
             }
+            const payload = await this.vivamedJwtService.decode<UserV2JwtPayload>(token);
 
-            request['user'] = this.vivamedJwtService.decode<UserV2JwtPayload>(token, this.accessTokenSecret);
+            request['user'] = payload;
 
             return true;
         } catch (error) {
-            if (error instanceof UnauthorizedException) {
-                throw error;
-            }
-            throw new UnauthorizedException('Token inválido');
+            throw error;
         }
     }
 

@@ -6,6 +6,11 @@ export class CreateProfileV2Dto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
+    userId: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     name: string;
 
     @ApiProperty()

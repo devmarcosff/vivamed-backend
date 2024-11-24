@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/shared/interfaces/jwt.interface';
 
@@ -10,13 +10,17 @@ export class VivamedJwtService {
         return this.jwtService.signAsync(payload, { secret, expiresIn });
     }
 
-    async decode<T extends object>(token: string, secret: string): Promise<T> {
+    decode<T extends object = any>(token: string): T | null {
+        return this.jwtService.decode(token) as T | null;
+    }
+
+    async verify<T extends object = any>(token: string, secret: string): Promise<T> {
         return this.jwtService.verifyAsync<T>(token, { secret });
     }
 
-    async verifyAccessTokenExpires<T extends JwtPayload>(token: string, secret: string): Promise<boolean> {
+    async verifyTokenExpires<T extends JwtPayload>(token: string, secret: string): Promise<boolean> {
         try {
-            const payload = await this.decode<T>(token, secret);
+            const payload = await this.verify<T>(token, secret);
 
             const currentTimestamp = Math.floor(Date.now() / 1000);
 
@@ -30,7 +34,10 @@ export class VivamedJwtService {
 
             return false;
         } catch (error) {
-            return false;
+            if (error.name === 'TokenExpiredError') {
+                throw new UnauthorizedException('Token expirado.');
+            }
+            throw new UnauthorizedException('Token inválido.');
         }
     }
 }

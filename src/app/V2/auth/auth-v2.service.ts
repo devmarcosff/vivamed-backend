@@ -7,6 +7,7 @@ import { VivamedJwtService } from 'src/app/vivamed-jwt-module/jwt.service';
 import { Repository } from 'typeorm';
 import { UserV2 } from '../user/entities/user-v2.entity';
 import { AuthV2Dto } from './dto/auth.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RequestResetPasswordDto, ResetPasswordDto } from './dto/reset-password.dto';
 import { UserV2JwtPayload } from './interfaces/user-v2-jwt.interface';
 
@@ -42,12 +43,11 @@ export class AuthV2Service {
 
             if (userDB.accessToken) {
                 try {
-                    const isExpired = await this.verifyAccessTokenExpires(userDB.accessToken);
+                    const isExpired = await this.vivamedJwtService.verifyTokenExpires(userDB.accessToken, this.accessTokenSecret);
 
                     if (!isExpired) {
                         return {
-                            access_token: userDB.accessToken,
-                            refresh_token: userDB.refreshToken
+                            access_token: userDB.accessToken
                         };
                     }
                 } catch (tokenError) {
@@ -78,29 +78,32 @@ export class AuthV2Service {
         });
 
         return {
-            access_token: user.accessToken,
-            refresh_token: hashedRefreshToken
+            access_token: access_token,
+            refresh_token: refresh_token
         };
     }
 
-    async refresh(userId: string, refreshToken: string) {
+    async refresh(dto: RefreshTokenDto) {
         try {
-            const userDB = await this.userRepository.findOne({ where: { id: userId } });
+            const payload = this.vivamedJwtService.decode<UserV2JwtPayload>(dto.access_token);
+            const userDB = await this.userRepository.findOne({ where: { id: payload.sub } });
             if (!userDB || !userDB.refreshToken) {
                 throw new UnauthorizedException('Acesso negado');
             }
 
-            const refreshTokenMatches = await bcrypt.compare(
-                refreshToken,
-                userDB.refreshToken
-            );
-
+            const refreshTokenMatches = await bcrypt.compare(dto.refresh_token, userDB.refreshToken);
             if (!refreshTokenMatches) {
+                throw new UnauthorizedException('Acesso negado');
+            }
+
+            const isExpired = await this.vivamedJwtService.verifyTokenExpires(dto.refresh_token, this.refreshTokenSecret);
+            if (isExpired) {
                 throw new UnauthorizedException('Acesso negado');
             }
 
             return await this.getTokens(userDB);
         } catch (error) {
+            console.log(error)
             throw new UnauthorizedException('Erro ao renovar o token');
         }
     }
@@ -168,25 +171,5 @@ export class AuthV2Service {
         user.codeResetPassword = null;
         user.codeResetPasswordExpiration = null;
         await this.userRepository.save(user);
-    }
-
-    async verifyAccessTokenExpires(token: string): Promise<boolean> {
-        try {
-            const payload = await this.vivamedJwtService.decode<UserV2JwtPayload>(token, this.accessTokenSecret);
-
-            const currentTimestamp = Math.floor(Date.now() / 1000);
-
-            if (payload.exp && payload.exp < currentTimestamp) {
-                return true; //Token expirado
-            }
-
-            if (payload.iat && payload.iat > currentTimestamp) {
-                return true; //Token inválido: data de emissão futura
-            }
-
-            return false;
-        } catch (error) {
-            throw new UnauthorizedException('Token inválido ou expirado');
-        }
     }
 }

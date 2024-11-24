@@ -18,6 +18,20 @@ export class AddressV2Service {
         private dataSource: DataSource,
     ) { }
 
+
+    async findOne(id: string): Promise<AddressV2Dto> {
+        const address = await this.addressRepository.findOne({
+            where: { id },
+            relations: ['profile'],
+        });
+
+        if (!address) {
+            throw new BadRequestException(`Endereço com ID ${id} não encontrado`);
+        }
+
+        return address.toDto();
+    }
+
     async findAll(filter: AddressV2FilterDto): Promise<Pagination<AddressV2Dto>> {
         const where: any = {};
         const page = filter.page || 1;
@@ -94,8 +108,8 @@ export class AddressV2Service {
         }
 
         try {
-            return await this.dataSource.transaction(async (transactionalEntityManager) => {
-                const addressRepository = transactionalEntityManager.getRepository(AddressV2);
+            return await this.dataSource.transaction(async (manager) => {
+                const addressRepository = manager.getRepository(AddressV2);
                 const newAddress = addressRepository.create({
                     zipcode,
                     street,
@@ -108,12 +122,12 @@ export class AddressV2Service {
                     complement
                 });
 
+
                 if (profileId) {
-                    const profileRepository = transactionalEntityManager.getRepository(ProfileV2);
+                    const profileRepository = manager.getRepository(ProfileV2);
                     const profile = await profileRepository.findOne({
                         relations: { address: true },
-                        where: { id: profileId },
-                        lock: { mode: 'pessimistic_write' }
+                        where: { id: profileId }
                     });
 
                     if (!profile) {
@@ -134,7 +148,7 @@ export class AddressV2Service {
                 }
 
                 // if (citizenId) {
-                //     const citizenRepository = transactionalEntityManager.getRepository(Cidadao);
+                //     const citizenRepository = manager.getRepository(Cidadao);
                 //     const citizen = await citizenRepository.findOne({
                 //         relations: { address: true },
                 //         where: { id: citizenId },
@@ -188,13 +202,12 @@ export class AddressV2Service {
         }: UpdateAddressV2Dto
     ): Promise<AddressV2Dto> {
         try {
-            return await this.dataSource.transaction(async (transactionalEntityManager) => {
-                const addressRepository = transactionalEntityManager.getRepository(AddressV2);
+            return await this.dataSource.transaction(async (manager) => {
+                const addressRepository = manager.getRepository(AddressV2);
                 const addressV2 = await addressRepository.findOne({
                     where: { id },
                     // relations: { profile: true, citizen: true },
                     relations: { profile: true },
-                    lock: { mode: 'pessimistic_write' }
                 });
 
                 if (!addressV2) {
@@ -206,7 +219,7 @@ export class AddressV2Service {
                 }
 
                 if (profileId) {
-                    const profileRepository = transactionalEntityManager.getRepository(ProfileV2);
+                    const profileRepository = manager.getRepository(ProfileV2);
                     const profile = await profileRepository.findOne({
                         where: { id: profileId },
                         relations: { address: true },
@@ -225,7 +238,7 @@ export class AddressV2Service {
                 }
 
                 // if (citizenId) {
-                //     const citizenRepository = transactionalEntityManager.getRepository(Cidadao);
+                //     const citizenRepository = manager.getRepository(Cidadao);
                 //     const citizen = await citizenRepository.findOne({
                 //         where: { id: citizenId },
                 //         relations: { addressV2: true },

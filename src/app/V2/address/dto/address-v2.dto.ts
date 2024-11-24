@@ -1,5 +1,6 @@
 
 export class AddressV2Dto {
+    id: string;
     zipcode: string;
     street: string;
     number: number;

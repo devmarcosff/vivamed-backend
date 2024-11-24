@@ -36,6 +36,7 @@ export class UserV2 extends VivamedBaseEntity {
 
     public toDto(): UserV2Dto {
         return plainToClass(UserV2Dto, {
+            id: this.id,
             email: this.email,
             cpf: this.cpf,
             profile: this.profile?.toDto() ?? undefined

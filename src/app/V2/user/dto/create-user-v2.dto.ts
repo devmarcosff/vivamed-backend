@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsString, Matches, MinLength } from "class-validator";
+import { Role } from "src/shared/enuns/role.enum";
 
 export class CreateUserV2Dto {
     @ApiProperty()
@@ -27,7 +28,7 @@ export class CreateUserV2Dto {
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
-    role: string;
+    @IsEnum(Role, { message: 'O papel do usuário deve ser Admin ou User.' })
+    role: Role;
 
 }
