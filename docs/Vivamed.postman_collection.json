@@ -378,7 +378,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"string\",\n  \"birthday\": \"2024-11-24T17:49:51.356Z\",\n  \"picture\": \"string\"\n}",
+							"raw": "{\n    \"userId\": \"083c002e-0548-4bbc-b719-239ddc1580cc\",\n    \"name\": \"string\",\n    \"birthday\": \"2024-11-24T17:49:51.356Z\",\n    \"picture\": \"string\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -415,7 +415,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"string\",\n  \"birthday\": \"2024-11-24T17:49:51.356Z\",\n  \"picture\": \"string\"\n}",
+							"raw": "{\n  \"name\": \"OPA\",\n  \"birthday\": \"2024-11-24T17:49:51.356Z\",\n  \"picture\": \"string\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -423,14 +423,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v2/profile/970a8d51-ca69-4896-98e8-d33d18a77427",
+							"raw": "{{base_url}}/v2/profile/d706a75c-1ee9-4370-88ef-3ddaef325b5d",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"profile",
-								"970a8d51-ca69-4896-98e8-d33d18a77427"
+								"d706a75c-1ee9-4370-88ef-3ddaef325b5d"
 							]
 						}
 					},
@@ -457,55 +457,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/address",
+							"raw": "{{base_url}}/v2/address/6ecedf3b-3f10-4b25-b119-703d15c19161",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
-								"address"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "limit",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "street",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "city",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "zipcode",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "state",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "profileId",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "citizenId",
-									"value": null,
-									"disabled": true
-								}
+								"address",
+								"6ecedf3b-3f10-4b25-b119-703d15c19161"
 							]
 						}
 					},
@@ -538,42 +497,42 @@
 							"query": [
 								{
 									"key": "page",
-									"value": null,
+									"value": "1",
 									"disabled": true
 								},
 								{
 									"key": "limit",
-									"value": null,
+									"value": "1",
 									"disabled": true
 								},
 								{
 									"key": "street",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "city",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "zipcode",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "state",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "profileId",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "citizenId",
-									"value": null,
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -598,7 +557,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"zipcode\": \"string\",\n    \"street\": \"string\",\n    \"number\": 0,\n    \"neighborhood\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"complement\": \"string\",\n    \"latitude\": 0,\n    \"longitude\": 0,\n    \"profileId\": \"string\",\n    \"citizenId\": \"string\"\n}",
+							"raw": "{\n    \"zipcode\": \"string\",\n    \"street\": \"string\",\n    \"number\": 0,\n    \"neighborhood\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"complement\": \"string\",\n    \"latitude\": 0,\n    \"longitude\": 0,\n    \"profileId\": \"d706a75c-1ee9-4370-88ef-3ddaef325b5d\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -635,7 +594,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"zipcode\": \"string\",\n    \"street\": \"string\",\n    \"number\": 0,\n    \"neighborhood\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"complement\": \"string\",\n    \"latitude\": 0,\n    \"longitude\": 0,\n    \"profileId\": \"string\",\n    \"citizenId\": \"string\"\n}",
+							"raw": "{\n    \"zipcode\": \"123456\",\n    \"street\": \"string\",\n    \"number\": 0,\n    \"neighborhood\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"complement\": \"string\",\n    \"latitude\": 0,\n    \"longitude\": 0,\n    \"profileId\": \"\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -643,14 +602,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v2/address/",
+							"raw": "{{base_url}}/v2/address/6ecedf3b-3f10-4b25-b119-703d15c19161",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"address",
-								""
+								"6ecedf3b-3f10-4b25-b119-703d15c19161"
 							]
 						}
 					},
