@@ -1,17 +1,17 @@
 import {
+    CanActivate,
     ExecutionContext,
     Injectable,
     UnauthorizedException
 } from '@nestjs/common';
 import { Request } from 'express';
-import { VivamedJwtService } from 'src/app/vivamed-jwt-module/jwt.service';
+import { VivamedJwtService } from '../vivamed-jwt-module/jwt.service';
 import { UserV2JwtPayload } from './interfaces/user-v2-jwt.interface';
 
 @Injectable()
-export class AuthV2Guard {
+export class AuthV2Guard implements CanActivate {
 
     private readonly accessTokenSecret = process.env.JWT_SECRET_KEY;
-    private readonly refreshTokenSecret = process.env.JWT_REFRESH_SECRET_KEY;
 
     constructor(private vivamedJwtService: VivamedJwtService) { }
 

@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { VivamedJwtConfigService } from './jwt-config.service';
 import { VivamedJwtService } from './jwt.service';
 
+@Global()
 @Module({
     imports: [
         JwtModule.registerAsync({

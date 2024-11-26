@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { VivamedJwtModule } from 'src/app/vivamed-jwt-module/vivamed-jwt.module';
 import { UserV2 } from './entities/user-v2.entity';
 import { UserV2Controller } from './user-v2.controller';
 import { UserV2Service } from './user-v2.service';
 
 @Module({
     imports: [
-        VivamedJwtModule,
         TypeOrmModule.forFeature([UserV2]),
     ],
     controllers: [UserV2Controller],

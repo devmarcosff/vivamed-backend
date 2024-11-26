@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthV2Service } from './auth-v2.service';
 import { AuthV2Dto } from './dto/auth.dto';
@@ -11,6 +11,7 @@ export class AuthV2Controller {
     constructor(private readonly authV2Service: AuthV2Service) { }
 
     @Post('login')
+    @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: "Login", description: "Logs in to the system using username and password." })
     @ApiOkResponse({ description: "Logged in successfully." })
     @ApiBadRequestResponse({ description: "Error verifying user credentials." })
@@ -33,6 +34,10 @@ export class AuthV2Controller {
     }
 
     @Post('refresh')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: "Refresh token", description: "Generate a new access token using a valid refresh token. This endpoint helps maintain user session without re-authentication." })
+    @ApiOkResponse({ description: "Token generated with successfully." })
+    @ApiBadRequestResponse({ description: "Error verifying user credentials." })
     async refreshToken(@Body() dto: RefreshTokenDto) {
         return this.authV2Service.refresh(dto);
     }

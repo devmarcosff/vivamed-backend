@@ -19,7 +19,24 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"    const response = pm.response.json();",
+									"",
+									"    if(response.access_token)",
+									"        pm.environment.set(\"access_token\", response.access_token);",
+									"",
+									"    if(response.refresh_token)",
+									"        pm.environment.set(\"refresh_token\", response.refresh_token);",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -31,7 +48,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"username\": \"romulo-gouvea@hotmail.com\",\n  \"password\": \"123\"\n}",
+							"raw": "{\n    \"username\": \"romulo-gouvea@hotmail.com\",\n    \"password\": \"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -62,6 +79,10 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"    const response = pm.response.json();",
+									"",
+									"    pm.environment.set(\"access_token\", response.access_token);",
+									"    pm.environment.set(\"refresh_token\", response.refresh_token);",
 									"});"
 								],
 								"type": "text/javascript",
@@ -374,43 +395,6 @@
 								}
 							]
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": \"083c002e-0548-4bbc-b719-239ddc1580cc\",\n    \"name\": \"string\",\n    \"birthday\": \"2024-11-24T17:49:51.356Z\",\n    \"picture\": \"string\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v2/profile",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v2",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/v2/profile",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -431,6 +415,43 @@
 								"v2",
 								"profile",
 								"d706a75c-1ee9-4370-88ef-3ddaef325b5d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"083c002e-0548-4bbc-b719-239ddc1580cc\",\n    \"name\": \"string\",\n    \"birthday\": \"2024-11-24T17:49:51.356Z\",\n    \"picture\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"profile"
 							]
 						}
 					},
@@ -610,6 +631,60 @@
 								"v2",
 								"address",
 								"6ecedf3b-3f10-4b25-b119-703d15c19161"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Citizen",
+			"item": [
+				{
+					"name": "import",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "city",
+									"value": "Bom Jesus do Itabapoana",
+									"type": "text"
+								},
+								{
+									"key": "district",
+									"value": "Serrinha",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/romulo/Documentos/2282690 UNIDADE DE SAUDE DA SERRINHA.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/citizen/import",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"citizen",
+								"import"
 							]
 						}
 					},

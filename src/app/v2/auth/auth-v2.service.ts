@@ -3,9 +3,9 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { VivamedJwtService } from 'src/app/vivamed-jwt-module/jwt.service';
 import { Repository } from 'typeorm';
 import { UserV2 } from '../user/entities/user-v2.entity';
+import { VivamedJwtService } from '../vivamed-jwt-module/jwt.service';
 import { AuthV2Dto } from './dto/auth.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RequestResetPasswordDto, ResetPasswordDto } from './dto/reset-password.dto';
@@ -88,23 +88,24 @@ export class AuthV2Service {
             const payload = this.vivamedJwtService.decode<UserV2JwtPayload>(dto.access_token);
             const userDB = await this.userRepository.findOne({ where: { id: payload.sub } });
             if (!userDB || !userDB.refreshToken) {
-                throw new UnauthorizedException('Acesso negado');
+                throw new UnauthorizedException('Usuário não encontrado.');
             }
 
             const refreshTokenMatches = await bcrypt.compare(dto.refresh_token, userDB.refreshToken);
             if (!refreshTokenMatches) {
-                throw new UnauthorizedException('Acesso negado');
+                throw new UnauthorizedException('Acesso negado.');
             }
 
             const isExpired = await this.vivamedJwtService.verifyTokenExpires(dto.refresh_token, this.refreshTokenSecret);
             if (isExpired) {
-                throw new UnauthorizedException('Acesso negado');
+                throw new UnauthorizedException('Token expirado, realize o login novamente.');
             }
 
             return await this.getTokens(userDB);
         } catch (error) {
             console.log(error)
-            throw new UnauthorizedException('Erro ao renovar o token');
+            throw new UnauthorizedException(error);
+            // throw new UnauthorizedException('Erro ao renovar o token');
         }
     }
 

@@ -1090,7 +1090,7 @@
     "@types/range-parser" "*"
     "@types/send" "*"
 
-"@types/express@^4.17.17":
+"@types/express@*", "@types/express@^4.17.21":
   version "4.17.21"
   resolved "https://registry.npmjs.org/@types/express/-/express-4.17.21.tgz"
   integrity sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==
@@ -1172,6 +1172,13 @@
   integrity sha512-vyi1vzWgMzFMwZY7GSZYX0GU0dmtC8vLHwpgk+NWmwbwRSrlieVyJ9sn5elodwUfklJM7yGl0zQeet1brKTWaQ==
   dependencies:
     "@types/mjml-core" "*"
+
+"@types/multer@^1.4.12":
+  version "1.4.12"
+  resolved "https://registry.npmjs.org/@types/multer/-/multer-1.4.12.tgz"
+  integrity sha512-pQ2hoqvXiJt2FP9WQVLPRO+AmiIm/ZYkavPlIQnx282u4ZrVdztx0pkh3jjpQt0Kz+YI0YhSG264y08UJKoUQg==
+  dependencies:
+    "@types/express" "*"
 
 "@types/node@*", "@types/node@^22.3.0", "@types/node@>=10.0.0":
   version "22.9.0"
@@ -4836,7 +4843,7 @@ magic-string@0.30.8:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
-mailparser@^3.7.1:
+mailparser@^3.6.4:
   version "3.7.1"
   resolved "https://registry.npmjs.org/mailparser/-/mailparser-3.7.1.tgz"
   integrity sha512-RCnBhy5q8XtB3mXzxcAfT1huNqN93HTYYyL6XawlIKycfxM/rXPg9tXoZ7D46+SgCS1zxKzw+BayDQSvncSTTw==
@@ -5540,7 +5547,7 @@ node-releases@^2.0.18:
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.18.tgz"
   integrity sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==
 
-nodemailer@^6.9.13, nodemailer@^6.9.16, nodemailer@>=6.4.6:
+nodemailer@^6.9.16, nodemailer@^6.9.2, nodemailer@>=6.4.6:
   version "6.9.16"
   resolved "https://registry.npmjs.org/nodemailer/-/nodemailer-6.9.16.tgz"
   integrity sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==
@@ -6041,21 +6048,21 @@ pretty-format@^29.0.0, pretty-format@^29.7.0:
     react-is "^18.0.0"
 
 preview-email@^3.0.19:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/preview-email/-/preview-email-3.1.0.tgz"
-  integrity sha512-ZtV1YrwscEjlrUzYrTSs6Nwo49JM3pXLM4fFOBSC3wSni+bxaWlw9/Qgk75PZO8M7cX2EybmL2iwvaV3vkAttw==
+  version "3.0.19"
+  resolved "https://registry.npmjs.org/preview-email/-/preview-email-3.0.19.tgz"
+  integrity sha512-DBS3Nir18YtKc8loYCCOGitmiaQ0vTdahPoiXxwNweJDpmVZo+w3tppufOhoK0m8skpRxT56llYLs3VrORnmNQ==
   dependencies:
     ci-info "^3.8.0"
     display-notification "2.0.0"
     fixpack "^4.0.0"
     get-port "5.1.1"
-    mailparser "^3.7.1"
-    nodemailer "^6.9.13"
+    mailparser "^3.6.4"
+    nodemailer "^6.9.2"
     open "7"
     p-event "4.2.0"
     p-wait-for "3.2.0"
-    pug "^3.0.3"
-    uuid "^9.0.1"
+    pug "^3.0.2"
+    uuid "^9.0.0"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -6186,7 +6193,7 @@ pug-walk@^2.0.0:
   resolved "https://registry.npmjs.org/pug-walk/-/pug-walk-2.0.0.tgz"
   integrity sha512-yYELe9Q5q9IQhuvqsZNwA5hfPkMJ8u92bQLIMcsMxf/VADjNtEYptU+inlufAFYcWdHlwNfZOEnOOQrZrcyJCQ==
 
-pug@^3.0.2, pug@^3.0.3:
+pug@^3.0.2:
   version "3.0.3"
   resolved "https://registry.npmjs.org/pug/-/pug-3.0.3.tgz"
   integrity sha512-uBi6kmc9f3SZ3PXxqcHiUZLmIXgfgWooKWXcwSGwQd2Zi5Rb0bT14+8CJjJgI8AB+nndLaNgHGrcc6bPIB665g==
@@ -7283,7 +7290,7 @@ uuid@^3.3.2:
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^9.0.0, uuid@^9.0.1, uuid@9.0.1:
+uuid@^9.0.0, uuid@9.0.1:
   version "9.0.1"
   resolved "https://registry.npmjs.org/uuid/-/uuid-9.0.1.tgz"
   integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==

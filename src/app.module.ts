@@ -21,12 +21,7 @@ import { ProductModule } from './app/product/product.module';
 import { StockModule } from './app/stock/stock.module';
 import { jwtConstants } from './app/user/jwtConstants';
 import { UserModule } from './app/user/user.module';
-import { AddressV2Module } from './app/V2/address/address-v2.module';
-import { AuthV2Module } from './app/V2/auth/auth-v2.module';
-import { ProfileV2Module } from './app/V2/profile/profile-v2.module';
-import { UserV2Module } from './app/V2/user/user-v2.module';
-import { VivamedJwtModule } from './app/vivamed-jwt-module/vivamed-jwt.module';
-import { CitizenModule } from './app/v2/citizen/citizen.module';
+import { MainModule } from './app/v2/main.module';
 
 @Module({
     imports: [
@@ -78,7 +73,6 @@ import { CitizenModule } from './app/v2/citizen/citizen.module';
             }),
             inject: [ConfigService],
         }),
-        VivamedJwtModule,
         UserModule,
         AuthModule,
         AuthCidadaoModule,
@@ -92,14 +86,9 @@ import { CitizenModule } from './app/v2/citizen/citizen.module';
         MedicamentosModule,
         AgendarConsultaModule,
         PainelAtendimentoModule,
-        UserV2Module,
-        ProfileV2Module,
-        AddressV2Module,
-        AuthV2Module,
-        CitizenModule,
+        MainModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
-    exports: [VivamedJwtModule]
+    providers: [AppService]
 })
 export class AppModule { }
