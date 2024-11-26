@@ -26,6 +26,7 @@ import { AuthV2Module } from './app/V2/auth/auth-v2.module';
 import { ProfileV2Module } from './app/V2/profile/profile-v2.module';
 import { UserV2Module } from './app/V2/user/user-v2.module';
 import { VivamedJwtModule } from './app/vivamed-jwt-module/vivamed-jwt.module';
+import { CitizenModule } from './app/v2/citizen/citizen.module';
 
 @Module({
     imports: [
@@ -95,6 +96,7 @@ import { VivamedJwtModule } from './app/vivamed-jwt-module/vivamed-jwt.module';
         ProfileV2Module,
         AddressV2Module,
         AuthV2Module,
+        CitizenModule,
     ],
     controllers: [AppController],
     providers: [AppService],

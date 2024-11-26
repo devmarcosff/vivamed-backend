@@ -26,7 +26,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "*",
-    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-express": "^10.4.9",
     "@nestjs/platform-socket.io": "^10.4.7",
     "@nestjs/swagger": "^8.0.7",
     "@nestjs/typeorm": "^10.0.2",
@@ -37,12 +37,14 @@
     "class-validator": "^0.14.1",
     "escpos": "^3.0.0-alpha.6",
     "escpos-usb": "^3.0.0-alpha.4",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
