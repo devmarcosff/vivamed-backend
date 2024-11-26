@@ -1,15 +1,15 @@
-import { VivamedBaseEntity } from 'src/shared/entities/vivamed-base-entity';
+import { VivamedFullBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity('citizens_v2')
-export class Citizen extends VivamedBaseEntity {
+export class Citizen extends VivamedFullBaseEntity {
     @Column()
     fullName: string;
 
     @Column({ nullable: true })
     cpf: string;
 
-    @Column({ nullable: true, unique: true })
+    @Column({ unique: true })
     cns: string;
 
     @Column({ nullable: true, type: 'date' })

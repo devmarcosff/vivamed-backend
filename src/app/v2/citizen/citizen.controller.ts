@@ -29,11 +29,12 @@ export class CitizenController {
     async importFromXlsx(
         @Body('city') city: string,
         @Body('district') district: string,
+        @Body('updateDuplicates') updateDuplicates: string,
         @UploadedFile() file: Express.Multer.File,
         @Req() req,
     ) {
         const userId = req.user.sub;
-        const result = await this.citizenService.importFromXlsx(city, district, file, userId);
+        const result = await this.citizenService.importFromXlsx(city, district, file, userId, updateDuplicates.toLowerCase() === "true");
 
         return {
             message: result.message,

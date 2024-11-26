@@ -670,9 +670,14 @@
 									"type": "text"
 								},
 								{
+									"key": "updateDuplicates",
+									"value": "true",
+									"type": "text"
+								},
+								{
 									"key": "file",
 									"type": "file",
-									"src": "/home/romulo/Documentos/2282690 UNIDADE DE SAUDE DA SERRINHA.xlsx"
+									"src": "/home/romulo/exemplo.xlsx"
 								}
 							]
 						},
