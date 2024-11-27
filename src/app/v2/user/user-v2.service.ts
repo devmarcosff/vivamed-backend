@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Pagination } from 'src/shared/types/pagination.type';
+import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, ILike, Repository } from 'typeorm';
 import { ProfileV2 } from '../profile/entities/profile-v2.entity';
 import { CreateUserV2Dto } from './dto/create-user-v2.dto';
@@ -55,7 +55,7 @@ export class UserV2Service {
         });
     }
 
-    async findAll(dto: UserV2FilterDto): Promise<Pagination<UserV2Dto>> {
+    async findAll(dto: UserV2FilterDto): Promise<IPagination<UserV2Dto>> {
         const where: any = {};
         const page = dto.page || 1;
         const limit = dto.limit || 10;

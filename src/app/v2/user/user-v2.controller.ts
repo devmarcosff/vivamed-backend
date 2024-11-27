@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Pagination } from 'src/shared/types/pagination.type';
+import { IPagination } from 'src/shared/types/pagination.type';
 import { AuthV2Guard } from '../auth/auth-v2.guard';
 import { CreateUserV2Dto } from './dto/create-user-v2.dto';
 import { UserV2FilterDto } from './dto/filter-user-v2.dto';
@@ -26,7 +26,7 @@ export class UserV2Controller {
     @ApiOperation({ summary: "User filter", description: "Fetches all users." })
     @ApiOkResponse({ description: "Users retrieved successfully." })
     @ApiUnauthorizedResponse({ description: "Unauthorized access." })
-    async findAll(@Query() dto: UserV2FilterDto): Promise<Pagination<UserV2Dto>> {
+    async findAll(@Query() dto: UserV2FilterDto): Promise<IPagination<UserV2Dto>> {
         return this.userV2Service.findAll(dto);
     }
 
