@@ -10,6 +10,7 @@ export class AddressV2Dto {
     latitude: number;
     longitude: number;
     complement: string;
-    citizenId: string;
-    profileId: string;
+    citizenId?: string;
+    profileId?: string;
+    vendorId?: string;
 }

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Pagination } from 'src/shared/types/pagination.type';
+import { IPagination } from 'src/shared/types/pagination.type';
 import { AuthV2Guard } from '../auth/auth-v2.guard';
 import { AddressV2Service } from './address-v2.service';
 import { AddressV2Dto } from './dto/address-v2.dto';
@@ -27,7 +27,7 @@ export class AddressV2Controller {
     @ApiOperation({ summary: "Address filter", description: "Fetches all addresses based on the filter passed to the endpoint." })
     @ApiOkResponse({ description: "Addresses retrieved successfully." })
     @ApiUnauthorizedResponse({ description: "Unauthorized access." })
-    async findAll(@Query() dto: AddressV2FilterDto): Promise<Pagination<AddressV2Dto>> {
+    async findAll(@Query() dto: AddressV2FilterDto): Promise<IPagination<AddressV2Dto>> {
         return this.addressV2Service.findAll(dto);
     }
 

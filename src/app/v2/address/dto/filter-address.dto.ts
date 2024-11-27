@@ -32,4 +32,9 @@ export class AddressV2FilterDto extends PaginationParamsDto {
     @IsOptional()
     @IsString()
     citizenId?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    vendorId?: string;
 }

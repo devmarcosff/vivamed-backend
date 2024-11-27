@@ -73,7 +73,7 @@ export class ProfileV2Service {
             }
 
             Object.assign(profileDb, dto);
-            console.log('first')
+
             await profileRepository.update(id, profileDb);
 
             return profileDb.toDto();

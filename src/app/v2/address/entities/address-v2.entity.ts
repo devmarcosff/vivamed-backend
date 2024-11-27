@@ -2,6 +2,7 @@ import { plainToClass } from "class-transformer";
 import { VivamedFullBaseEntity } from "src/shared/entities/vivamed-full-base-entity";
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { ProfileV2 } from "../../profile/entities/profile-v2.entity";
+import { Vendor } from "../../vendor/entities/vendor.entity";
 import { AddressV2Dto } from "../dto/address-v2.dto";
 
 @Entity('addresses_v2')
@@ -41,6 +42,10 @@ export class AddressV2 extends VivamedFullBaseEntity {
     @JoinColumn()
     profile: ProfileV2;
 
+    @OneToOne(() => Vendor, vendor => vendor.address)
+    @JoinColumn()
+    vendor: Vendor;
+
     public toDto(): AddressV2Dto {
         return plainToClass(AddressV2Dto, {
             id: this.id,
@@ -55,6 +60,7 @@ export class AddressV2 extends VivamedFullBaseEntity {
             longitude: this.longitude,
             // citizenId: this.citizen ? this.citizen.id : "",
             profileId: this.profile?.id ?? "",
+            vendorId: this.vendor?.id ?? "",
         } as AddressV2Dto);
     }
 }

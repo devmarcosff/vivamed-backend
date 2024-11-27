@@ -49,9 +49,13 @@ export class CreateAddressV2Dto {
 
     @ApiProperty()
     @IsString()
-    profileId: string;
+    profileId?: string;
 
     @ApiProperty()
     @IsString()
     citizenId?: string;
+
+    @ApiProperty()
+    @IsString()
+    vendorId?: string;
 }

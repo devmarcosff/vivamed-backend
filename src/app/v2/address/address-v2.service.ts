@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Pagination } from 'src/shared/types/pagination.type';
+import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, EntityNotFoundError, ILike, QueryFailedError, Repository } from 'typeorm';
 import { ProfileV2 } from '../profile/entities/profile-v2.entity';
+import { Vendor } from '../vendor/entities/vendor.entity';
 import { AddressV2Dto } from './dto/address-v2.dto';
 import { CreateAddressV2Dto } from './dto/create-address-v2.dto';
 import { AddressV2FilterDto } from './dto/filter-address.dto';
@@ -32,7 +33,7 @@ export class AddressV2Service {
         return address.toDto();
     }
 
-    async findAll(filter: AddressV2FilterDto): Promise<Pagination<AddressV2Dto>> {
+    async findAll(filter: AddressV2FilterDto): Promise<IPagination<AddressV2Dto>> {
         const where: any = {};
         const page = filter.page || 1;
         const limit = filter.limit || 10;
@@ -64,12 +65,12 @@ export class AddressV2Service {
 
         const [items, total] = await this.addressRepository.findAndCount({
             // relations: { profile: true, citizen: true },
-            relations: { profile: true },
+            relations: { profile: true, vendor: true },
             where,
             take: limit,
             skip: skip,
             order: {
-                id: 'DESC'
+                street: 'ASC'
             }
         });
 
@@ -86,48 +87,35 @@ export class AddressV2Service {
         };
     }
 
-    async create({
-        zipcode,
-        street,
-        number,
-        neighborhood,
-        city,
-        state,
-        latitude,
-        longitude,
-        complement,
-        profileId,
-        citizenId
-    }: CreateAddressV2Dto): Promise<AddressV2Dto> {
-        if (profileId && citizenId) {
-            throw new BadRequestException('Não é possível criar um endereço para usuário e cidadão simultaneamente');
+    async create(dto: CreateAddressV2Dto): Promise<AddressV2Dto> {
+        if (dto.profileId && dto.citizenId && dto.vendorId) {
+            throw new BadRequestException('Não é possível criar um endereço simultaneamente');
         }
 
-        if (!profileId && !citizenId) {
-            throw new BadRequestException('É necessário fornecer profileId ou citizenId');
+        if (!dto.profileId && !dto.citizenId && !dto.vendorId) {
+            throw new BadRequestException('É necessário fornecer uma referência como ID');
         }
 
         try {
             return await this.dataSource.transaction(async (manager) => {
                 const addressRepository = manager.getRepository(AddressV2);
                 const newAddress = addressRepository.create({
-                    zipcode,
-                    street,
-                    number,
-                    neighborhood,
-                    city,
-                    state,
-                    latitude,
-                    longitude,
-                    complement
+                    zipcode: dto.zipcode,
+                    street: dto.street,
+                    number: dto.number,
+                    neighborhood: dto.neighborhood,
+                    city: dto.city,
+                    state: dto.state,
+                    latitude: dto.latitude,
+                    longitude: dto.longitude,
+                    complement: dto.complement
                 });
 
-
-                if (profileId) {
+                if (dto.profileId) {
                     const profileRepository = manager.getRepository(ProfileV2);
                     const profile = await profileRepository.findOne({
                         relations: { address: true },
-                        where: { id: profileId }
+                        where: { id: dto.profileId }
                     });
 
                     if (!profile) {
@@ -145,6 +133,30 @@ export class AddressV2Service {
                     await profileRepository.save(profile);
 
                     delete newAddress.profile;
+                }
+
+                if (dto.vendorId) {
+                    const vendorRepository = manager.getRepository(Vendor);
+                    const vendor = await vendorRepository.findOne({
+                        relations: { address: true },
+                        where: { id: dto.vendorId }
+                    });
+
+                    if (!vendor) {
+                        throw new BadRequestException('Fornecedor não encontrado.');
+                    }
+
+                    if (vendor.address) {
+                        throw new BadRequestException('O fornecedor já possui um endereço associado.');
+                    }
+
+                    newAddress.vendor = vendor;
+                    await addressRepository.save(newAddress);
+
+                    vendor.address = newAddress;
+                    await vendorRepository.save(vendor);
+
+                    delete newAddress.vendor;
                 }
 
                 // if (citizenId) {
@@ -176,12 +188,12 @@ export class AddressV2Service {
             });
         } catch (error) {
             if (error instanceof QueryFailedError) {
-                throw new InternalServerErrorException('Falha na operação do banco de dados');
+                throw new BadRequestException('Falha na operação do banco de dados');
             }
             if (error instanceof EntityNotFoundError) {
                 throw new BadRequestException(error.message);
             }
-            throw error;
+            throw new BadRequestException(error);
         }
     }
 
@@ -207,7 +219,7 @@ export class AddressV2Service {
                 const addressV2 = await addressRepository.findOne({
                     where: { id },
                     // relations: { profile: true, citizen: true },
-                    relations: { profile: true },
+                    relations: { profile: true, vendor: true },
                 });
 
                 if (!addressV2) {

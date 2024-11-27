@@ -1,11 +1,11 @@
-export interface PaginationInfo {
+export interface IPaginationInfo {
     total: number;
     page: number;
     limit: number;
     totalPages: number;
 }
 
-export interface Pagination<T> {
+export interface IPagination<T> {
     items: T[];
-    info: PaginationInfo;
+    info: IPaginationInfo;
 }
