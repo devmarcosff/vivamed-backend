@@ -23,6 +23,8 @@ export class FirmService {
             const existingFirm = await firmRepository.findOneBy({ cnpj: dto.cnpj });
 
             if (existingFirm) {
+                existingFirm.enabled = true;
+                await this.firmRepository.update(existingFirm.id, existingFirm);
                 throw new BadRequestException('Firm already exists.');
             }
 
@@ -76,6 +78,8 @@ export class FirmService {
             where.municipalRegistration = ILike(`%${filter.municipalRegistration}%`);
         }
 
+        where.enabled = true;
+
         const [items, total] = await this.firmRepository.findAndCount({
             where,
             take: limit,
@@ -99,7 +103,7 @@ export class FirmService {
     }
 
     async findOne(id: string): Promise<FirmDto> {
-        const firm = await this.firmRepository.findOneBy({ id });
+        const firm = await this.firmRepository.findOneBy({ id, enabled: true });
         if (!firm) {
             throw new NotFoundException(`Firm not found.`);
         }
