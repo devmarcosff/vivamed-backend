@@ -30,7 +30,7 @@ export class FirmService {
 
             const newFirm = firmRepository.create({
                 businessName: dto.businessName,
-                tradeName: dto.tradeName,
+                fantasyName: dto.fantasyName,
                 cnpj: dto.cnpj,
                 phone: dto.phone,
                 email: dto.email,
@@ -54,8 +54,8 @@ export class FirmService {
             where.businessName = ILike(`%${filter.businessName}%`);
         }
 
-        if (filter.tradeName) {
-            where.tradeName = ILike(`%${filter.tradeName}%`);
+        if (filter.fantasyName) {
+            where.fantasyName = ILike(`%${filter.fantasyName}%`);
         }
 
         if (filter.cnpj) {

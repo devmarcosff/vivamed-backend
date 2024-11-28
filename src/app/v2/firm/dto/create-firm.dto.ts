@@ -10,7 +10,7 @@ export class CreateFirmDto {
     @ApiProperty()
     @IsString()
     @IsOptional()
-    tradeName?: string;
+    fantasyName?: string;
 
     @ApiProperty()
     @IsString()

@@ -11,8 +11,8 @@ export class Firm extends VivamedBigBaseEntity {
     @Column({ name: 'business_name', nullable: false })
     businessName: string; // Razão social
 
-    @Column({ name: 'trade_name', nullable: true })
-    tradeName?: string; // Nome fantasia
+    @Column({ name: 'fantasy_name', nullable: true })
+    fantasyName?: string; // Nome fantasia
 
     @Column({ unique: true, nullable: false })
     cnpj: string; // CNPJ
@@ -42,7 +42,7 @@ export class Firm extends VivamedBigBaseEntity {
         return plainToClass(FirmDto, {
             id: this.id,
             businessName: this.businessName,
-            tradeName: this.tradeName,
+            fantasyName: this.fantasyName,
             cnpj: this.cnpj,
             phone: this.phone,
             email: this.email,

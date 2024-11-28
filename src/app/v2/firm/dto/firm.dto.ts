@@ -1,7 +1,7 @@
 export class FirmDto {
     id: string;
     businessName: string;
-    tradeName?: string;
+    fantasyName?: string;
     cnpj: string;
     phone?: string;
     email?: string;
