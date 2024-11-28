@@ -55,4 +55,6 @@ export class Receipt extends VivamedSmallBaseEntity {
 
     @OneToMany(() => ReceiptProduct, (product) => product.receipt, { cascade: false })
     products: ReceiptProduct[];
+
+
 }

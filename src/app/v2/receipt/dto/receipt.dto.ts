@@ -17,7 +17,4 @@ export class ReceiptDto {
 
     barcodeOrAuthCode: string;
     nfeAccessKey?: string;
-    nfeNumber?: string;
-    nfeAuthCode?: string;
-    nfeAuthDateTime?: string;
 }

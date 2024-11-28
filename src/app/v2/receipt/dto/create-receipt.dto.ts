@@ -1,60 +1,77 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateReceiptDto {
-    @ApiProperty({ description: 'Invoice number', example: '12345' })
+    @ApiProperty({ description: 'Invoice number of the receipt', example: '123456', maxLength: 50, })
     @IsString()
+    @IsNotEmpty()
     invoiceNumber: string;
 
-    @ApiProperty({ description: 'Invoice series', example: '1' })
+    @ApiProperty({ description: 'Invoice series of the receipt', example: 'A1', maxLength: 20, })
     @IsString()
+    @IsNotEmpty()
     invoiceSeries: string;
 
-    @ApiProperty({ description: 'Issue date and time', example: '2024-11-26T14:30:00Z' })
+    @ApiProperty({ description: 'The date and time when the invoice was issued', example: '2024-11-27T12:00:00', })
     @IsDateString()
-    issueDateTime: string;
+    issueDateTime: Date;
 
-    @ApiProperty({ description: 'Issuer CNPJ', example: '12345678000195' })
+    @ApiProperty({ description: 'CNPJ of the firm issuing the receipt', example: '12345678000195', })
     @IsString()
+    @IsNotEmpty()
     issuerCnpj: string;
 
-    @ApiProperty({ description: 'Recipient CNPJ', example: '98765432000123' })
+    @ApiProperty({ description: 'CNPJ of the recipient firm', example: '98765432000176', })
     @IsString()
+    @IsNotEmpty()
     recipientCnpj: string;
 
-    @ApiProperty({ description: 'Total invoice value', example: 1500.75 })
+    @ApiProperty({ description: 'Total value of the receipt', example: 1500.50, })
     @IsNumber()
     totalValue: number;
 
-    @ApiProperty({
-        description: 'Tax information (e.g., ICMS, IPI, ISS)',
-        example: { ICMS: 120.5, IPI: 45.3, ISS: 10.0 },
-    })
+    @ApiProperty({ description: 'ICMS base calculation value', example: 1000.00, required: false, })
     @IsOptional()
-    taxes?: Record<string, number>;
+    @IsNumber()
+    icmsBase?: number;
 
-    @ApiProperty({ description: 'Barcode or authentication code', example: 'ABCD1234567890' })
+    @ApiProperty({ description: 'ICMS value', example: 150.00, required: false, })
+    @IsOptional()
+    @IsNumber()
+    icmsValue?: number;
+
+    @ApiProperty({ description: 'IPI value', example: 50.00, required: false, })
+    @IsOptional()
+    @IsNumber()
+    ipiValue?: number;
+
+    @ApiProperty({ description: 'ISS value', example: 100.00, required: false, })
+    @IsOptional()
+    @IsNumber()
+    issValue?: number;
+
+    @ApiProperty({ description: 'ICMS rate percentage', example: 18.00, required: false, })
+    @IsOptional()
+    @IsNumber()
+    icmsRate?: number;
+
+    @ApiProperty({ description: 'IPI rate percentage', example: 10.00, required: false, })
+    @IsOptional()
+    @IsNumber()
+    ipiRate?: number;
+
+    @ApiProperty({ description: 'ISS rate percentage', example: 5.00, required: false, })
+    @IsOptional()
+    @IsNumber()
+    issRate?: number;
+
+    @ApiProperty({ description: 'Barcode or authorization code for the invoice', example: '12345678901234567890', required: false, })
+    @IsOptional()
     @IsString()
-    barcodeOrAuthCode: string;
+    barcodeOrAuthCode?: string;
 
-    // Fields specific to electronic invoices
-    @ApiProperty({ description: 'NFe access key', example: '35191012345678000191550010000012341999999999' })
+    @ApiProperty({ description: 'Access key for NFe (Nota Fiscal Eletrônica)', example: '351904123456789012345500100100001234567890123', required: false, })
     @IsOptional()
     @IsString()
     nfeAccessKey?: string;
-
-    @ApiProperty({ description: 'NFe number', example: '98765' })
-    @IsOptional()
-    @IsString()
-    nfeNumber?: string;
-
-    @ApiProperty({ description: 'NFe authentication code', example: 'AUTH123456789' })
-    @IsOptional()
-    @IsString()
-    nfeAuthCode?: string;
-
-    @ApiProperty({ description: 'NFe authentication date and time', example: '2024-11-26T15:00:00Z' })
-    @IsOptional()
-    @IsDateString()
-    nfeAuthDateTime?: string;
 }

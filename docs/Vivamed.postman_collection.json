@@ -223,17 +223,18 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"cpf\": \"string\",\n  \"email\": \"string\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{base_url}}/v2/auth/logout",
 							"host": [
@@ -298,14 +299,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/user/086ac86f-0a30-4d0c-93fb-568067972bfe",
+							"raw": "{{base_url}}/v2/user/083c002e-0548-4bbc-b719-239ddc1580cc",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"user",
-								"086ac86f-0a30-4d0c-93fb-568067972bfe"
+								"083c002e-0548-4bbc-b719-239ddc1580cc"
 							]
 						}
 					},
@@ -328,7 +329,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"nome\": \"5\",\n  \"cpf\": \"5\",\n  \"email\": \"5\",\n  \"password\": \"string\",\n  \"role\": \"admin\"\n}",
+							"raw": "{\n  \"nome\": \"6\",\n  \"cpf\": \"6\",\n  \"email\": \"6\",\n  \"password\": \"6\",\n  \"role\": \"admin\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -369,14 +370,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/profile/970a8d51-ca69-4896-98e8-d33d18a77427",
+							"raw": "{{base_url}}/v2/profile/d706a75c-1ee9-4370-88ef-3ddaef325b5d",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"profile",
-								"970a8d51-ca69-4896-98e8-d33d18a77427"
+								"d706a75c-1ee9-4370-88ef-3ddaef325b5d"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -399,7 +407,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"OPA\",\n  \"birthday\": \"2024-11-24T17:49:51.356Z\",\n  \"picture\": \"string\"\n}",
+							"raw": "{\n  \"name\": \"OPA2\",\n  \"birthday\": \"2024-11-24T17:49:51.356Z\",\n  \"picture\": \"string\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -478,14 +486,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/address/6ecedf3b-3f10-4b25-b119-703d15c19161",
+							"raw": "{{base_url}}/v2/address/a5ae1e04-59c4-457f-98f9-473454a5e1a0",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"address",
-								"6ecedf3b-3f10-4b25-b119-703d15c19161"
+								"a5ae1e04-59c4-457f-98f9-473454a5e1a0"
 							]
 						}
 					},
@@ -552,7 +560,7 @@
 									"disabled": true
 								},
 								{
-									"key": "citizenId",
+									"key": "firmId",
 									"value": "",
 									"disabled": true
 								}
@@ -578,7 +586,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"zipcode\": \"string\",\n    \"street\": \"string\",\n    \"number\": 0,\n    \"neighborhood\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"complement\": \"string\",\n    \"latitude\": 0,\n    \"longitude\": 0,\n    \"profileId\": \"d706a75c-1ee9-4370-88ef-3ddaef325b5d\"\n}",
+							"raw": "{\n    \"zipcode\": \"1\",\n    \"street\": \"1\",\n    \"number\": 1,\n    \"neighborhood\": \"1\",\n    \"city\": \"1\",\n    \"state\": \"1\",\n    \"complement\": \"1\",\n    \"latitude\": 0,\n    \"longitude\": 0,\n    // \"profileId\": \"d706a75c-1ee9-4370-88ef-3ddaef325b5d\"\n    \"firmId\": \"d92dbd17-aa93-43f1-8347-9f8e8e06b23f\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -682,14 +690,619 @@
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/v2/citizen/import",
+							"raw": "{{base_url}}/v2/citizens/import",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
-								"citizen",
+								"citizens",
 								"import"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/citizen",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/citizens",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"citizens"
+							],
+							"query": [
+								{
+									"key": "fullName",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "cpf",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "cns",
+									"value": "702009377245088",
+									"disabled": true
+								},
+								{
+									"key": "birthDate",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "weighting",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "identificationType",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "lastContactDate",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "totalServices",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "50",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Firm",
+			"item": [
+				{
+					"name": "/v2/firms",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessName\": \"1\",\n    \"tradeName\": \"2\",\n    \"cnpj\": \"3\",\n    \"phone\": \"4\",\n    \"email\": \"5\",\n    \"stateRegistration\": \"6\",\n    \"municipalRegistration\": \"7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/firms",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"firms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/firms",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/firms",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"firms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/firms/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/firms/f41535f6-bd3b-42fe-96fa-801a177751bb",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"firms",
+								"f41535f6-bd3b-42fe-96fa-801a177751bb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/firms/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"businessName\": \"1\",\n  \"tradeName\": \"2\",\n  \"cnpj\": \"3\",\n  \"phone\": \"4\",\n  \"email\": \"5\",\n  \"stateRegistration\": \"6\",\n  \"municipalRegistration\": \"7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/firms/f41535f6-bd3b-42fe-96fa-801a177751bb",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"firms",
+								"f41535f6-bd3b-42fe-96fa-801a177751bb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/firms/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/firms/f41535f6-bd3b-42fe-96fa-801a177751bb",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"firms",
+								"f41535f6-bd3b-42fe-96fa-801a177751bb"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "/v2/products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"photo\": \"https://example.com/photo.jpg\",\n  \"code\": \"PRD12345\",\n  \"name\": \"Paracetamol\",\n  \"activeIngredient\": \"Paracetamol\",\n  \"pharmaceuticalForm\": \"Tablet\",\n  \"concentration\": \"500mg\",\n  \"healthRegistration\": \"123456789\",\n  \"manufacturer\": \"PharmaCorp\",\n  \"leafletURL\": \"https://example.com/leaflet.pdf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/products/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/products/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"products",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/products/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"photo\": \"https://example.com/photo.jpg\",\n    \"code\": \"PRD12345\",\n    \"name\": \"Paracetamola\",\n    \"activeIngredient\": \"Paracetamol\",\n    \"pharmaceuticalForm\": \"Tablet\",\n    \"concentration\": \"500mg\",\n    \"manufacturer\": \"PharmaCorp\",\n    \"healthRegistration\": \"123456789\",\n    \"leafletUrl\": \"null\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/products/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"products",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/products/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/products/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"products",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Receipt",
+			"item": [
+				{
+					"name": "/v2/receipts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"invoiceNumber\": \"123456\",\n    \"invoiceSeries\": \"A1\",\n    \"issueDateTime\": \"2024-11-27T12:00:00\",\n    \"issuerCnpj\": \"12345678000195\",\n    \"recipientCnpj\": \"98765432000176\",\n    \"totalValue\": 1500.5,\n    //   \"icmsBase\": 1000,\n    //   \"icmsValue\": 150,\n    //   \"ipiValue\": 50,\n    //   \"issValue\": 100,\n    //   \"icmsRate\": 18,\n    //   \"ipiRate\": 10,\n    //   \"issRate\": 5,\n    \"barcodeOrAuthCode\": \"12345678901234567890\",\n    \"nfeAccessKey\": \"351904123456789012345500100100001234567890123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/receipts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"receipts"
+							],
+							"query": [
+								{
+									"key": "firmId",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/receipts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/receipts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"receipts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/receipts/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/receipts/d92dbd17-aa93-43f1-8347-9f8e8e06b23f",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"receipts",
+								"d92dbd17-aa93-43f1-8347-9f8e8e06b23f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/receipts/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"businessName\": \"1\",\n  \"tradeName\": \"2\",\n  \"cnpj\": \"3\",\n  \"phone\": \"4\",\n  \"email\": \"5\",\n  \"stateRegistration\": \"6\",\n  \"municipalRegistration\": \"7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/receipts/d92dbd17-aa93-43f1-8347-9f8e8e06b23f",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"receipts",
+								"d92dbd17-aa93-43f1-8347-9f8e8e06b23f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/receipts/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/receipts/d92dbd17-aa93-43f1-8347-9f8e8e06b23f",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"receipts",
+								"d92dbd17-aa93-43f1-8347-9f8e8e06b23f"
 							]
 						}
 					},

@@ -16,18 +16,19 @@ export class ReceiptService {
     ) { }
 
     async create(dto: CreateReceiptDto): Promise<ReceiptDto> {
-        return this.dataSource.transaction(async (manager) => {
-            const receiptRepository = manager.getRepository(Receipt);
+        // return this.dataSource.transaction(async (manager) => {
+        //     const receiptRepository = manager.getRepository(Receipt);
 
-            const newReceipt = receiptRepository.create({
-                ...dto,
-                issueDateTime: new Date(dto.issueDateTime),
-                nfeAuthDateTime: dto.nfeAuthDateTime ? new Date(dto.nfeAuthDateTime) : null,
-            });
+        //     const newReceipt = receiptRepository.create({
+        //         ...dto,
+        //         issueDateTime: new Date(dto.issueDateTime),
+        //         nfeAuthDateTime: dto.nfeAuthDateTime ? new Date(dto.nfeAuthDateTime) : null,
+        //     });
 
-            const receipt = await receiptRepository.save(newReceipt);
-            return plainToClass(ReceiptDto, receipt);
-        });
+        //     const receipt = await receiptRepository.save(newReceipt);
+        //     return plainToClass(ReceiptDto, receipt);
+        // });
+        return null;
     }
 
     async findOne(id: string): Promise<ReceiptDto> {
@@ -41,24 +42,25 @@ export class ReceiptService {
     }
 
     async update(id: string, dto: UpdateReceiptDto): Promise<ReceiptDto> {
-        return this.dataSource.transaction(async (manager) => {
-            const receiptRepository = manager.getRepository(Receipt);
+        // return this.dataSource.transaction(async (manager) => {
+        //     const receiptRepository = manager.getRepository(Receipt);
 
-            const receipt = await receiptRepository.findOne({ where: { id }, lock: { mode: 'pessimistic_write' } });
+        //     const receipt = await receiptRepository.findOne({ where: { id }, lock: { mode: 'pessimistic_write' } });
 
-            if (!receipt) {
-                throw new NotFoundException('Receipt not found');
-            }
+        //     if (!receipt) {
+        //         throw new NotFoundException('Receipt not found');
+        //     }
 
-            Object.assign(receipt, {
-                ...dto,
-                issueDateTime: dto.issueDateTime ? new Date(dto.issueDateTime) : receipt.issueDateTime,
-                nfeAuthDateTime: dto.nfeAuthDateTime ? new Date(dto.nfeAuthDateTime) : receipt.nfeAuthDateTime,
-            });
+        //     Object.assign(receipt, {
+        //         ...dto,
+        //         issueDateTime: dto.issueDateTime ? new Date(dto.issueDateTime) : receipt.issueDateTime,
+        //         nfeAuthDateTime: dto.nfeAuthDateTime ? new Date(dto.nfeAuthDateTime) : receipt.nfeAuthDateTime,
+        //     });
 
-            await receiptRepository.save(receipt);
-            return plainToClass(ReceiptDto, receipt);
-        });
+        //     await receiptRepository.save(receipt);
+        //     return plainToClass(ReceiptDto, receipt);
+        // });
+        return null;
     }
 
     async remove(id: string): Promise<void> {

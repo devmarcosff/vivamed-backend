@@ -16,7 +16,7 @@ export class ReceiptProductService {
         private readonly dataSource: DataSource,
     ) { }
 
-    async create(dto: CreateReceiptProductDto): Promise<ReceiptProduct> {
+    async create(dto: CreateReceiptProductDto): Promise<ReceiptProductDto> {
         return this.dataSource.transaction(async (manager) => {
             const productRepository = manager.getRepository(ReceiptProduct);
 
@@ -26,7 +26,7 @@ export class ReceiptProductService {
                 receipt: { id: dto.receiptId },
             });
 
-            return productRepository.save(newProduct);
+            return productRepository.save(newProduct) as unknown as ReceiptProductDto;
         });
     }
 
@@ -49,7 +49,9 @@ export class ReceiptProductService {
             take: limit,
             skip: skip,
             order: {
-                description: 'ASC',
+                product: {
+                    name: 'ASC'
+                },
             },
         });
 
