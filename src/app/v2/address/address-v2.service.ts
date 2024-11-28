@@ -2,8 +2,8 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, EntityNotFoundError, ILike, QueryFailedError, Repository } from 'typeorm';
+import { Firm } from '../firm/entities/firm.entity';
 import { ProfileV2 } from '../profile/entities/profile-v2.entity';
-import { Vendor } from '../vendor/entities/vendor.entity';
 import { AddressV2Dto } from './dto/address-v2.dto';
 import { CreateAddressV2Dto } from './dto/create-address-v2.dto';
 import { AddressV2FilterDto } from './dto/filter-address.dto';
@@ -65,7 +65,7 @@ export class AddressV2Service {
 
         const [items, total] = await this.addressRepository.findAndCount({
             // relations: { profile: true, citizen: true },
-            relations: { profile: true, vendor: true },
+            relations: { profile: true, firm: true },
             where,
             take: limit,
             skip: skip,
@@ -88,11 +88,11 @@ export class AddressV2Service {
     }
 
     async create(dto: CreateAddressV2Dto): Promise<AddressV2Dto> {
-        if (dto.profileId && dto.citizenId && dto.vendorId) {
+        if (dto.profileId && dto.citizenId && dto.firmId) {
             throw new BadRequestException('Não é possível criar um endereço simultaneamente');
         }
 
-        if (!dto.profileId && !dto.citizenId && !dto.vendorId) {
+        if (!dto.profileId && !dto.citizenId && !dto.firmId) {
             throw new BadRequestException('É necessário fornecer uma referência como ID');
         }
 
@@ -135,28 +135,28 @@ export class AddressV2Service {
                     delete newAddress.profile;
                 }
 
-                if (dto.vendorId) {
-                    const vendorRepository = manager.getRepository(Vendor);
-                    const vendor = await vendorRepository.findOne({
+                if (dto.firmId) {
+                    const firmRepository = manager.getRepository(Firm);
+                    const firm = await firmRepository.findOne({
                         relations: { address: true },
-                        where: { id: dto.vendorId }
+                        where: { id: dto.firmId }
                     });
 
-                    if (!vendor) {
+                    if (!firm) {
                         throw new BadRequestException('Fornecedor não encontrado.');
                     }
 
-                    if (vendor.address) {
+                    if (firm.address) {
                         throw new BadRequestException('O fornecedor já possui um endereço associado.');
                     }
 
-                    newAddress.vendor = vendor;
+                    newAddress.firm = firm;
                     await addressRepository.save(newAddress);
 
-                    vendor.address = newAddress;
-                    await vendorRepository.save(vendor);
+                    firm.address = newAddress;
+                    await firmRepository.save(firm);
 
-                    delete newAddress.vendor;
+                    delete newAddress.firm;
                 }
 
                 // if (citizenId) {
@@ -219,7 +219,7 @@ export class AddressV2Service {
                 const addressV2 = await addressRepository.findOne({
                     where: { id },
                     // relations: { profile: true, citizen: true },
-                    relations: { profile: true, vendor: true },
+                    relations: { profile: true, firm: true },
                 });
 
                 if (!addressV2) {

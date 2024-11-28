@@ -1,4 +1,4 @@
-export class VendorDto {
+export class FirmDto {
     id: string;
     businessName: string;
     tradeName?: string;

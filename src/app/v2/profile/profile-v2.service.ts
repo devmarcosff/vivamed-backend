@@ -19,19 +19,6 @@ export class ProfileV2Service {
         private dataSource: DataSource,
     ) { }
 
-    async findById(id: string): Promise<ProfileV2Dto> {
-        const profile = await this.profileRepository.findOne({
-            where: { id },
-            relations: ['address'],
-        });
-
-        if (!profile) {
-            throw new NotFoundException('Perfil não encontrado');
-        }
-
-        return profile.toDto();
-    }
-
     async create(dto: CreateProfileV2Dto): Promise<ProfileV2Dto> {
         return this.dataSource.transaction(async (manager) => {
             const profileRepository = manager.getRepository(ProfileV2);
@@ -57,6 +44,19 @@ export class ProfileV2Service {
 
             return profileDb.toDto();
         });
+    }
+
+    async findById(id: string): Promise<ProfileV2Dto> {
+        const profile = await this.profileRepository.findOne({
+            where: { id },
+            relations: ['address'],
+        });
+
+        if (!profile) {
+            throw new NotFoundException('Perfil não encontrado');
+        }
+
+        return profile.toDto();
     }
 
     async update(id: string, dto: UpdateProfileV2Dto): Promise<ProfileV2Dto> {

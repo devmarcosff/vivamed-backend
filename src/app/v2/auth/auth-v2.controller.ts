@@ -1,5 +1,6 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthV2Guard } from './auth-v2.guard';
 import { AuthV2Service } from './auth-v2.service';
 import { AuthV2Dto } from './dto/auth.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -42,6 +43,7 @@ export class AuthV2Controller {
         return this.authV2Service.refresh(dto);
     }
 
+    @UseGuards(AuthV2Guard)
     @Post('logout')
     async logout(@Req() req) {
         const userId = req.user.sub;

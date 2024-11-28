@@ -1,12 +1,12 @@
 import { plainToClass } from "class-transformer";
-import { VivamedFullBaseEntity } from "src/shared/entities/vivamed-full-base-entity";
+import { VivamedBigBaseEntity } from "src/shared/entities/vivamed-full-base-entity";
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { AddressV2 } from "../../address/entities/address-v2.entity";
 import { UserV2 } from "../../user/entities/user-v2.entity";
 import { ProfileV2Dto } from "../dto/profile-v2.dto";
 
 @Entity('profiles_v2')
-export class ProfileV2 extends VivamedFullBaseEntity {
+export class ProfileV2 extends VivamedBigBaseEntity {
     @Column()
     name: string;
 

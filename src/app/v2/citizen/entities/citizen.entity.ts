@@ -1,8 +1,10 @@
-import { VivamedFullBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
+import { plainToClass } from 'class-transformer';
+import { VivamedBigBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
 import { Column, Entity } from 'typeorm';
+import { CitizenDto } from '../dto/citizen.dto';
 
 @Entity('citizens_v2')
-export class Citizen extends VivamedFullBaseEntity {
+export class Citizen extends VivamedBigBaseEntity {
     @Column()
     fullName: string;
 
@@ -38,4 +40,21 @@ export class Citizen extends VivamedFullBaseEntity {
 
     @Column()
     district: string;
+
+    public toDto(): CitizenDto {
+        return plainToClass(CitizenDto, {
+            fullName: this.fullName,
+            cpf: this.cpf,
+            cns: this.cns,
+            birthDate: this.birthDate,
+            gender: this.gender,
+            age: this.age,
+            weighting: this.weighting,
+            identificationType: this.identificationType,
+            lastContactDate: this.lastContactDate,
+            totalServices: this.totalServices,
+            city: this.city,
+            district: this.district,
+        });
+    }
 }

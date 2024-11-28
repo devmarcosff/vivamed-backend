@@ -57,5 +57,5 @@ export class CreateAddressV2Dto {
 
     @ApiProperty()
     @IsString()
-    vendorId?: string;
+    firmId?: string;
 }

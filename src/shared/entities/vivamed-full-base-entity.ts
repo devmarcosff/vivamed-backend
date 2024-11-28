@@ -1,16 +1,7 @@
-import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { VivamedBaseEntity } from './vivamed-base-entity';
+import { Column } from 'typeorm';
+import { VivamedMediumBaseEntity } from './vivamed-medium-entity';
 
-export abstract class VivamedFullBaseEntity extends VivamedBaseEntity {
-    @Column({ default: true })
-    enabled: boolean;
-
-    @CreateDateColumn({ name: 'created_at' })
-    createdAt: Date;
-
-    @UpdateDateColumn({ name: 'updated_at' })
-    updatedAt: Date;
-
+export abstract class VivamedBigBaseEntity extends VivamedMediumBaseEntity {
     @Column({ name: 'created_by', nullable: true })
     createdBy: string;
 

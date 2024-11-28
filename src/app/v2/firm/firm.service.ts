@@ -2,31 +2,31 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, ILike, Repository } from 'typeorm';
-import { CreateVendorDto } from './dto/create-vendor.dto';
-import { VendorFilterDto } from './dto/filter-vendor.dto';
-import { UpdateVendorDto } from './dto/update-vendor.dto';
-import { VendorDto } from './dto/vendor.dto';
-import { Vendor } from './entities/vendor.entity';
+import { CreateFirmDto } from './dto/create-firm.dto';
+import { FirmFilterDto } from './dto/filter-firm.dto';
+import { FirmDto } from './dto/firm.dto';
+import { UpdateFirmDto } from './dto/update-firm.dto';
+import { Firm } from './entities/firm.entity';
 
 @Injectable()
-export class VendorService {
+export class FirmService {
     constructor(
-        @InjectRepository(Vendor)
-        private vendorRepository: Repository<Vendor>,
+        @InjectRepository(Firm)
+        private firmRepository: Repository<Firm>,
         private dataSource: DataSource,
     ) { }
 
-    async create(dto: CreateVendorDto): Promise<VendorDto> {
+    async create(dto: CreateFirmDto): Promise<FirmDto> {
         return this.dataSource.transaction(async (manager) => {
-            const vendorRepository = manager.getRepository(Vendor);
+            const firmRepository = manager.getRepository(Firm);
 
-            const existingVendor = await vendorRepository.findOneBy({ cnpj: dto.cnpj });
+            const existingFirm = await firmRepository.findOneBy({ cnpj: dto.cnpj });
 
-            if (existingVendor) {
-                throw new BadRequestException('Vendor already exists.');
+            if (existingFirm) {
+                throw new BadRequestException('Firm already exists.');
             }
 
-            const newVendor = vendorRepository.create({
+            const newFirm = firmRepository.create({
                 businessName: dto.businessName,
                 tradeName: dto.tradeName,
                 cnpj: dto.cnpj,
@@ -36,13 +36,13 @@ export class VendorService {
                 municipalRegistration: dto.municipalRegistration,
             });
 
-            const savedVendor = await vendorRepository.save(newVendor);
+            const savedFirm = await firmRepository.save(newFirm);
 
-            return savedVendor.toDto();
+            return savedFirm.toDto();
         });
     }
 
-    async findAll(filter: VendorFilterDto): Promise<IPagination<VendorDto>> {
+    async findAll(filter: FirmFilterDto): Promise<IPagination<FirmDto>> {
         const where: any = {};
         const page = filter.page || 1;
         const limit = filter.limit || 10;
@@ -76,7 +76,7 @@ export class VendorService {
             where.municipalRegistration = ILike(`%${filter.municipalRegistration}%`);
         }
 
-        const [items, total] = await this.vendorRepository.findAndCount({
+        const [items, total] = await this.firmRepository.findAndCount({
             where,
             take: limit,
             skip: skip,
@@ -85,10 +85,10 @@ export class VendorService {
             },
         });
 
-        const vendorDtos = items.map((vendor) => vendor.toDto());
+        const firmDtos = items.map((firm) => firm.toDto());
 
         return {
-            items: vendorDtos,
+            items: firmDtos,
             info: {
                 total,
                 page,
@@ -98,37 +98,37 @@ export class VendorService {
         };
     }
 
-    async findOne(id: string): Promise<VendorDto> {
-        const vendor = await this.vendorRepository.findOneBy({ id });
-        if (!vendor) {
-            throw new NotFoundException(`Vendor not found.`);
+    async findOne(id: string): Promise<FirmDto> {
+        const firm = await this.firmRepository.findOneBy({ id });
+        if (!firm) {
+            throw new NotFoundException(`Firm not found.`);
         }
-        return vendor.toDto();
+        return firm.toDto();
     }
 
-    async update(id: string, dto: UpdateVendorDto): Promise<VendorDto> {
+    async update(id: string, dto: UpdateFirmDto): Promise<FirmDto> {
         return this.dataSource.transaction(async (manager) => {
-            const vendorRepository = manager.getRepository(Vendor);
+            const firmRepository = manager.getRepository(Firm);
 
-            const vendorDb = await vendorRepository.findOne({
+            const firmDb = await firmRepository.findOne({
                 where: { id },
             });
 
-            if (!vendorDb) {
-                throw new BadRequestException('Vendor not found.');
+            if (!firmDb) {
+                throw new BadRequestException('Firm not found.');
             }
 
-            Object.assign(vendorDb, dto);
+            Object.assign(firmDb, dto);
 
-            await vendorRepository.update(id, vendorDb);
+            await firmRepository.update(id, firmDb);
 
-            return vendorDb.toDto();
+            return firmDb.toDto();
         });
     }
 
     async remove(id: string): Promise<void> {
-        const vendorDb = await this.vendorRepository.findOneBy({ id });
-        vendorDb.enabled = false;
-        await this.vendorRepository.update(id, vendorDb);
+        const firmDb = await this.firmRepository.findOneBy({ id });
+        firmDb.enabled = false;
+        await this.firmRepository.update(id, firmDb);
     }
 }

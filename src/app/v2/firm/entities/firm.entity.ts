@@ -1,12 +1,13 @@
 import { plainToClass } from 'class-transformer';
-import { VivamedFullBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { VivamedBigBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
+import { Column, Entity, OneToOne } from 'typeorm';
 import { AddressV2 } from '../../address/entities/address-v2.entity';
 import { Receipt } from '../../receipt/entities/receipt.entity';
-import { VendorDto } from '../dto/vendor.dto';
+import { FirmDto } from '../dto/firm.dto';
 
-@Entity('vendors_v2')
-export class Vendor extends VivamedFullBaseEntity {
+
+@Entity('firm_v2')
+export class Firm extends VivamedBigBaseEntity {
     @Column({ name: 'business_name', nullable: false })
     businessName: string; // Razão social
 
@@ -28,14 +29,17 @@ export class Vendor extends VivamedFullBaseEntity {
     @Column({ name: 'municipal_registration', nullable: true })
     municipalRegistration?: string; // Inscrição municipal
 
-    @OneToOne(() => AddressV2, address => address.vendor, { cascade: false })
+    @OneToOne(() => AddressV2, address => address.firm, { cascade: false })
     address: AddressV2;
 
-    @OneToMany(() => Receipt, (receipt) => receipt.vendor, { cascade: false })
-    receipts: Receipt[];
+    @OneToOne(() => Receipt, receipt => receipt.issuerCnpj, { cascade: false })
+    receiptIssuerCnpj: Receipt;
 
-    public toDto(): VendorDto {
-        return plainToClass(VendorDto, {
+    @OneToOne(() => Receipt, receipt => receipt.recipientCnpj, { cascade: false })
+    receiptRecipientCnpj: Receipt;
+
+    public toDto(): FirmDto {
+        return plainToClass(FirmDto, {
             id: this.id,
             businessName: this.businessName,
             tradeName: this.tradeName,

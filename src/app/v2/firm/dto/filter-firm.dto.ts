@@ -1,6 +1,6 @@
 import { PaginationParamsDto } from "src/shared/dto/pagination-params.dto";
 
-export class VendorFilterDto extends PaginationParamsDto {
+export class FirmFilterDto extends PaginationParamsDto {
     businessName?: string;
     tradeName?: string;
     cnpj?: string;

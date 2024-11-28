@@ -12,5 +12,5 @@ export class AddressV2Dto {
     complement: string;
     citizenId?: string;
     profileId?: string;
-    vendorId?: string;
+    firmId?: string;
 }

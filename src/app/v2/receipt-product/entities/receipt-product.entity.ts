@@ -1,24 +1,29 @@
 import { plainToClass } from 'class-transformer';
-import { VivamedBaseEntity } from 'src/shared/entities/vivamed-base-entity';
+import { VivamedSmallBaseEntity } from 'src/shared/entities/vivamed-small-base-entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { ProductV2 } from '../../product/entities/product.entity';
+import { StockProductV2 } from '../../product/entities/stock-product.entity';
 import { Receipt } from '../../receipt/entities/receipt.entity';
 import { ReceiptProductDto } from '../dto/receipt-product.dto';
 
 @Entity('receipt_products_v2')
-export class ReceiptProduct extends VivamedBaseEntity {
-    @Column({ type: 'varchar', length: 20 })
-    productCode: string; // Código do produto
+export class ReceiptProduct extends VivamedSmallBaseEntity {
 
-    @Column({ type: 'varchar', length: 255 })
-    description: string; // Descrição do produto
+    @ManyToOne(() => ProductV2, product => product.receiptProduct)
+    @JoinColumn()
+    product: ProductV2;
 
-    @Column({ type: 'varchar', length: 10 })
+    @ManyToOne(() => StockProductV2, stock => stock.receiptProduct)
+    @JoinColumn()
+    stockProduct: StockProductV2;
+
+    @Column({ nullable: true, type: 'varchar', length: 10 })
     ncmCode: string; // Código NCM/SH
 
-    @Column({ type: 'varchar', length: 5 })
+    @Column({ nullable: true, type: 'varchar', length: 5 })
     cst: string; // CST
 
-    @Column({ type: 'varchar', length: 10 })
+    @Column({ nullable: true, type: 'varchar', length: 10 })
     cfopCode: string; // Código CFOP
 
     @Column({ type: 'varchar', length: 10 })
@@ -34,19 +39,19 @@ export class ReceiptProduct extends VivamedBaseEntity {
     totalValue: number; // Valor total do produto
 
     // Informações de impostos
-    @Column({ type: 'decimal', precision: 15, scale: 2, nullable: true })
+    @Column({ nullable: true, type: 'decimal', precision: 15, scale: 2 })
     bcIcms: number; // Base de cálculo ICMS
 
-    @Column({ type: 'decimal', precision: 15, scale: 2, nullable: true })
+    @Column({ nullable: true, type: 'decimal', precision: 15, scale: 2 })
     vIcms: number; // Valor ICMS
 
-    @Column({ type: 'decimal', precision: 15, scale: 2, nullable: true })
+    @Column({ nullable: true, type: 'decimal', precision: 15, scale: 2 })
     vIpi: number; // Valor IPI
 
-    @Column({ type: 'decimal', precision: 15, scale: 2, nullable: true })
+    @Column({ nullable: true, type: 'decimal', precision: 15, scale: 2 })
     aIcms: number; // Alíquota ICMS
 
-    @Column({ type: 'decimal', precision: 15, scale: 2, nullable: true })
+    @Column({ nullable: true, type: 'decimal', precision: 15, scale: 2 })
     aIpi: number; // Alíquota IPI
 
     @ManyToOne(() => Receipt, (receipt) => receipt.products)

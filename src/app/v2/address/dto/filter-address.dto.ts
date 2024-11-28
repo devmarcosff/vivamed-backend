@@ -36,5 +36,5 @@ export class AddressV2FilterDto extends PaginationParamsDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsString()
-    vendorId?: string;
+    firmId?: string;
 }

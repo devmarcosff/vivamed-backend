@@ -1,14 +1,96 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { DataSource, In } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { IPagination } from 'src/shared/types/pagination.type';
+import { DataSource, ILike, In, Repository } from 'typeorm';
 import * as XLSX from 'xlsx';
+import { CitizenDto } from './dto/citizen.dto';
+import { CitizenFilterDto } from './dto/filter-citizen.dto';
 import { Citizen } from './entities/citizen.entity';
 import { IImportResult } from './interfaces/citizen.interface';
 
 @Injectable()
 export class CitizenService {
     constructor(
+        @InjectRepository(Citizen)
+        private citizenRepository: Repository<Citizen>,
         private dataSource: DataSource,
     ) { }
+
+    async findAll(filter: CitizenFilterDto): Promise<IPagination<CitizenDto>> {
+        const where: any = {};
+        const page = filter.page || 1;
+        const limit = filter.limit || 10;
+        const skip = (page - 1) * limit;
+
+        if (filter.fullName) {
+            where.fullName = ILike(`%${filter.fullName}%`);
+        }
+
+        if (filter.cpf) {
+            where.cpf = filter.cpf;
+        }
+
+        if (filter.cns) {
+            where.cns = filter.cns;
+        }
+
+        if (filter.birthDate) {
+            where.birthDate = filter.birthDate;
+        }
+
+        if (filter.gender) {
+            where.gender = ILike(`%${filter.gender}%`);
+        }
+
+        if (filter.age) {
+            where.age = filter.age;
+        }
+
+        if (filter.weighting) {
+            where.weighting = filter.weighting;
+        }
+
+        if (filter.identificationType) {
+            where.identificationType = ILike(`%${filter.identificationType}%`);
+        }
+
+        if (filter.lastContactDate) {
+            where.lastContactDate = filter.lastContactDate;
+        }
+
+        if (filter.totalServices) {
+            where.totalServices = filter.totalServices;
+        }
+
+        if (filter.city) {
+            where.city = ILike(`%${filter.city}%`);
+        }
+
+        if (filter.district) {
+            where.district = ILike(`%${filter.district}%`);
+        }
+
+        const [items, total] = await this.citizenRepository.findAndCount({
+            where,
+            take: limit,
+            skip,
+            order: {
+                fullName: 'ASC',
+            },
+        });
+
+        const citizenDtos = items.map((citizen) => citizen.toDto());
+
+        return {
+            items: citizenDtos,
+            info: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
+    }
 
     parseDate = (dateStr: string): Date | null => {
         if (!dateStr) return null;

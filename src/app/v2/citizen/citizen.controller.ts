@@ -1,15 +1,26 @@
-import { Body, Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { IPagination } from 'src/shared/types/pagination.type';
 import { AuthV2Guard } from '../auth/auth-v2.guard';
 import { CitizenService } from './citizen.service';
+import { CitizenDto } from './dto/citizen.dto';
+import { CitizenFilterDto } from './dto/filter-citizen.dto';
 
 @ApiBearerAuth()
 @ApiTags('Citizen')
 @UseGuards(AuthV2Guard)
-@Controller('v2/citizen')
+@Controller('v2/citizens')
 export class CitizenController {
     constructor(private readonly citizenService: CitizenService) { }
+
+    @Get()
+    @ApiOperation({ summary: "Citizen filter", description: "Fetches all citizens." })
+    @ApiOkResponse({ description: "Citizens retrieved successfully." })
+    @ApiUnauthorizedResponse({ description: "Unauthorized access." })
+    async findAll(@Query() dto: CitizenFilterDto): Promise<IPagination<CitizenDto>> {
+        return this.citizenService.findAll(dto);
+    }
 
     @Post('import')
     @ApiOperation({ summary: 'Import citizens from XLSX file' })

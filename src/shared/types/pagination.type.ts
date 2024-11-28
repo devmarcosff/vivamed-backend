@@ -1,11 +1,22 @@
-export interface IPaginationInfo {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-}
+import { ApiProperty } from "@nestjs/swagger";
 
-export interface IPagination<T> {
+export abstract class IPagination<T> {
+    @ApiProperty({ description: 'List of items' })
     items: T[];
-    info: IPaginationInfo;
+
+    @ApiProperty({
+        description: 'Pagination info',
+        type: () => ({
+            total: { type: 'number', description: 'Total number of items' },
+            page: { type: 'number', description: 'Current page' },
+            limit: { type: 'number', description: 'Items per page' },
+            totalPages: { type: 'number', description: 'Total number of pages' },
+        }),
+    })
+    info: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
 }
