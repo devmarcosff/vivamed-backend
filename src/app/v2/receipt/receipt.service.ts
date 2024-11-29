@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { plainToClass } from 'class-transformer';
-import { DataSource, Repository } from 'typeorm';
+import { IPagination } from 'src/shared/types/pagination.type';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { Firm } from '../firm/entities/firm.entity';
 import { ProductV2 } from '../product/entities/product.entity';
 import { StockProductV2 } from '../product/entities/stock-product.entity';
 import { ReceiptProduct } from '../receipt-product/entities/receipt-product.entity';
 import { CreateReceiptDto } from './dto/create-receipt.dto';
+import { ReceiptFilterDto } from './dto/filter-receipt.dto';
 import { ReceiptDto } from './dto/receipt.dto';
 import { UpdateReceiptDto } from './dto/update-receipt.dto';
 import { Receipt } from './entities/receipt.entity';
@@ -31,6 +32,8 @@ export class ReceiptService {
                 const receiptDB = await receiptRepository.findOneBy({ invoiceNumber: dto.invoiceNumber });
 
                 if (receiptDB) {
+                    receiptDB.enabled = true;
+                    await this.receiptRepository.update(receiptDB.id, receiptDB);
                     throw new BadRequestException('Receipt with this number already exists.');
                 }
 
@@ -133,44 +136,121 @@ export class ReceiptService {
 
 
     async findOne(id: string): Promise<ReceiptDto> {
-        const receipt = await this.receiptRepository.findOne({ where: { id } });
-
+        const receipt = await this.receiptRepository.findOne({
+            where: { id, enabled: true },
+            relations: ['issuerCnpj', 'recipientCnpj']
+        });
         if (!receipt) {
-            throw new NotFoundException('Receipt not found');
+            throw new NotFoundException('Receipt not found.');
+        }
+        return receipt.toDto();
+    }
+
+    async findAll(filter: ReceiptFilterDto): Promise<IPagination<ReceiptDto>> {
+        const where: any = {};
+        const page = filter.page || 1;
+        const limit = filter.limit || 10;
+        const skip = (page - 1) * limit;
+
+        if (filter.invoiceNumber) {
+            where.invoiceNumber = ILike(`%${filter.invoiceNumber}%`);
         }
 
-        return plainToClass(ReceiptDto, receipt);
+        if (filter.invoiceSeries) {
+            where.invoiceSeries = ILike(`%${filter.invoiceSeries}%`);
+        }
+
+        if (filter.issueDateTime) {
+            where.issueDateTime = filter.issueDateTime;
+        }
+
+        if (filter.issuerCnpj) {
+            where.issuerCnpj = { cnpj: ILike(`%${filter.issuerCnpj}%`) };
+        }
+
+        where.enabled = true;
+
+        const [items, total] = await this.receiptRepository.findAndCount({
+            where,
+            relations: ['issuerCnpj', 'recipientCnpj'],
+            take: limit,
+            skip: skip,
+            order: {
+                issueDateTime: 'DESC',
+            },
+        });
+
+        const receiptDtos = items.map((receipt) => receipt.toDto());
+
+        return {
+            items: receiptDtos,
+            info: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
     }
 
     async update(id: string, dto: UpdateReceiptDto): Promise<ReceiptDto> {
-        // return this.dataSource.transaction(async (manager) => {
-        //     const receiptRepository = manager.getRepository(Receipt);
+        try {
+            return this.dataSource.transaction(async (manager) => {
+                const receiptRepository = manager.getRepository(Receipt);
+                const firmRepository = manager.getRepository(Firm);
 
-        //     const receipt = await receiptRepository.findOne({ where: { id }, lock: { mode: 'pessimistic_write' } });
+                const receiptDb = await receiptRepository.findOneBy({ id, enabled: true });
+                if (!receiptDb) {
+                    throw new BadRequestException('Receipt not found.');
+                }
 
-        //     if (!receipt) {
-        //         throw new NotFoundException('Receipt not found');
-        //     }
+                if (dto.issuerCnpj == dto.recipientCnpj) {
+                    throw new BadRequestException('Issuer or recipient firm not found.');
+                }
 
-        //     Object.assign(receipt, {
-        //         ...dto,
-        //         issueDateTime: dto.issueDateTime ? new Date(dto.issueDateTime) : receipt.issueDateTime,
-        //         nfeAuthDateTime: dto.nfeAuthDateTime ? new Date(dto.nfeAuthDateTime) : receipt.nfeAuthDateTime,
-        //     });
+                const firmIssuerCnpj = await firmRepository.findOneBy({ cnpj: dto.issuerCnpj });
+                const firmRecipientCnpj = await firmRepository.findOneBy({ cnpj: dto.recipientCnpj });
 
-        //     await receiptRepository.save(receipt);
-        //     return plainToClass(ReceiptDto, receipt);
-        // });
-        return null;
+                if (!firmIssuerCnpj || !firmRecipientCnpj) {
+                    throw new BadRequestException('Issuer or recipient firm not found.');
+                }
+
+                const newReceipt = {
+                    invoiceNumber: dto.invoiceNumber,
+                    invoiceSeries: dto.invoiceSeries,
+                    issueDateTime: new Date(dto.issueDateTime),
+                    issuerCnpj: firmIssuerCnpj,
+                    recipientCnpj: firmRecipientCnpj,
+                    barcodeOrAuthCode: dto.barcodeOrAuthCode || '',
+                    icmsBase: dto.icmsBase || 0,
+                    icmsRate: dto.icmsRate || 0,
+                    icmsValue: dto.icmsValue || 0,
+                    ipiRate: dto.ipiRate || 0,
+                    ipiValue: dto.ipiValue || 0,
+                    issRate: dto.issRate || 0,
+                    issValue: dto.issValue || 0,
+                    nfeAccessKey: dto.nfeAccessKey || '',
+                    totalValue: dto.totalValue || 0,
+                } as Receipt;
+
+                await receiptRepository.update(receiptDb.id, newReceipt);
+
+                const receiptUpdateDb = await receiptRepository.findOneBy({ id });
+                return receiptUpdateDb.toDto();
+            });
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
     }
 
     async remove(id: string): Promise<void> {
-        // const receipt = await this.receiptRepository.findOne({ where: { id } });
+        const receiptDb = await this.receiptRepository.findOneBy({ id, enabled: true });
 
-        // if (!receipt) {
-        //     throw new NotFoundException('Receipt not found');
-        // }
-
-        // await this.receiptRepository.remove(receipt);
+        if (!receiptDb) {
+            throw new NotFoundException('Receipt not found.');
+        }
+        receiptDb.enabled = false;
+        await this.receiptRepository.update(id, { enabled: false });
     }
+
 }

@@ -825,7 +825,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"businessName\": \"1\",\n    \"tradeName\": \"2\",\n    \"cnpj\": \"3\",\n    \"phone\": \"4\",\n    \"email\": \"5\",\n    \"stateRegistration\": \"6\",\n    \"municipalRegistration\": \"7\"\n}",
+							"raw": "{\n    \"businessName\": \"2\",\n    \"tradeName\": \"2\",\n    \"cnpj\": \"98765432000176\",\n    \"phone\": \"2\",\n    \"email\": \"2\",\n    \"stateRegistration\": \"2\",\n    \"municipalRegistration\": \"2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1157,7 +1157,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"invoiceNumber\": \"123456\",\n    \"invoiceSeries\": \"A1\",\n    \"issueDateTime\": \"2024-11-27T12:00:00\",\n    \"issuerCnpj\": \"12345678000195\",\n    \"recipientCnpj\": \"98765432000176\",\n    \"totalValue\": 1500.5,\n    //   \"icmsBase\": 1000,\n    //   \"icmsValue\": 150,\n    //   \"ipiValue\": 50,\n    //   \"issValue\": 100,\n    //   \"icmsRate\": 18,\n    //   \"ipiRate\": 10,\n    //   \"issRate\": 5,\n    \"barcodeOrAuthCode\": \"12345678901234567890\",\n    \"nfeAccessKey\": \"351904123456789012345500100100001234567890123\"\n}",
+							"raw": "{\n  \"invoiceNumber\": \"123456\",\n  \"invoiceSeries\": \"A1\",\n  \"issueDateTime\": \"2024-11-27T12:00:00\",\n  \"issuerCnpj\": \"12345678000195\",\n  \"recipientCnpj\": \"98765432000176\",\n  \"totalValue\": 1500.5,\n  \"icmsBase\": 1000,\n  \"icmsValue\": 150,\n  \"ipiValue\": 50,\n  \"issValue\": 100,\n  \"icmsRate\": 18,\n  \"ipiRate\": 10,\n  \"issRate\": 5,\n  \"barcodeOrAuthCode\": \"12345678901234567890\",\n  \"nfeAccessKey\": \"351904123456789012345500100100001234567890123\",\n  \"receiptProducts\": [\n    {\n      \"productCode\": \"PRD12345\",\n      \"productBatch\": \"A001\",\n      \"productExpirationDate\": \"2024-11-28\",\n      \"productManufacturingDate\": \"2024-01-15\",\n      \"quantity\": 50,\n      \"unitPrice\": 10\n    }\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1200,13 +1200,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/receipts",
+							"raw": "{{base_url}}/v2/receipts?issuerCnpj=12345678000195",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"receipts"
+							],
+							"query": [
+								{
+									"key": "issuerCnpj",
+									"value": "12345678000195"
+								}
 							]
 						}
 					},
@@ -1228,14 +1234,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/receipts/d92dbd17-aa93-43f1-8347-9f8e8e06b23f",
+							"raw": "{{base_url}}/v2/receipts/b7b0269c-a08f-4b31-8e86-92fef541fcc2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"receipts",
-								"d92dbd17-aa93-43f1-8347-9f8e8e06b23f"
+								"b7b0269c-a08f-4b31-8e86-92fef541fcc2"
 							]
 						}
 					},
@@ -1258,7 +1264,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"businessName\": \"1\",\n  \"tradeName\": \"2\",\n  \"cnpj\": \"3\",\n  \"phone\": \"4\",\n  \"email\": \"5\",\n  \"stateRegistration\": \"6\",\n  \"municipalRegistration\": \"7\"\n}",
+							"raw": "{\n    \"invoiceNumber\": \"123456\",\n    \"invoiceSeries\": \"A4\",\n    \"issueDateTime\": \"2024-11-27T15:00:00.000Z\",\n    \"issuerCnpj\": \"12345678000195\",\n    \"recipientCnpj\": \"98765432000176\",\n    \"totalValue\": \"1500.50\",\n    \"icmsBase\": \"1000.00\",\n    \"icmsValue\": \"150.00\",\n    \"ipiValue\": \"50.00\",\n    \"issValue\": \"100.00\",\n    \"icmsRate\": \"18.00\",\n    \"ipiRate\": \"10.00\",\n    \"issRate\": \"5.00\",\n    \"barcodeOrAuthCode\": \"12345678901234567890\",\n    \"nfeAccessKey\": \"351904123456789012345500100100001234567890123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1266,14 +1272,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v2/receipts/d92dbd17-aa93-43f1-8347-9f8e8e06b23f",
+							"raw": "{{base_url}}/v2/receipts/b7b0269c-a08f-4b31-8e86-92fef541fcc2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"receipts",
-								"d92dbd17-aa93-43f1-8347-9f8e8e06b23f"
+								"b7b0269c-a08f-4b31-8e86-92fef541fcc2"
 							]
 						}
 					},
@@ -1295,14 +1301,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/v2/receipts/d92dbd17-aa93-43f1-8347-9f8e8e06b23f",
+							"raw": "{{base_url}}/v2/receipts/b7b0269c-a08f-4b31-8e86-92fef541fcc2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v2",
 								"receipts",
-								"d92dbd17-aa93-43f1-8347-9f8e8e06b23f"
+								"b7b0269c-a08f-4b31-8e86-92fef541fcc2"
 							]
 						}
 					},

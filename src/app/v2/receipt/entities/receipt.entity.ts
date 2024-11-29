@@ -1,11 +1,11 @@
-import { VivamedSmallBaseEntity } from 'src/shared/entities/vivamed-small-base-entity';
+import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Firm } from '../../firm/entities/firm.entity';
 import { ReceiptProduct } from '../../receipt-product/entities/receipt-product.entity';
 import { ReceiptDto } from '../dto/receipt.dto';
 
 @Entity('receipts_v2')
-export class Receipt extends VivamedSmallBaseEntity {
+export class Receipt extends VivamedMediumBaseEntity {
     @Column({ type: 'varchar', length: 50 })
     invoiceNumber: string;
 
