@@ -19,74 +19,6 @@ export class AddressV2Service {
         private dataSource: DataSource,
     ) { }
 
-
-    async findOne(id: string): Promise<AddressV2Dto> {
-        const address = await this.addressRepository.findOne({
-            where: { id },
-            relations: ['profile'],
-        });
-
-        if (!address) {
-            throw new BadRequestException(`Endereço com ID ${id} não encontrado`);
-        }
-
-        return address.toDto();
-    }
-
-    async findAll(filter: AddressV2FilterDto): Promise<IPagination<AddressV2Dto>> {
-        const where: any = {};
-        const page = filter.page || 1;
-        const limit = filter.limit || 10;
-        const skip = (page - 1) * limit;
-
-        if (filter.street) {
-            where.street = ILike(`%${filter.street}%`);
-        }
-
-        if (filter.city) {
-            where.city = ILike(`%${filter.city}%`);
-        }
-
-        if (filter.zipcode) {
-            where.zipcode = filter.zipcode;
-        }
-
-        if (filter.state) {
-            where.state = ILike(`%${filter.state}%`);
-        }
-
-        if (filter.profileId) {
-            where.profile = { id: filter.profileId };
-        }
-
-        // if (filter.citizenId) {
-        //     where.cidadao = { id: filter.citizenId };
-        // }
-
-        const [items, total] = await this.addressRepository.findAndCount({
-            // relations: { profile: true, citizen: true },
-            relations: { profile: true, firm: true },
-            where,
-            take: limit,
-            skip: skip,
-            order: {
-                street: 'ASC'
-            }
-        });
-
-        const addressDtos = items.map(address => address.toDto());
-
-        return {
-            items: addressDtos,
-            info: {
-                total,
-                page,
-                limit,
-                totalPages: Math.ceil(total / limit)
-            }
-        };
-    }
-
     async create(dto: CreateAddressV2Dto): Promise<AddressV2Dto> {
         if (dto.profileId && dto.citizenId && dto.firmId) {
             throw new BadRequestException('Não é possível criar um endereço simultaneamente');
@@ -195,6 +127,75 @@ export class AddressV2Service {
             }
             throw new BadRequestException(error);
         }
+    }
+
+    async findOne(id: string): Promise<AddressV2Dto> {
+        const address = await this.addressRepository.findOne({
+            where: { id, enabled: true },
+            relations: ['profile'],
+        });
+
+        if (!address) {
+            throw new BadRequestException(`Endereço com ID ${id} não encontrado`);
+        }
+
+        return address.toDto();
+    }
+
+    async findAll(filter: AddressV2FilterDto): Promise<IPagination<AddressV2Dto>> {
+        const where: any = {};
+        const page = filter.page || 1;
+        const limit = filter.limit || 10;
+        const skip = (page - 1) * limit;
+
+        if (filter.street) {
+            where.street = ILike(`%${filter.street}%`);
+        }
+
+        if (filter.city) {
+            where.city = ILike(`%${filter.city}%`);
+        }
+
+        if (filter.zipcode) {
+            where.zipcode = filter.zipcode;
+        }
+
+        if (filter.state) {
+            where.state = ILike(`%${filter.state}%`);
+        }
+
+        if (filter.profileId) {
+            where.profile = { id: filter.profileId };
+        }
+
+        // if (filter.citizenId) {
+        //     where.cidadao = { id: filter.citizenId };
+        // }
+
+        where.enabled = true;
+
+        const [items, total] = await this.addressRepository.findAndCount({
+            // relations: { profile: true, citizen: true },
+            relations: { profile: true, firm: true },
+            where,
+            take: limit,
+            skip: skip,
+            order: {
+                street: 'ASC'
+            }
+        });
+
+        const addressDtos = items.map(address => address.toDto());
+
+        return {
+            items: addressDtos,
+            info: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
     }
 
     async update(

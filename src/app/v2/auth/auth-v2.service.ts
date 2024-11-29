@@ -33,6 +33,7 @@ export class AuthV2Service {
                 where: [
                     { cpf: username },
                     { email: username },
+                    { enabled: true }
                 ],
             });
             if (!userDB) throw new BadRequestException(`Usuário não encontrado.`);
@@ -86,7 +87,7 @@ export class AuthV2Service {
     async refresh(dto: RefreshTokenDto) {
         try {
             const payload = this.vivamedJwtService.decode<UserV2JwtPayload>(dto.access_token);
-            const userDB = await this.userRepository.findOne({ where: { id: payload.sub } });
+            const userDB = await this.userRepository.findOne({ where: { id: payload.sub, enabled: true } });
             if (!userDB || !userDB.refreshToken) {
                 throw new UnauthorizedException('Usuário não encontrado.');
             }
@@ -117,7 +118,7 @@ export class AuthV2Service {
 
     async requestPasswordReset(dto: RequestResetPasswordDto): Promise<void> {
         const user = await this.userRepository.findOne({
-            where: { cpf: dto.cpf, email: dto.email }
+            where: { cpf: dto.cpf, email: dto.email, enabled: true }
         });
 
         if (!user) {

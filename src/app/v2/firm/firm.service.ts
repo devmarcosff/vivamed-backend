@@ -115,7 +115,7 @@ export class FirmService {
             const firmRepository = manager.getRepository(Firm);
 
             const firmDb = await firmRepository.findOne({
-                where: { id },
+                where: { id, enabled: true },
             });
 
             if (!firmDb) {
@@ -131,7 +131,7 @@ export class FirmService {
     }
 
     async remove(id: string): Promise<void> {
-        const firmDb = await this.firmRepository.findOneBy({ id });
+        const firmDb = await this.firmRepository.findOneBy({ id, enabled: true });
         firmDb.enabled = false;
         await this.firmRepository.update(id, firmDb);
     }

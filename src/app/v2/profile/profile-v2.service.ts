@@ -29,6 +29,10 @@ export class ProfileV2Service {
                 where: { id: dto.userId }
             });
 
+            if (!userDb) {
+                throw new NotFoundException('User not found.');
+            }
+
             if (userDb && userDb.profile) {
                 return userDb.profile.toDto();
             }
@@ -48,7 +52,7 @@ export class ProfileV2Service {
 
     async findById(id: string): Promise<ProfileV2Dto> {
         const profile = await this.profileRepository.findOne({
-            where: { id },
+            where: { id, enabled: true },
             relations: ['address'],
         });
 
@@ -64,7 +68,7 @@ export class ProfileV2Service {
             const profileRepository = manager.getRepository(ProfileV2);
 
             const profileDb = await profileRepository.findOne({
-                where: { id },
+                where: { id, enabled: true },
                 lock: { mode: 'pessimistic_write' },
             });
 

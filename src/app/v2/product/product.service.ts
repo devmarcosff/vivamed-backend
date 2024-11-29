@@ -102,7 +102,7 @@ export class ProductV2Service {
             const pRepository = manager.getRepository(ProductV2);
 
             const productDb = await pRepository.findOne({
-                where: { id },
+                where: { id, enabled: true },
             });
 
             if (!productDb) {
@@ -119,11 +119,11 @@ export class ProductV2Service {
 
 
     async remove(id: string): Promise<void> {
-        const product = await this.productRepository.findOne({ where: { id } });
+        const product = await this.productRepository.findOne({ where: { id, enabled: true } });
         if (!product) {
             throw new NotFoundException('ProductV2 not found');
         }
         product.enabled = false;
-        await this.productRepository.save(product);
+        await this.productRepository.update(id, product);
     }
 }

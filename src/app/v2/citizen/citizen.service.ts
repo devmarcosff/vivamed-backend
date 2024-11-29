@@ -70,6 +70,8 @@ export class CitizenService {
             where.district = ILike(`%${filter.district}%`);
         }
 
+        where.enabled = true;
+
         const [items, total] = await this.citizenRepository.findAndCount({
             where,
             take: limit,
