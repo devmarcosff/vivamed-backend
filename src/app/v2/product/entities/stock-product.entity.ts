@@ -21,7 +21,7 @@ export class StockProductV2 extends VivamedMediumBaseEntity {
     quantity: number; // Quantity in stock for the batch
 
     @Column('decimal', { nullable: true, precision: 10, scale: 2 })
-    purchasePrice?: number; // Unit purchase price
+    unitPrice?: number; // Unit purchase price
 
     @Column('decimal', { nullable: true, precision: 10, scale: 2 })
     salePrice?: number; // Unit sale price

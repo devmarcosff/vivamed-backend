@@ -33,7 +33,7 @@ export class ReceiptProduct extends VivamedSmallBaseEntity {
     quantity: number; // Quantidade do produto
 
     @Column({ type: 'decimal', precision: 15, scale: 2 })
-    unitValue: number; // Valor unitário do produto
+    unitPrice: number; // Valor unitário do produto
 
     @Column({ type: 'decimal', precision: 15, scale: 2 })
     totalValue: number; // Valor total do produto

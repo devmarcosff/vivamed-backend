@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { ReceiptProductDto } from '../../receipt-product/dto/receipt-product.dto';
 
 export class CreateReceiptDto {
     @ApiProperty({ description: 'Invoice number of the receipt', example: '123456', maxLength: 50, })
@@ -74,4 +76,24 @@ export class CreateReceiptDto {
     @IsOptional()
     @IsString()
     nfeAccessKey?: string;
+
+
+    @ApiProperty({
+        description: 'List of products included in the receipt',
+        type: [ReceiptProductDto],
+        example: [
+            {
+                code: '123456',
+                batch: 'A001',
+                expirationDate: '2024-11-28',
+                manufactureDate: '2024-01-15',
+                quantity: 50,
+                unitPrice: 10.00
+            }
+        ]
+    })
+    @ValidateNested({ each: true })
+    @Type(() => ReceiptProductDto)
+    @IsNotEmpty()
+    receiptProducts: ReceiptProductDto[];
 }

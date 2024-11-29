@@ -87,7 +87,7 @@ export class ReceiptProductService {
 
         Object.assign(product, {
             ...dto,
-            totalValue: dto.quantity ? dto.quantity * (dto.unitValue || product.unitValue) : product.totalValue,
+            totalValue: dto.quantity ? dto.quantity * (dto.unitValue || product.unitPrice) : product.totalValue,
         });
 
         return this.receiptProductRepository.save(product);

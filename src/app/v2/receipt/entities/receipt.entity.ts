@@ -2,6 +2,7 @@ import { VivamedSmallBaseEntity } from 'src/shared/entities/vivamed-small-base-e
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Firm } from '../../firm/entities/firm.entity';
 import { ReceiptProduct } from '../../receipt-product/entities/receipt-product.entity';
+import { ReceiptDto } from '../dto/receipt.dto';
 
 @Entity('receipts_v2')
 export class Receipt extends VivamedSmallBaseEntity {
@@ -50,11 +51,31 @@ export class Receipt extends VivamedSmallBaseEntity {
     @Column({ nullable: true, type: 'varchar', length: 100 })
     barcodeOrAuthCode: string;
 
-    @Column({ nullable: true, type: 'varchar', length: 44 })
+    @Column({ nullable: true, type: 'varchar', length: 50 })
     nfeAccessKey: string;
 
     @OneToMany(() => ReceiptProduct, (product) => product.receipt, { cascade: false })
     products: ReceiptProduct[];
 
+    toDto(): ReceiptDto {
+        return {
+            id: this.id,
+            invoiceNumber: this.invoiceNumber,
+            invoiceSeries: this.invoiceSeries,
+            issueDateTime: this.issueDateTime.toISOString(),
+            issuerCnpj: this.issuerCnpj?.cnpj || '',
+            recipientCnpj: this.recipientCnpj?.cnpj || '',
+            totalValue: this.totalValue,
+            icmsBase: this.icmsBase || 0,
+            icmsValue: this.icmsValue || 0,
+            ipiValue: this.ipiValue || 0,
+            issValue: this.issValue || 0,
+            icmsRate: this.icmsRate || 0,
+            ipiRate: this.ipiRate || 0,
+            issRate: this.issRate || 0,
+            barcodeOrAuthCode: this.barcodeOrAuthCode || '',
+            nfeAccessKey: this.nfeAccessKey || '',
+        } as ReceiptDto;
+    }
 
 }
