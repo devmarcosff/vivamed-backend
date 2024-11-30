@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { ReceiptProductDto } from './receipt-product.dto';
 
 export class ReceiptDto {
@@ -66,8 +64,5 @@ export class ReceiptDto {
             }
         ]
     })
-    @ValidateNested({ each: true })
-    @Type(() => ReceiptProductDto)
-    @IsNotEmpty()
     receiptProducts: ReceiptProductDto[];
 }

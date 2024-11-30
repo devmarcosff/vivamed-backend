@@ -150,6 +150,7 @@ export class ReceiptService {
         if (!receipt) {
             throw new NotFoundException('Receipt not found.');
         }
+
         return receipt.toDto();
     }
 

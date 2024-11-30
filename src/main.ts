@@ -5,35 +5,35 @@ import "reflect-metadata";
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('Vivamed API')
-    .setDescription('')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+    const config = new DocumentBuilder()
+        .setTitle('Vivamed API')
+        .setDescription('')
+        .setVersion('1.0')
+        .addBearerAuth()
+        .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
 
-  app.use(
-    '/docs',
-    apiReference({
-      theme: 'purple',
-      spec: {
-        content: document,
-      },
-    }),
-  )
+    app.use(
+        '/docs',
+        apiReference({
+            theme: 'purple',
+            spec: {
+                content: document,
+            },
+        }),
+    )
 
-  app.enableCors({
-    credentials: true,
-    origin: [process.env.FRONTEND_URL, 'http://localhost:3000', 'https://vivamed.stevanini.com.br', 'https://vivamedbji.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+    app.enableCors({
+        credentials: true,
+        origin: [process.env.FRONTEND_URL, 'http://localhost:3000', 'https://vivamed.stevanini.com.br', 'https://vivamedbji.vercel.app'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    });
 
-  await app.listen(8000);
+    await app.listen(8000);
 }
 bootstrap();
