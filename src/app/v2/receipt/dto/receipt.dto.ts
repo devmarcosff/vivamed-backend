@@ -1,4 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { ReceiptProductDto } from './receipt-product.dto';
 
 export class ReceiptDto {
     @ApiProperty({ description: 'Unique identifier of the receipt', example: 'uuid-v4-id' })
@@ -48,4 +51,23 @@ export class ReceiptDto {
 
     @ApiProperty({ description: 'Access key for NFe (Nota Fiscal Eletrônica)', example: '351904123456789012345500100100001234567890123', required: false })
     nfeAccessKey?: string;
+
+    @ApiProperty({
+        description: 'List of products included in the receipt',
+        type: [ReceiptProductDto],
+        example: [
+            {
+                code: '123456',
+                batch: 'A001',
+                expirationDate: '2024-11-28',
+                manufactureDate: '2024-01-15',
+                quantity: 50,
+                unitPrice: 10.00
+            }
+        ]
+    })
+    @ValidateNested({ each: true })
+    @Type(() => ReceiptProductDto)
+    @IsNotEmpty()
+    receiptProducts: ReceiptProductDto[];
 }

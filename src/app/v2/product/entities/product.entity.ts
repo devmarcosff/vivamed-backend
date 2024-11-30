@@ -1,7 +1,5 @@
 import { VivamedBigBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
-import { ReceiptProduct } from '../../receipt-product/entities/receipt-product.entity';
-import { Receipt } from '../../receipt/entities/receipt.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { ProductV2Dto } from '../dto/product.dto';
 import { StockProductV2 } from './stock-product.entity';
 
@@ -34,14 +32,8 @@ export class ProductV2 extends VivamedBigBaseEntity {
     @Column({ nullable: true })
     leafletUrl?: string;
 
-    @OneToMany(() => StockProductV2, (stock) => stock.product)
-    items: StockProductV2[];
-
-    @OneToMany(() => Receipt, (receipt) => receipt.products)
-    receipt: Receipt[];
-
-    @OneToOne(() => ReceiptProduct, receiptProduct => receiptProduct.product)
-    receiptProduct: ReceiptProduct;
+    @OneToMany(() => StockProductV2, (otm) => otm.product)
+    stockProducts: StockProductV2[];
 
     toDto(): ProductV2Dto {
         return {

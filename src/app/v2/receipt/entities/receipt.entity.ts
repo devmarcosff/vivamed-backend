@@ -1,8 +1,8 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Firm } from '../../firm/entities/firm.entity';
-import { ReceiptProduct } from '../../receipt-product/entities/receipt-product.entity';
 import { ReceiptDto } from '../dto/receipt.dto';
+import { ReceiptProduct } from './receipt-product.entity';
 
 @Entity('receipts_v2')
 export class Receipt extends VivamedMediumBaseEntity {
@@ -54,8 +54,8 @@ export class Receipt extends VivamedMediumBaseEntity {
     @Column({ nullable: true, type: 'varchar', length: 50 })
     nfeAccessKey: string;
 
-    @OneToMany(() => ReceiptProduct, (product) => product.receipt, { cascade: false })
-    products: ReceiptProduct[];
+    @OneToMany(() => ReceiptProduct, (otm) => otm.receipt, { cascade: false })
+    receiptProducts: ReceiptProduct[];
 
     toDto(): ReceiptDto {
         return {
@@ -75,6 +75,7 @@ export class Receipt extends VivamedMediumBaseEntity {
             issRate: this.issRate || 0,
             barcodeOrAuthCode: this.barcodeOrAuthCode || '',
             nfeAccessKey: this.nfeAccessKey || '',
+            receiptProducts: this.receiptProducts.map(m => m.toDto())
         } as ReceiptDto;
     }
 

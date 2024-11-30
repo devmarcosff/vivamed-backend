@@ -5,11 +5,11 @@ import { DataSource, ILike, Repository } from 'typeorm';
 import { Firm } from '../firm/entities/firm.entity';
 import { ProductV2 } from '../product/entities/product.entity';
 import { StockProductV2 } from '../product/entities/stock-product.entity';
-import { ReceiptProduct } from '../receipt-product/entities/receipt-product.entity';
 import { CreateReceiptDto } from './dto/create-receipt.dto';
 import { ReceiptFilterDto } from './dto/filter-receipt.dto';
 import { ReceiptDto } from './dto/receipt.dto';
 import { UpdateReceiptDto } from './dto/update-receipt.dto';
+import { ReceiptProduct } from './entities/receipt-product.entity';
 import { Receipt } from './entities/receipt.entity';
 
 @Injectable()
@@ -104,7 +104,6 @@ export class ReceiptService {
                     }
 
                     const newReceiptProduct = {
-                        product: productDb,
                         stockProduct: productStockDB,
                         bcIcms: rp.bcIcms || 0,
                         vIcms: rp.vIcms || 0,
@@ -138,7 +137,15 @@ export class ReceiptService {
     async findOne(id: string): Promise<ReceiptDto> {
         const receipt = await this.receiptRepository.findOne({
             where: { id, enabled: true },
-            relations: ['issuerCnpj', 'recipientCnpj']
+            relations: {
+                issuerCnpj: true,
+                recipientCnpj: true,
+                receiptProducts: {
+                    stockProduct: {
+                        product: true,
+                    },
+                }
+            }
         });
         if (!receipt) {
             throw new NotFoundException('Receipt not found.');
@@ -172,7 +179,15 @@ export class ReceiptService {
 
         const [items, total] = await this.receiptRepository.findAndCount({
             where,
-            relations: ['issuerCnpj', 'recipientCnpj'],
+            relations: {
+                issuerCnpj: true,
+                recipientCnpj: true,
+                receiptProducts: {
+                    stockProduct: {
+                        product: true,
+                    },
+                }
+            },
             take: limit,
             skip: skip,
             order: {

@@ -1,19 +1,13 @@
-import { plainToClass } from 'class-transformer';
 import { VivamedSmallBaseEntity } from 'src/shared/entities/vivamed-small-base-entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { ProductV2 } from '../../product/entities/product.entity';
 import { StockProductV2 } from '../../product/entities/stock-product.entity';
-import { Receipt } from '../../receipt/entities/receipt.entity';
 import { ReceiptProductDto } from '../dto/receipt-product.dto';
+import { Receipt } from './receipt.entity';
 
 @Entity('receipt_products_v2')
 export class ReceiptProduct extends VivamedSmallBaseEntity {
 
-    @ManyToOne(() => ProductV2, product => product.receiptProduct)
-    @JoinColumn()
-    product: ProductV2;
-
-    @ManyToOne(() => StockProductV2, stock => stock.receiptProduct)
+    @ManyToOne(() => StockProductV2, stock => stock.receiptProducts)
     @JoinColumn()
     stockProduct: StockProductV2;
 
@@ -54,13 +48,29 @@ export class ReceiptProduct extends VivamedSmallBaseEntity {
     @Column({ nullable: true, type: 'decimal', precision: 15, scale: 2 })
     aIpi: number; // Alíquota IPI
 
-    @ManyToOne(() => Receipt, (receipt) => receipt.products)
+    @ManyToOne(() => Receipt, (mto) => mto.receiptProducts)
     @JoinColumn()
     receipt: Receipt;
 
-    public toDto(): ReceiptProductDto {
-        return plainToClass(ReceiptProductDto, {
-            id: this.id,
-        });
+    toDto(): ReceiptProductDto {
+        return {
+            productCode: this.stockProduct?.product.code || '', // Ajuste para obter o código do produto da relação
+            productBatch: this.stockProduct?.batch || '', // Ajuste para obter o lote do produto da relação
+            productExpirationDate: this.stockProduct?.expirationDate || null, // Data de validade do lote
+            productManufacturingDate: this.stockProduct?.manufactureDate || null, // Data de fabricação do lote
+            quantity: this.quantity,
+            unitPrice: this.unitPrice,
+            ncmCode: this.ncmCode || '',
+            cst: this.cst || '',
+            cfopCode: this.cfopCode || '',
+            unitOfMeasure: this.unitOfMeasure || '',
+            bcIcms: this.bcIcms || 0,
+            vIcms: this.vIcms || 0,
+            vIpi: this.vIpi || 0,
+            aIcms: this.aIcms || 0,
+            aIpi: this.aIpi || 0,
+        };
     }
+
+
 }

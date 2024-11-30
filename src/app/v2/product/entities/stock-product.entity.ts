@@ -1,13 +1,10 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
-import { ReceiptProduct } from '../../receipt-product/entities/receipt-product.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { ReceiptProduct } from '../../receipt/entities/receipt-product.entity';
 import { ProductV2 } from './product.entity';
 
 @Entity('stock_product')
 export class StockProductV2 extends VivamedMediumBaseEntity {
-    @ManyToOne(() => ProductV2, { eager: true })
-    product: ProductV2;
-
     @Column()
     batch: string; // Batch of the product
 
@@ -29,6 +26,10 @@ export class StockProductV2 extends VivamedMediumBaseEntity {
     @Column({ nullable: true })
     location?: string; // Stock location
 
-    @OneToOne(() => ReceiptProduct, receiptProduct => receiptProduct.product)
-    receiptProduct: ReceiptProduct;
+    @ManyToOne(() => ProductV2, mto => mto.stockProducts)
+    @JoinColumn()
+    product: ProductV2;
+
+    @OneToMany(() => ReceiptProduct, (otm) => otm.receipt,)
+    receiptProducts: ReceiptProduct[];
 }
