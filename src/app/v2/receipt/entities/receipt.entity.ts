@@ -1,5 +1,5 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Firm } from '../../firm/entities/firm.entity';
 import { ReceiptDto } from '../dto/receipt.dto';
 import { ReceiptProduct } from './receipt-product.entity';
@@ -15,11 +15,11 @@ export class Receipt extends VivamedMediumBaseEntity {
     @Column({ type: 'timestamp' })
     issueDateTime: Date;
 
-    @OneToOne(() => Firm, (firm) => firm.receiptIssuerCnpj)
+    @ManyToOne(() => Firm, (firm) => firm.receiptIssuerCnpj)
     @JoinColumn()
     issuerCnpj: Firm;
 
-    @OneToOne(() => Firm, firm => firm.receiptRecipientCnpj)
+    @ManyToOne(() => Firm, firm => firm.receiptRecipientCnpj)
     @JoinColumn()
     recipientCnpj: Firm;
 
@@ -75,7 +75,7 @@ export class Receipt extends VivamedMediumBaseEntity {
             issRate: this.issRate || 0,
             barcodeOrAuthCode: this.barcodeOrAuthCode || '',
             nfeAccessKey: this.nfeAccessKey || '',
-            receiptProducts: this.receiptProducts.map(m => m.toDto())
+            receiptProducts: this.receiptProducts?.map(m => m.toDto()) ?? []
         } as ReceiptDto;
     }
 

@@ -6,6 +6,7 @@ import { FirmModule } from './firm/firm.module';
 import { ProductV2Module } from './product/product.module';
 import { ProfileV2Module } from './profile/profile-v2.module';
 import { ReceiptModule } from './receipt/receipt.module';
+import { StockMovmentModule } from './stock-movment/stock-movment.module';
 import { UserV2Module } from './user/user-v2.module';
 import { VivamedJwtModule } from './vivamed-jwt-module/vivamed-jwt.module';
 
@@ -19,7 +20,8 @@ import { VivamedJwtModule } from './vivamed-jwt-module/vivamed-jwt.module';
         CitizenModule,
         FirmModule,
         ReceiptModule,
-        ProductV2Module
+        ProductV2Module,
+        StockMovmentModule,
     ],
 })
 export class MainModule { }

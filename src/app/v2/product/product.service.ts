@@ -117,7 +117,6 @@ export class ProductV2Service {
         });
     }
 
-
     async remove(id: string): Promise<void> {
         const product = await this.productRepository.findOne({ where: { id, enabled: true } });
         if (!product) {

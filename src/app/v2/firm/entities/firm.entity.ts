@@ -1,6 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { VivamedBigBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { AddressV2 } from '../../address/entities/address-v2.entity';
 import { Receipt } from '../../receipt/entities/receipt.entity';
 import { FirmDto } from '../dto/firm.dto';
@@ -32,10 +32,10 @@ export class Firm extends VivamedBigBaseEntity {
     @OneToOne(() => AddressV2, address => address.firm, { cascade: false })
     address: AddressV2;
 
-    @OneToOne(() => Receipt, receipt => receipt.issuerCnpj, { cascade: false })
+    @OneToMany(() => Receipt, receipt => receipt.issuerCnpj, { cascade: false })
     receiptIssuerCnpj: Receipt;
 
-    @OneToOne(() => Receipt, receipt => receipt.recipientCnpj, { cascade: false })
+    @OneToMany(() => Receipt, receipt => receipt.recipientCnpj, { cascade: false })
     receiptRecipientCnpj: Receipt;
 
     public toDto(): FirmDto {

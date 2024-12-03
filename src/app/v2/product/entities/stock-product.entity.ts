@@ -1,6 +1,8 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { ReceiptProduct } from '../../receipt/entities/receipt-product.entity';
+import { StockMovement } from '../../stock-movment/entities/stock-movment.entity';
+import { StockProductV2Dto } from '../dto/stock-product.dto';
 import { ProductV2 } from './product.entity';
 
 @Entity('stock_product')
@@ -32,4 +34,30 @@ export class StockProductV2 extends VivamedMediumBaseEntity {
 
     @OneToMany(() => ReceiptProduct, (otm) => otm.receipt,)
     receiptProducts: ReceiptProduct[];
+
+    @OneToMany(() => StockMovement, (movement) => movement.stockProduct)
+    movements: StockMovement[];
+
+    toDto(): StockProductV2Dto {
+        return {
+            batch: this.batch,
+            expirationDate: this.expirationDate,
+            manufactureDate: this.manufactureDate,
+            quantity: this.quantity,
+            unitPrice: this.unitPrice,
+            salePrice: this.salePrice,
+            location: this.location,
+            product: this.product?.toDto(),
+            receiptProducts: this.receiptProducts?.map(receiptProduct => receiptProduct.toDto()),
+            movements: this.movements?.map(movement => movement.toDto()),
+        };
+    }
+
+    calculateStockMovement(): number {
+        return this.movements?.reduce((total, movement) => {
+            if (movement.type === 'IN') return total + movement.quantity;
+            if (movement.type === 'OUT') return total - movement.quantity;
+            return total;
+        }, 0) || 0;
+    }
 }

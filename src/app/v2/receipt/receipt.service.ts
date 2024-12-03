@@ -5,6 +5,7 @@ import { DataSource, ILike, Repository } from 'typeorm';
 import { Firm } from '../firm/entities/firm.entity';
 import { ProductV2 } from '../product/entities/product.entity';
 import { StockProductV2 } from '../product/entities/stock-product.entity';
+import { StockMovementService } from '../stock-movment/stock-movment.service';
 import { CreateReceiptDto } from './dto/create-receipt.dto';
 import { ReceiptFilterDto } from './dto/filter-receipt.dto';
 import { ReceiptDto } from './dto/receipt.dto';
@@ -18,6 +19,7 @@ export class ReceiptService {
         @InjectRepository(Receipt)
         private readonly receiptRepository: Repository<Receipt>,
         private readonly dataSource: DataSource,
+        private readonly stockMovementService: StockMovementService
     ) { }
 
     async create(dto: CreateReceiptDto): Promise<ReceiptDto> {
@@ -68,6 +70,10 @@ export class ReceiptService {
                 const newReceiptCreate = receiptRepository.create(newReceipt);
                 const receipt = await receiptRepository.save(newReceiptCreate);
 
+                if (dto.receiptProducts.length == 0) {
+                    throw new BadRequestException(`Product not found.`);
+                }
+
                 const receiptProducts: ReceiptProduct[] = [];
                 for (const rp of dto.receiptProducts) {
                     const productDb = await productV2Repository.findOneBy({ code: rp.productCode });
@@ -82,12 +88,27 @@ export class ReceiptService {
 
                     if (productStockDB) {
                         productStockDB.quantity += (rp.quantity ?? 0);
-                        productStockDB.expirationDate = new Date(
-                            Math.min(new Date(rp.productExpirationDate).getTime(), productStockDB.expirationDate.getTime())
-                        );
-                        productStockDB.manufactureDate = new Date(
-                            Math.min(new Date(rp.productManufacturingDate).getTime(), productStockDB.manufactureDate.getTime())
-                        );
+                        if (rp.productExpirationDate) {
+                            const newExpirationDate = new Date(rp.productExpirationDate);
+                            const currentExpirationDate = productStockDB.expirationDate
+                                ? new Date(productStockDB.expirationDate)
+                                : null;
+
+                            productStockDB.expirationDate = currentExpirationDate
+                                ? new Date(Math.min(newExpirationDate.getTime(), currentExpirationDate.getTime()))
+                                : newExpirationDate;
+                        }
+
+                        if (rp.productManufacturingDate) {
+                            const newManufactureDate = new Date(rp.productManufacturingDate);
+                            const currentManufactureDate = productStockDB.manufactureDate
+                                ? new Date(productStockDB.manufactureDate)
+                                : null;
+
+                            productStockDB.manufactureDate = currentManufactureDate
+                                ? new Date(Math.min(newManufactureDate.getTime(), currentManufactureDate.getTime()))
+                                : newManufactureDate;
+                        }
                         productStockDB.updatedAt = new Date();
                         await stockProductV2Repository.save(productStockDB);
                     } else {
@@ -121,6 +142,14 @@ export class ReceiptService {
                     } as ReceiptProduct;
                     const newReceiptProductCreate = receiptProductRepository.create(newReceiptProduct);
                     receiptProducts.push(newReceiptProductCreate);
+
+                    // var movementDto = {
+                    //     stockProductId: productStockDB.id,
+                    //     type: "IN",
+                    //     quantity: productStockDB.quantity,
+                    //     description: "Receipt entry"
+                    // } as CreateStockMovementDto;
+                    // await this.stockMovementService.create(movementDto);
                 }
 
                 await receiptProductRepository.save(receiptProducts);
@@ -192,7 +221,7 @@ export class ReceiptService {
             take: limit,
             skip: skip,
             order: {
-                issueDateTime: 'DESC',
+                createdAt: 'DESC',
             },
         });
 
