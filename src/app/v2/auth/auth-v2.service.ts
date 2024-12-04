@@ -26,42 +26,32 @@ export class AuthV2Service {
         private readonly vivamedJwtService: VivamedJwtService,
     ) { }
 
-    async signIn(createAuthDto: AuthV2Dto) {
-        const { username } = createAuthDto;
-        try {
-            const userDB = await this.userRepository.findOne({
-                where: [
-                    { cpf: username },
-                    { email: username },
-                    { enabled: true }
-                ],
-            });
-            if (!userDB) throw new BadRequestException(`Usuário não encontrado.`);
+    async signIn({ username, password }: AuthV2Dto) {
+        const userDB = await this.userRepository.findOne({
+            where: [
+                { cpf: username, enabled: true },
+                { email: username, enabled: true }
+            ],
+        });
+        if (!userDB) throw new BadRequestException(`Usuário não encontrado.`);
 
-            const validPass = await bcrypt.compare(createAuthDto.password, userDB.password);
-            if (!validPass) throw new BadRequestException(`Senha incorreta.`);
+        const validPass = await bcrypt.compare(password, userDB.password);
+        if (!validPass) throw new BadRequestException(`Senha incorreta.`);
 
+        if (userDB.accessToken) {
+            try {
+                const isExpired = await this.vivamedJwtService.verifyTokenExpires(userDB.accessToken, this.accessTokenSecret);
 
-            if (userDB.accessToken) {
-                try {
-                    const isExpired = await this.vivamedJwtService.verifyTokenExpires(userDB.accessToken, this.accessTokenSecret);
-
-                    if (!isExpired) {
-                        return {
-                            access_token: userDB.accessToken
-                        };
-                    }
-                } catch (tokenError) {
+                if (!isExpired) {
+                    return {
+                        access_token: userDB.accessToken
+                    };
                 }
+            } catch (tokenError) {
             }
-
-            return await this.getTokens(userDB);
-        } catch (error) {
-            // if (error instanceof BadRequestException) {
-            //     throw error;
-            // }
-            throw new BadRequestException(error);
         }
+
+        return await this.getTokens(userDB);
     }
 
     private async getTokens(user: UserV2) {
@@ -104,17 +94,19 @@ export class AuthV2Service {
 
             return await this.getTokens(userDB);
         } catch (error) {
-            console.log(error)
-            throw new UnauthorizedException(error);
-            // throw new UnauthorizedException('Erro ao renovar o token');
+            throw new UnauthorizedException('Erro ao renovar o token');
         }
     }
 
     async logout(userId: string) {
+        const userDB = await this.userRepository.findOneBy({ id: userId });
+
+        if (userDB && (userDB.accessToken == "" || userDB.accessToken == undefined)) {
+            return { message: 'o usuário já está deslogado' };
+        }
         await this.userRepository.update(userId, { accessToken: null, refreshToken: null });
         return { message: 'Logout realizado com sucesso' };
     }
-
 
     async requestPasswordReset(dto: RequestResetPasswordDto): Promise<void> {
         const user = await this.userRepository.findOne({

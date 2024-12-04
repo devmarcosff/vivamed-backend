@@ -39,6 +39,7 @@ export class UserV2 extends VivamedBigBaseEntity {
             id: this.id,
             email: this.email,
             cpf: this.cpf,
+            role: this.role,
             profile: this.profile?.toDto() ?? undefined
         });
     }
