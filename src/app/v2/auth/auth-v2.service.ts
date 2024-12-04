@@ -54,7 +54,7 @@ export class AuthV2Service {
         return await this.getTokens(userDB);
     }
 
-    private async getTokens(user: UserV2) {
+    private async getTokens(user: UserV2, keepRefreshToken = false) {
         const payload = { sub: user.id, ...user.toDto() };
 
         const [access_token, refresh_token] = await Promise.all([
@@ -65,12 +65,12 @@ export class AuthV2Service {
         const hashedRefreshToken = await bcrypt.hash(refresh_token, 10);
         await this.userRepository.update(user.id, {
             accessToken: access_token,
-            refreshToken: hashedRefreshToken,
+            refreshToken: keepRefreshToken ? user.refreshToken : hashedRefreshToken,
         });
 
         return {
             access_token: access_token,
-            refresh_token: refresh_token
+            refresh_token: keepRefreshToken ? undefined : refresh_token
         };
     }
 
@@ -92,7 +92,16 @@ export class AuthV2Service {
                 throw new UnauthorizedException('Token expirado, realize o login novamente.');
             }
 
-            return await this.getTokens(userDB);
+            if (userDB.accessToken) {
+                const isExpired = await this.vivamedJwtService.verifyTokenExpires(userDB.accessToken, this.accessTokenSecret);
+                if (!isExpired) {
+                    return {
+                        access_token: userDB.accessToken
+                    };
+                }
+            }
+
+            return await this.getTokens(userDB, true);
         } catch (error) {
             throw new UnauthorizedException('Erro ao renovar o token');
         }
