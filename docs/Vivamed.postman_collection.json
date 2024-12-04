@@ -824,7 +824,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"businessName\": \"2\",\n    \"tradeName\": \"2\",\n    \"cnpj\": \"98765432000176\",\n    \"phone\": \"2\",\n    \"email\": \"2\",\n    \"stateRegistration\": \"2\",\n    \"municipalRegistration\": \"2\"\n}",
+							"raw": "{\n    \"businessName\": \"2\",\n    \"fantasyName\": \"2\",\n    \"cnpj\": \"98765432000176\",\n    \"phone\": \"2\",\n    \"email\": \"2\",\n    \"stateRegistration\": \"2\",\n    \"municipalRegistration\": \"2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -918,7 +918,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"businessName\": \"1\",\n  \"tradeName\": \"2\",\n  \"cnpj\": \"3\",\n  \"phone\": \"4\",\n  \"email\": \"5\",\n  \"stateRegistration\": \"6\",\n  \"municipalRegistration\": \"7\"\n}",
+							"raw": "{\n  \"businessName\": \"1\",\n  \"fantasyName\": \"2\",\n  \"cnpj\": \"3\",\n  \"phone\": \"4\",\n  \"email\": \"5\",\n  \"stateRegistration\": \"6\",\n  \"municipalRegistration\": \"7\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
