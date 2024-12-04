@@ -57,10 +57,10 @@ export class AuthV2Service {
 
             return await this.getTokens(userDB);
         } catch (error) {
-            if (error instanceof BadRequestException) {
-                throw error;
-            }
-            throw new BadRequestException(`Erro ao entrar com o usuário.`);
+            // if (error instanceof BadRequestException) {
+            //     throw error;
+            // }
+            throw new BadRequestException(error);
         }
     }
 
