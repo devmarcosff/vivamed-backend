@@ -82,7 +82,6 @@
 									"    const response = pm.response.json();",
 									"",
 									"    pm.environment.set(\"access_token\", response.access_token);",
-									"    pm.environment.set(\"refresh_token\", response.refresh_token);",
 									"});"
 								],
 								"type": "text/javascript",
@@ -1157,7 +1156,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"invoiceNumber\": \"123456\",\n  \"invoiceSeries\": \"A1\",\n  \"issueDateTime\": \"2024-11-27T12:00:00\",\n  \"issuerCnpj\": \"12345678000195\",\n  \"recipientCnpj\": \"98765432000176\",\n  \"totalValue\": 1500.5,\n  \"icmsBase\": 1000,\n  \"icmsValue\": 150,\n  \"ipiValue\": 50,\n  \"issValue\": 100,\n  \"icmsRate\": 18,\n  \"ipiRate\": 10,\n  \"issRate\": 5,\n  \"barcodeOrAuthCode\": \"12345678901234567890\",\n  \"nfeAccessKey\": \"351904123456789012345500100100001234567890123\",\n  \"receiptProducts\": [\n    {\n      \"productCode\": \"PRD12345\",\n      \"productBatch\": \"A001\",\n      \"productExpirationDate\": \"2024-11-28\",\n      \"productManufacturingDate\": \"2024-01-15\",\n      \"quantity\": 50,\n      \"unitPrice\": 10\n    }\n  ]\n}",
+							"raw": "{\n  \"invoiceNumber\": \"111111\",\n  \"invoiceSeries\": \"11\",\n  \"issueDateTime\": \"2024-11-27T12:00:00\",\n  \"issuerCnpj\": \"12345678000195\",\n  \"recipientCnpj\": \"98765432000176\",\n  \"totalValue\": 1,\n  \"icmsBase\": 1,\n  \"icmsValue\": 1,\n  \"ipiValue\": 1,\n  \"issValue\": 1,\n  \"icmsRate\": 1,\n  \"ipiRate\": 1,\n  \"issRate\": 1,\n  \"barcodeOrAuthCode\": \"12345678901234567890\",\n  \"nfeAccessKey\": \"351904123456789012345500100100001234567890123\",\n  \"receiptProducts\": [\n    {\n      \"productCode\": \"PRD12345\",\n      \"productBatch\": \"L1\",\n      \"productExpirationDate\": \"2024-11-28\",\n      \"productManufacturingDate\": \"2024-01-15\",\n      \"quantity\": 50,\n      \"unitPrice\": 10\n    }\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
