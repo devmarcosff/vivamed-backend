@@ -32,6 +32,7 @@ export class AuthV2Service {
                 { cpf: username, enabled: true },
                 { email: username, enabled: true }
             ],
+            relations: { profile: true }
         });
         if (!userDB) throw new BadRequestException('User not found.');
 
@@ -76,7 +77,10 @@ export class AuthV2Service {
     async refresh(dto: RefreshTokenDto) {
         try {
             const payload = this.vivamedJwtService.decode<UserV2JwtPayload>(dto.access_token);
-            const userDB = await this.userRepository.findOne({ where: { id: payload.sub, enabled: true } });
+            const userDB = await this.userRepository.findOne({
+                where: { id: payload.sub, enabled: true },
+                relations: { profile: true }
+            });
             if (!userDB || !userDB.refreshToken) {
                 throw new UnauthorizedException('User not found.');
             }
@@ -118,9 +122,11 @@ export class AuthV2Service {
 
     async requestPasswordReset(dto: RequestResetPasswordDto): Promise<void> {
         const user = await this.userRepository.findOne({
-            where: { cpf: dto.cpf, email: dto.email, enabled: true }
+            where: [
+                { cpf: dto.cpf, enabled: true },
+                { email: dto.email, enabled: true }
+            ]
         });
-
         if (!user) {
             throw new NotFoundException('User not found.');
         }
@@ -151,10 +157,10 @@ export class AuthV2Service {
 
     async resetPassword(dto: ResetPasswordDto): Promise<void> {
         const user = await this.userRepository.findOne({
-            where: {
-                cpf: dto.cpf,
-                email: dto.email
-            }
+            where: [
+                { cpf: dto.cpf, enabled: true },
+                { email: dto.email, enabled: true }
+            ]
         });
 
         if (!user) {
