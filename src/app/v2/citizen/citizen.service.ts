@@ -121,7 +121,7 @@ export class CitizenService {
 
                 const dataStartIndex = rows.findIndex(row => row[0] === 'Nome' && row[2] === 'CNS');
                 if (dataStartIndex === -1) {
-                    throw new BadRequestException('Coluna "Nome" ou "CNS" não encontrada');
+                    throw new BadRequestException('Column "Name" or "CNS" not found');
                 }
 
                 const dataRows = rows.slice(dataStartIndex + 1).filter(row => row[0] && row[2]);
@@ -178,7 +178,7 @@ export class CitizenService {
                     savedCitizens = await citizenRepository.save(newCitizens);
                 }
 
-                //atualizar os duplicados
+                // Update duplicates
                 if (updateDuplicates && duplicatedCns.length > 0) {
                     for (const d of duplicatedCns) {
                         const citzenDb = citizensDb.find(f => f.cns === d.cns);
@@ -189,18 +189,16 @@ export class CitizenService {
                 }
 
                 return {
-                    message: 'Importação concluída',
+                    message: 'Import completed',
                     totalImported: savedCitizens.length,
                     totalDuplicated: duplicatedCns.length,
                     duplicatedCitizens: duplicatedCns.map(m => m.cns),
                 };
             } catch (error) {
                 throw new BadRequestException(
-                    error.message || 'Erro ao importar cidadãos. Verifique o arquivo e tente novamente.'
+                    error.message || 'Error importing citizens. Please check the file and try again.'
                 );
             }
         });
     }
-
-
 }

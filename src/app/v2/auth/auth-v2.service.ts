@@ -33,10 +33,10 @@ export class AuthV2Service {
                 { email: username, enabled: true }
             ],
         });
-        if (!userDB) throw new BadRequestException(`Usuário não encontrado.`);
+        if (!userDB) throw new BadRequestException('User not found.');
 
         const validPass = await bcrypt.compare(password, userDB.password);
-        if (!validPass) throw new BadRequestException(`Senha incorreta.`);
+        if (!validPass) throw new BadRequestException('Incorrect password.');
 
         if (userDB.accessToken) {
             try {
@@ -47,8 +47,7 @@ export class AuthV2Service {
                         access_token: userDB.accessToken
                     };
                 }
-            } catch (tokenError) {
-            }
+            } catch (tokenError) { }
         }
 
         return await this.getTokens(userDB);
@@ -79,17 +78,17 @@ export class AuthV2Service {
             const payload = this.vivamedJwtService.decode<UserV2JwtPayload>(dto.access_token);
             const userDB = await this.userRepository.findOne({ where: { id: payload.sub, enabled: true } });
             if (!userDB || !userDB.refreshToken) {
-                throw new UnauthorizedException('Usuário não encontrado.');
+                throw new UnauthorizedException('User not found.');
             }
 
             const refreshTokenMatches = await bcrypt.compare(dto.refresh_token, userDB.refreshToken);
             if (!refreshTokenMatches) {
-                throw new UnauthorizedException('Acesso negado.');
+                throw new UnauthorizedException('Access denied.');
             }
 
             const isExpired = await this.vivamedJwtService.verifyTokenExpires(dto.refresh_token, this.refreshTokenSecret);
             if (isExpired) {
-                throw new UnauthorizedException('Token expirado, realize o login novamente.');
+                throw new UnauthorizedException('Token expired, please log in again.');
             }
 
             if (userDB.accessToken) {
@@ -103,18 +102,18 @@ export class AuthV2Service {
 
             return await this.getTokens(userDB, true);
         } catch (error) {
-            throw new UnauthorizedException('Erro ao renovar o token');
+            throw new UnauthorizedException('Error renewing token.');
         }
     }
 
     async logout(userId: string) {
         const userDB = await this.userRepository.findOneBy({ id: userId });
 
-        if (userDB && (userDB.accessToken == "" || userDB.accessToken == undefined)) {
-            return { message: 'o usuário já está deslogado' };
+        if (userDB && (!userDB.accessToken || userDB.accessToken === '')) {
+            return { message: 'User is already logged out.' };
         }
         await this.userRepository.update(userId, { accessToken: null, refreshToken: null });
-        return { message: 'Logout realizado com sucesso' };
+        return { message: 'Logout successful.' };
     }
 
     async requestPasswordReset(dto: RequestResetPasswordDto): Promise<void> {
@@ -123,7 +122,7 @@ export class AuthV2Service {
         });
 
         if (!user) {
-            throw new NotFoundException('Usuário não encontrado');
+            throw new NotFoundException('User not found.');
         }
 
         const resetCode = randomBytes(3).toString('hex').toUpperCase();
@@ -135,12 +134,12 @@ export class AuthV2Service {
         await this.userRepository.save(user);
 
         const payload = { email: user.email, code: resetCode };
-        const token = await this.vivamedJwtService.encode(payload, this.accessTokenSecret, "5m");
+        const token = await this.vivamedJwtService.encode(payload, this.accessTokenSecret, '5m');
         const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
         await this.mailerService.sendMail({
             to: user.email,
-            subject: 'Código de redefinição de senha',
+            subject: 'Password Reset Code',
             template: 'reset-password',
             context: {
                 code: resetCode,
@@ -159,15 +158,15 @@ export class AuthV2Service {
         });
 
         if (!user) {
-            throw new BadRequestException('Usuário não encontrado');
+            throw new BadRequestException('User not found.');
         }
 
         if (!user.codeResetPasswordExpiration || new Date() > user.codeResetPasswordExpiration) {
-            throw new BadRequestException('O código de redefinição expirou');
+            throw new BadRequestException('Reset code expired.');
         }
 
         if (!user.codeResetPassword || user.codeResetPassword !== dto.code) {
-            throw new BadRequestException('Código de redefinição inválido');
+            throw new BadRequestException('Invalid reset code.');
         }
 
         user.password = await bcrypt.hash(dto.newPassword, 10);

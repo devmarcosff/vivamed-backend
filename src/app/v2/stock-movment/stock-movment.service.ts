@@ -26,18 +26,18 @@ export class StockMovementService {
             });
 
             if (!stock) {
-                throw new NotFoundException('Produto não encontrado.');
+                throw new NotFoundException('Product not found.');
             }
 
             if (dto.type === 'IN') {
                 stock.quantity += dto.quantity;
             } else if (dto.type === 'OUT') {
                 if (stock.quantity < dto.quantity) {
-                    throw new BadRequestException('Estoque insuficiente.');
+                    throw new BadRequestException('Insufficient stock.');
                 }
                 stock.quantity -= dto.quantity;
             } else {
-                throw new BadRequestException('Tipo de movimento inválido.');
+                throw new BadRequestException('Invalid movement type.');
             }
 
             await stockRepository.update(stock.id, { quantity: stock.quantity });

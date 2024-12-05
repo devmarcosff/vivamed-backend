@@ -4,38 +4,38 @@ import { StockMovementDto } from '../../stock-movment/dto/stock-movment.dto';
 import { ProductV2Dto } from './product.dto';
 
 export class StockProductV2Dto {
-    @ApiProperty({ description: 'Lote do produto', example: 'L12345' })
+    @ApiProperty({ description: 'Product batch', example: 'L12345' })
     batch: string;
 
-    @ApiProperty({ description: 'Data de validade do produto', example: '2024-12-31' })
+    @ApiProperty({ description: 'Product expiration date', example: '2024-12-31' })
     expirationDate: Date;
 
-    @ApiProperty({ description: 'Data de fabricação do produto', example: '2023-01-01' })
+    @ApiProperty({ description: 'Product manufacture date', example: '2023-01-01' })
     manufactureDate: Date;
 
-    @ApiProperty({ description: 'Quantidade em estoque', example: 100 })
+    @ApiProperty({ description: 'Quantity in stock', example: 100 })
     quantity: number;
 
-    @ApiPropertyOptional({ description: 'Preço unitário do produto', example: 15.5 })
+    @ApiPropertyOptional({ description: 'Unit price of the product', example: 15.5 })
     unitPrice?: number;
 
-    @ApiPropertyOptional({ description: 'Preço de venda do produto', example: 18.0 })
+    @ApiPropertyOptional({ description: 'Sale price of the product', example: 18.0 })
     salePrice?: number;
 
-    @ApiPropertyOptional({ description: 'Localização do produto no estoque', example: 'A1-B2-C3' })
+    @ApiPropertyOptional({ description: 'Product location in stock', example: 'A1-B2-C3' })
     location?: string;
 
-    @ApiProperty({ description: 'Detalhes do produto associado', type: ProductV2Dto })
+    @ApiProperty({ description: 'Details of the associated product', type: ProductV2Dto })
     product: ProductV2Dto;
 
     @ApiProperty({
-        description: 'Lista de produtos associados ao recebimento',
+        description: 'List of products associated with the receipt',
         type: [ReceiptProductDto],
     })
     receiptProducts: ReceiptProductDto[];
 
     @ApiProperty({
-        description: 'Lista de movimentações de estoque relacionadas',
+        description: 'List of stock movements related to the product',
         type: [StockMovementDto],
     })
     movements: StockMovementDto[];

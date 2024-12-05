@@ -8,6 +8,6 @@ export class AuthV2Dto {
 
     @ApiProperty()
     @IsString()
-    @IsNotEmpty({ message: 'Campo obrigatório' })
+    @IsNotEmpty({ message: 'Field is required' })
     password: string;
 }

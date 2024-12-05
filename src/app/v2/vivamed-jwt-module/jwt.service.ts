@@ -25,19 +25,19 @@ export class VivamedJwtService {
             const currentTimestamp = Math.floor(Date.now() / 1000);
 
             if (payload.exp && payload.exp < currentTimestamp) {
-                return true; //Token expirado
+                return true; // Expired token
             }
 
             if (payload.iat && payload.iat > currentTimestamp) {
-                return true; //Token inválido: data de emissão futura
+                return true; // Invalid token: future issue date
             }
 
             return false;
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
-                throw new UnauthorizedException('Token expirado.');
+                throw new UnauthorizedException('Token expired.');
             }
-            throw new UnauthorizedException('Token inválido.');
+            throw new UnauthorizedException('Invalid token.');
         }
     }
 }

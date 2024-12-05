@@ -43,14 +43,14 @@ export class AuthV2Guard implements CanActivate {
         const token = this.extractTokenFromHeader(request);
 
         if (!token) {
-            throw new UnauthorizedException('Token não fornecido');
+            throw new UnauthorizedException('Token not provided');
         }
 
         try {
             const isExpired = await this.vivamedJwtService.verifyTokenExpires<UserV2JwtPayload>(token, this.accessTokenSecret);
 
             if (isExpired) {
-                throw new UnauthorizedException('Token inválido');
+                throw new UnauthorizedException('Invalid token');
             }
             const payload = await this.vivamedJwtService.decode<UserV2JwtPayload>(token);
 
@@ -58,11 +58,11 @@ export class AuthV2Guard implements CanActivate {
                 const userRepository = manager.getRepository(UserV2);
                 const user = await userRepository.findOneBy({ id: payload.sub, enabled: true });
                 if (!user) {
-                    throw new UnauthorizedException('Usuário não encontrado');
+                    throw new UnauthorizedException('User not found');
                 }
 
                 if (!user.accessToken) {
-                    throw new UnauthorizedException('Usuário não está logado, faça o login novamente');
+                    throw new UnauthorizedException('User is not logged in, please log in again');
                 }
             });
 
@@ -71,7 +71,7 @@ export class AuthV2Guard implements CanActivate {
             return true;
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
-                throw new UnauthorizedException('Token expirado');
+                throw new UnauthorizedException('Token expired');
             }
             throw error;
         }

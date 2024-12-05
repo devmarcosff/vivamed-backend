@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from "class-validat
 
 export class RequestResetPasswordDto {
     @ApiProperty()
-    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, { message: 'CPF inválido' })
+    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, { message: 'Invalid CPF' })
     cpf?: string;
 
     @ApiProperty()
@@ -17,7 +17,7 @@ export class ResetPasswordDto {
     email?: string;
 
     @ApiProperty()
-    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, { message: 'CPF inválido' })
+    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, { message: 'Invalid CPF' })
     cpf?: string;
 
     @ApiProperty()
@@ -27,9 +27,9 @@ export class ResetPasswordDto {
 
     @ApiProperty()
     @IsString()
-    @MinLength(6, { message: "A senha deve ter mais de 6 caracteres" })
+    @MinLength(6, { message: "Password must be at least 6 characters long" })
     @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'A senha deve conter letras, numeros e caracteres',
+        message: 'Password must contain letters, numbers, and characters',
     })
     newPassword: string;
 }

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, EntityNotFoundError, ILike, QueryFailedError, Repository } from 'typeorm';
@@ -21,11 +26,11 @@ export class AddressV2Service {
 
     async create(dto: CreateAddressV2Dto): Promise<AddressV2Dto> {
         if (dto.profileId && dto.citizenId && dto.firmId) {
-            throw new BadRequestException('Não é possível criar um endereço simultaneamente');
+            throw new BadRequestException('Cannot create an address simultaneously for multiple entities.');
         }
 
         if (!dto.profileId && !dto.citizenId && !dto.firmId) {
-            throw new BadRequestException('É necessário fornecer uma referência como ID');
+            throw new BadRequestException('You must provide a reference ID.');
         }
 
         try {
@@ -51,11 +56,11 @@ export class AddressV2Service {
                     });
 
                     if (!profile) {
-                        throw new BadRequestException('Usuário não encontrado');
+                        throw new BadRequestException('User not found.');
                     }
 
                     if (profile.address) {
-                        throw new BadRequestException('O usuário já possui um endereço associado');
+                        throw new BadRequestException('The user already has an associated address.');
                     }
 
                     newAddress.profile = profile;
@@ -75,11 +80,11 @@ export class AddressV2Service {
                     });
 
                     if (!firm) {
-                        throw new BadRequestException('Fornecedor não encontrado.');
+                        throw new BadRequestException('Firm not found.');
                     }
 
                     if (firm.address) {
-                        throw new BadRequestException('O fornecedor já possui um endereço associado.');
+                        throw new BadRequestException('The firm already has an associated address.');
                     }
 
                     newAddress.firm = firm;
@@ -91,41 +96,16 @@ export class AddressV2Service {
                     delete newAddress.firm;
                 }
 
-                // if (citizenId) {
-                //     const citizenRepository = manager.getRepository(Cidadao);
-                //     const citizen = await citizenRepository.findOne({
-                //         relations: { address: true },
-                //         where: { id: citizenId },
-                //         lock: { mode: 'pessimistic_write' }
-                //     });
-
-                //     if (!citizen) {
-                //         throw new BadRequestException('Cidadão não encontrado');
-                //     }
-
-                //     if (citizen.address) {
-                //         throw new BadRequestException('O cidadão já possui um endereço associado');
-                //     }
-
-                //     newAddress.citizen = citizen;
-                //     await addressRepository.save(newAddress);
-
-                //     citizen.addressV2 = newAddress;
-                //     await citizenRepository.save(citizen);
-
-                //     delete newAddress.citizen;
-                // }
-
                 return newAddress.toDto();
             });
         } catch (error) {
             if (error instanceof QueryFailedError) {
-                throw new BadRequestException('Falha na operação do banco de dados');
+                throw new BadRequestException('Database operation failed.');
             }
             if (error instanceof EntityNotFoundError) {
                 throw new BadRequestException(error.message);
             }
-            throw new BadRequestException(error);
+            throw new BadRequestException(error.message || 'An unexpected error occurred.');
         }
     }
 
@@ -136,7 +116,7 @@ export class AddressV2Service {
         });
 
         if (!address) {
-            throw new BadRequestException(`Endereço com ID ${id} não encontrado`);
+            throw new BadRequestException(`Address with ID ${id} not found.`);
         }
 
         return address.toDto();
@@ -168,14 +148,9 @@ export class AddressV2Service {
             where.profile = { id: filter.profileId };
         }
 
-        // if (filter.citizenId) {
-        //     where.cidadao = { id: filter.citizenId };
-        // }
-
         where.enabled = true;
 
         const [items, total] = await this.addressRepository.findAndCount({
-            // relations: { profile: true, citizen: true },
             relations: { profile: true, firm: true },
             where,
             take: limit,
@@ -219,16 +194,15 @@ export class AddressV2Service {
                 const addressRepository = manager.getRepository(AddressV2);
                 const addressV2 = await addressRepository.findOne({
                     where: { id },
-                    // relations: { profile: true, citizen: true },
                     relations: { profile: true, firm: true },
                 });
 
                 if (!addressV2) {
-                    throw new BadRequestException('Endereço não encontrado.');
+                    throw new BadRequestException('Address not found.');
                 }
 
                 if (profileId && citizenId) {
-                    throw new BadRequestException('Não é possível associar um endereço a um perfil e a um cidadão simultaneamente.');
+                    throw new BadRequestException('Cannot associate an address with both a profile and a citizen simultaneously.');
                 }
 
                 if (profileId) {
@@ -240,34 +214,15 @@ export class AddressV2Service {
                     });
 
                     if (!profile) {
-                        throw new BadRequestException('Perfil não encontrado.');
+                        throw new BadRequestException('Profile not found.');
                     }
 
                     if (profile.address && profile.address.id !== id) {
-                        throw new BadRequestException('O perfil já possui um endereço associado.');
+                        throw new BadRequestException('The profile already has an associated address.');
                     }
 
                     addressV2.profile = profile;
                 }
-
-                // if (citizenId) {
-                //     const citizenRepository = manager.getRepository(Cidadao);
-                //     const citizen = await citizenRepository.findOne({
-                //         where: { id: citizenId },
-                //         relations: { addressV2: true },
-                //         lock: { mode: 'pessimistic_write' }
-                //     });
-
-                //     if (!citizen) {
-                //         throw new BadRequestException('Cidadão não encontrado.');
-                //     }
-
-                //     if (citizen.addressV2 && citizen.addressV2.id !== id) {
-                //         throw new BadRequestException('O cidadão já possui um endereço associado.');
-                //     }
-
-                //     addressV2.citizen = citizen;
-                // }
 
                 Object.assign(addressV2, {
                     zipcode,
@@ -287,12 +242,21 @@ export class AddressV2Service {
             });
         } catch (error) {
             if (error instanceof QueryFailedError) {
-                throw new InternalServerErrorException('Falha na operação do banco de dados.');
+                throw new InternalServerErrorException('Database operation failed.');
             }
             if (error instanceof EntityNotFoundError) {
                 throw new BadRequestException(error.message);
             }
             throw error;
         }
+    }
+
+    async remove(id: string): Promise<void> {
+        const itemDb = await this.addressRepository.findOne({ where: { id, enabled: true } });
+        if (!itemDb) {
+            throw new NotFoundException('Address not found.');
+        }
+        itemDb.enabled = false;
+        await this.addressRepository.update(id, itemDb);
     }
 }

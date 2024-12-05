@@ -92,7 +92,7 @@ export class ProductV2Service {
     async findOne(id: string): Promise<ProductV2Dto> {
         const product = await this.productRepository.findOne({ where: { id, enabled: true } });
         if (!product) {
-            throw new NotFoundException('ProductV2 not found');
+            throw new NotFoundException('Product not found');
         }
         return product as ProductV2Dto;
     }
@@ -106,7 +106,7 @@ export class ProductV2Service {
             });
 
             if (!productDb) {
-                throw new NotFoundException('ProductV2 not found');
+                throw new NotFoundException('Product not found');
             }
 
             Object.assign(productDb, dto);
@@ -118,11 +118,11 @@ export class ProductV2Service {
     }
 
     async remove(id: string): Promise<void> {
-        const product = await this.productRepository.findOne({ where: { id, enabled: true } });
-        if (!product) {
-            throw new NotFoundException('ProductV2 not found');
+        const itemDb = await this.productRepository.findOne({ where: { id, enabled: true } });
+        if (!itemDb) {
+            throw new NotFoundException('Product not found');
         }
-        product.enabled = false;
-        await this.productRepository.update(id, product);
+        itemDb.enabled = false;
+        await this.productRepository.update(id, itemDb);
     }
 }

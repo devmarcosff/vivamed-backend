@@ -34,10 +34,6 @@ export class AddressV2 extends VivamedBigBaseEntity {
     @Column({ nullable: true })
     complement: string;
 
-    // @OneToOne(() => Cidadao, (cidadao) => cidadao.address)
-    // @JoinColumn()
-    // citizen: Cidadao;
-
     @OneToOne(() => ProfileV2, profile => profile.address)
     @JoinColumn()
     profile: ProfileV2;
@@ -58,7 +54,6 @@ export class AddressV2 extends VivamedBigBaseEntity {
             complement: this.complement,
             latitude: this.latitude,
             longitude: this.longitude,
-            // citizenId: this.citizen ? this.citizen.id : "",
             profileId: this.profile?.id ?? "",
             firmId: this.firm?.id ?? "",
         } as AddressV2Dto);

@@ -45,6 +45,9 @@ export class AuthV2Controller {
 
     @UseGuards(AuthV2Guard)
     @Post('logout')
+    @ApiOperation({ summary: "Logout", description: "Log out the user by their current session or token." })
+    @ApiOkResponse({ description: "Successfully logged out." })
+    @ApiBadRequestResponse({ description: "Error logging out the user." })
     async logout(@Req() req) {
         const userId = req.user.sub;
         return this.authV2Service.logout(userId);

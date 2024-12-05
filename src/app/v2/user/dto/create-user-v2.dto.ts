@@ -6,11 +6,11 @@ export class CreateUserV2Dto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    nome: string;
+    name: string;
 
     @ApiProperty()
     @IsNotEmpty()
-    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, { message: 'CPF inválido' })
+    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, { message: 'Invalid CPF' })
     cpf: string;
 
     @ApiProperty()
@@ -20,15 +20,14 @@ export class CreateUserV2Dto {
 
     @ApiProperty()
     @IsString()
-    @MinLength(6, { message: "A senha deve ter mais de 6 caracteres" })
+    @MinLength(6, { message: "Password must be more than 6 characters" })
     @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'A senha deve conter letras, numeros e caracteres',
+        message: 'Password must contain letters, numbers, and special characters',
     })
     password: string;
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsEnum(Role, { message: 'O papel do usuário deve ser Admin ou User.' })
+    @IsEnum(Role, { message: 'User role must be Admin or User.' })
     role: Role;
-
 }

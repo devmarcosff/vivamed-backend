@@ -25,12 +25,12 @@ export class UserV2Service {
 
             const eCpf = await userRepository.findOne({ where: { cpf: dto.cpf } });
             if (eCpf) {
-                throw new BadRequestException('CPF já está em uso.');
+                throw new BadRequestException('CPF is already in use.');
             }
 
             const eEmail = await userRepository.findOne({ where: { email: dto.email } });
             if (eEmail) {
-                throw new BadRequestException('E-mail já cadastrado, escolha um e-mail de usuário diferente.');
+                throw new BadRequestException('Email is already registered, please choose a different one.');
             }
 
             const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -45,7 +45,7 @@ export class UserV2Service {
             const userDb = await userRepository.save(newUser);
 
             const newProfile = profileRepository.create({
-                name: dto.nome,
+                name: dto.name,
                 user: userDb,
             });
 
@@ -101,9 +101,18 @@ export class UserV2Service {
         });
 
         if (!user) {
-            throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+            throw new NotFoundException(`User with ID ${id} not found`);
         }
 
         return user.toDto();
+    }
+
+    async remove(id: string): Promise<void> {
+        const itemDb = await this.userRepository.findOne({ where: { id, enabled: true } });
+        if (!itemDb) {
+            throw new NotFoundException('User not found');
+        }
+        itemDb.enabled = false;
+        await this.userRepository.update(id, itemDb);
     }
 }

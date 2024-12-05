@@ -57,7 +57,7 @@ export class ProfileV2Service {
         });
 
         if (!profile) {
-            throw new NotFoundException('Perfil não encontrado');
+            throw new NotFoundException('Profile not found.');
         }
 
         return profile.toDto();
@@ -69,11 +69,10 @@ export class ProfileV2Service {
 
             const profileDb = await profileRepository.findOne({
                 where: { id, enabled: true },
-                lock: { mode: 'pessimistic_write' },
             });
 
             if (!profileDb) {
-                throw new BadRequestException('Perfil não encontrado');
+                throw new BadRequestException('Profile not found.');
             }
 
             Object.assign(profileDb, dto);
