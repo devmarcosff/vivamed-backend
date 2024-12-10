@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ProductV2Dto } from '../../product/dto/product.dto';
 import { ReceiptProductDto } from '../../receipt/dto/receipt-product.dto';
 import { StockMovementDto } from '../../stock-movment/dto/stock-movment.dto';
-import { ProductV2Dto } from './product.dto';
 
 export class StockProductV2Dto {
     @ApiProperty({ description: 'Product batch', example: 'L12345' })

@@ -1,6 +1,7 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { StockProductV2 } from '../../product/entities/stock-product.entity';
+
+import { StockProductV2 } from '../../stock-product/entities/stock-product.entity';
 import { StockMovementDto } from '../dto/stock-movment.dto';
 
 

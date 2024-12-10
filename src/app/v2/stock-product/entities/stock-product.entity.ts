@@ -1,9 +1,9 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { ProductV2 } from '../../product/entities/product.entity';
 import { ReceiptProduct } from '../../receipt/entities/receipt-product.entity';
 import { StockMovement } from '../../stock-movment/entities/stock-movment.entity';
-import { StockProductV2Dto } from '../dto/stock-product.dto';
-import { ProductV2 } from './product.entity';
+import { StockProductV2Dto } from '../../stock-product/dto/stock-product.dto';
 
 @Entity('stock_product')
 export class StockProductV2 extends VivamedMediumBaseEntity {

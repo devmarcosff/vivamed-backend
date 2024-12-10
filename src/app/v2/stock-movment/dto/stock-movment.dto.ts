@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { StockProductV2Dto } from '../../product/dto/stock-product.dto';
+import { StockProductV2Dto } from '../../stock-product/dto/stock-product.dto';
 
 export class StockMovementDto {
     @ApiProperty({ description: 'Movement ID', example: 'uuid' })

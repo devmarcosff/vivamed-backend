@@ -9,6 +9,7 @@ import { ReceiptModule } from './receipt/receipt.module';
 import { StockMovmentModule } from './stock-movment/stock-movment.module';
 import { UserV2Module } from './user/user-v2.module';
 import { VivamedJwtModule } from './vivamed-jwt-module/vivamed-jwt.module';
+import { StockProductModule } from './stock-product/stock-product.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { VivamedJwtModule } from './vivamed-jwt-module/vivamed-jwt.module';
         ReceiptModule,
         ProductV2Module,
         StockMovmentModule,
+        StockProductModule,
     ],
 })
 export class MainModule { }

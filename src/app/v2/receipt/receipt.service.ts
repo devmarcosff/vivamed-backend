@@ -4,8 +4,10 @@ import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, ILike, Repository } from 'typeorm';
 import { Firm } from '../firm/entities/firm.entity';
 import { ProductV2 } from '../product/entities/product.entity';
-import { StockProductV2 } from '../product/entities/stock-product.entity';
+import { CreateStockMovementDto } from '../stock-movment/dto/create-stock-movment.dto';
+import { StockMovement } from '../stock-movment/entities/stock-movment.entity';
 import { StockMovementService } from '../stock-movment/stock-movment.service';
+import { StockProductV2 } from '../stock-product/entities/stock-product.entity';
 import { CreateReceiptDto } from './dto/create-receipt.dto';
 import { ReceiptFilterDto } from './dto/filter-receipt.dto';
 import { ReceiptDto } from './dto/receipt.dto';
@@ -143,13 +145,47 @@ export class ReceiptService {
                     const newReceiptProductCreate = receiptProductRepository.create(newReceiptProduct);
                     receiptProducts.push(newReceiptProductCreate);
 
-                    // var movementDto = {
-                    //     stockProductId: productStockDB.id,
-                    //     type: "IN",
-                    //     quantity: productStockDB.quantity,
-                    //     description: "Receipt entry"
-                    // } as CreateStockMovementDto;
-                    // await this.stockMovementService.create(movementDto);
+                    //#region Movement
+                    var movementDto = {
+                        stockProductId: productStockDB.id,
+                        type: "IN",
+                        quantity: productStockDB.quantity,
+                        description: "Receipt entry"
+                    } as CreateStockMovementDto;
+
+                    const stockRepository = manager.getRepository(StockProductV2);
+                    const movementRepository = manager.getRepository(StockMovement);
+
+                    const stock = await stockRepository.findOne({
+                        where: { id: movementDto.stockProductId },
+                    });
+
+                    if (!stock) {
+                        throw new NotFoundException('Product not found.');
+                    }
+
+                    if (movementDto.type === 'IN') {
+                        stock.quantity += movementDto.quantity;
+                    } else if (movementDto.type === 'OUT') {
+                        if (stock.quantity < movementDto.quantity) {
+                            throw new BadRequestException('Insufficient stock.');
+                        }
+                        stock.quantity -= movementDto.quantity;
+                    } else {
+                        throw new BadRequestException('Invalid movement type.');
+                    }
+
+                    await stockRepository.update(stock.id, { quantity: stock.quantity });
+
+                    const movement = movementRepository.create({
+                        stockProduct: stock,
+                        type: movementDto.type,
+                        quantity: movementDto.quantity,
+                        description: movementDto.description,
+                    });
+
+                    await movementRepository.save(movement);
+                    //#endregion
                 }
 
                 await receiptProductRepository.save(receiptProducts);
@@ -161,7 +197,6 @@ export class ReceiptService {
             throw new BadRequestException(error);
         }
     }
-
 
     async findOne(id: string): Promise<ReceiptDto> {
         const receipt = await this.receiptRepository.findOne({

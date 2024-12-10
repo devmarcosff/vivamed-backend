@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPagination } from 'src/shared/types/pagination.type';
 import { DataSource, ILike, Repository } from 'typeorm';
-import { StockProductV2 } from '../product/entities/stock-product.entity';
+import { StockProductV2 } from '../stock-product/entities/stock-product.entity';
 import { CreateStockMovementDto } from './dto/create-stock-movment.dto';
 import { StockMovementFilterDto } from './dto/filter-stock-movment.dto';
 import { StockMovementDto } from './dto/stock-movment.dto';
