@@ -33,10 +33,10 @@ export class StockProductV2 extends VivamedMediumBaseEntity {
     @JoinColumn()
     product: ProductV2;
 
-    @OneToMany(() => ReceiptProduct, (otm) => otm.receipt,)
+    @OneToMany(() => ReceiptProduct, (otm) => otm.receipt)
     receiptProducts: ReceiptProduct[];
 
-    @OneToMany(() => StockMovement, (movement) => movement.stockProduct)
+    @OneToMany(() => StockMovement, (otm) => otm.stockProduct)
     movements: StockMovement[];
 
     @OneToMany(() => OrderItemV2, (otm) => otm.stockProduct)

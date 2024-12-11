@@ -17,6 +17,9 @@ export class StockMovementDto {
     @ApiProperty({ description: 'Creation date', example: '2024-11-28T14:30:00Z' })
     createdAt: Date;
 
-    @ApiProperty({ description: 'Associated stock details', type: StockProductV2Dto })
+    @ApiProperty({
+        description: 'Associated stock details',
+        type: () => StockProductV2Dto,
+    })
     stockProduct: StockProductV2Dto;
 }

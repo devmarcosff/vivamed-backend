@@ -17,7 +17,7 @@ export class ReceiptController {
 
     @Post()
     @ApiOperation({ summary: 'Create a receipt', description: 'Creates a new receipt.' })
-    @ApiCreatedResponse({ description: 'Receipt created successfully.', type: ReceiptDto })
+    @ApiCreatedResponse({ description: 'Receipt created successfully.', type: () => ReceiptDto })
     @ApiBadRequestResponse({ description: 'Invalid data provided.' })
     async create(@Body() dto: CreateReceiptDto): Promise<ReceiptDto> {
         return this.receiptService.create(dto);
@@ -25,14 +25,14 @@ export class ReceiptController {
 
     @Get()
     @ApiOperation({ summary: 'List all receipts', description: 'Retrieves a list of all receipts.' })
-    @ApiOkResponse({ description: 'List of receipts retrieved successfully.', type: [ReceiptDto] })
+    @ApiOkResponse({ description: 'List of receipts retrieved successfully.', type: () => [ReceiptDto] })
     async findAll(@Query() filter: ReceiptFilterDto): Promise<IPagination<ReceiptDto>> {
         return this.receiptService.findAll(filter);
     }
 
     @Get(':id')
     @ApiOperation({ summary: 'Get a receipt', description: 'Retrieves details of a specific receipt by ID.' })
-    @ApiOkResponse({ description: 'Receipt details retrieved successfully.', type: ReceiptDto })
+    @ApiOkResponse({ description: 'Receipt details retrieved successfully.', type: () => ReceiptDto })
     @ApiNotFoundResponse({ description: 'Receipt not found.' })
     async findOne(@Param('id') id: string): Promise<ReceiptDto> {
         return this.receiptService.findOne(id);
@@ -40,7 +40,7 @@ export class ReceiptController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'Update a receipt', description: 'Updates an existing receipt by ID.' })
-    @ApiOkResponse({ description: 'Receipt updated successfully.', type: ReceiptDto })
+    @ApiOkResponse({ description: 'Receipt updated successfully.', type: () => ReceiptDto })
     @ApiBadRequestResponse({ description: 'Invalid data or receipt not found.' })
     async update(@Param('id') id: string, @Body() dto: UpdateReceiptDto): Promise<ReceiptDto> {
         return this.receiptService.update(id, dto);

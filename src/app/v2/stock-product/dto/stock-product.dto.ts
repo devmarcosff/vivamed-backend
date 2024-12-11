@@ -25,18 +25,18 @@ export class StockProductV2Dto {
     @ApiPropertyOptional({ description: 'Product location in stock', example: 'A1-B2-C3' })
     location?: string;
 
-    @ApiProperty({ description: 'Details of the associated product', type: ProductV2Dto })
+    @ApiProperty({ description: 'Details of the associated product', type: () => ProductV2Dto })
     product: ProductV2Dto;
 
     @ApiProperty({
         description: 'List of products associated with the receipt',
-        type: [ReceiptProductDto],
+        type: () => [ReceiptProductDto],
     })
     receiptProducts: ReceiptProductDto[];
 
     @ApiProperty({
         description: 'List of stock movements related to the product',
-        type: [StockMovementDto],
+        type: () => [StockMovementDto],
     })
     movements: StockMovementDto[];
 }

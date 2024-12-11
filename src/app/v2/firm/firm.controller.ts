@@ -25,7 +25,7 @@ export class FirmController {
 
     @Get()
     @ApiOperation({ summary: 'List all firms', description: 'Retrieves a list of all firms.' })
-    @ApiOkResponse({ description: 'List of firms retrieved successfully.', type: [FirmDto] })
+    @ApiOkResponse({ description: 'List of firms retrieved successfully.', type: () => [FirmDto] })
     async findAll(@Query() filter: FirmFilterDto): Promise<IPagination<FirmDto>> {
         return this.firmService.findAll(filter);
     }

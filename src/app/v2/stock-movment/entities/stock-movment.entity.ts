@@ -1,5 +1,5 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { StockProductV2 } from '../../stock-product/entities/stock-product.entity';
 import { StockMovementDto } from '../dto/stock-movment.dto';
@@ -8,6 +8,7 @@ import { StockMovementDto } from '../dto/stock-movment.dto';
 @Entity('stock_movements')
 export class StockMovement extends VivamedMediumBaseEntity {
     @ManyToOne(() => StockProductV2, (stockProduct) => stockProduct.movements)
+    @JoinColumn()
     stockProduct: StockProductV2;
 
     @Column({ type: 'enum', enum: ['IN', 'OUT', 'ADJUSTMENT'], default: 'IN' })

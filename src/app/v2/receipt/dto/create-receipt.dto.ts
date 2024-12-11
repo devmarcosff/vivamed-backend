@@ -80,7 +80,7 @@ export class CreateReceiptDto {
 
     @ApiProperty({
         description: 'List of products included in the receipt',
-        type: [ReceiptProductDto],
+        type: () => [ReceiptProductDto],
         example: [
             {
                 code: '123456',
