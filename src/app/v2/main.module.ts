@@ -3,13 +3,15 @@ import { AddressV2Module } from './address/address-v2.module';
 import { AuthV2Module } from './auth/auth-v2.module';
 import { CitizenModule } from './citizen/citizen.module';
 import { FirmModule } from './firm/firm.module';
+import { OrderItemV2Module } from './order-item/order-item-v2.module';
+import { OrderV2Module } from './order/order-v2.module';
 import { ProductV2Module } from './product/product.module';
 import { ProfileV2Module } from './profile/profile-v2.module';
 import { ReceiptModule } from './receipt/receipt.module';
 import { StockMovmentModule } from './stock-movment/stock-movment.module';
+import { StockProductModule } from './stock-product/stock-product.module';
 import { UserV2Module } from './user/user-v2.module';
 import { VivamedJwtModule } from './vivamed-jwt-module/vivamed-jwt.module';
-import { StockProductModule } from './stock-product/stock-product.module';
 
 @Module({
     imports: [
@@ -24,6 +26,8 @@ import { StockProductModule } from './stock-product/stock-product.module';
         ProductV2Module,
         StockMovmentModule,
         StockProductModule,
+        OrderV2Module,
+        OrderItemV2Module,
     ],
 })
 export class MainModule { }

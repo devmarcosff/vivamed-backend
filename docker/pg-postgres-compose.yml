@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: vivamed
+      POSTGRES_PASSWORD: vivamed@2024
+      POSTGRES_DB: vivamed
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5454:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local

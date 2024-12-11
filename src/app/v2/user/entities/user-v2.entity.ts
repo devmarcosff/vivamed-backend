@@ -1,7 +1,8 @@
 import { plainToClass } from "class-transformer";
 import { VivamedBigBaseEntity } from "src/shared/entities/vivamed-full-base-entity";
 import { Role } from "src/shared/enuns/role.enum";
-import { Column, Entity, OneToOne } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
+import { OrderV2 } from "../../order/entities/order-v2.entity";
 import { ProfileV2 } from "../../profile/entities/profile-v2.entity";
 import { UserV2Dto } from "../dto/user-v2.dto";
 
@@ -33,6 +34,9 @@ export class UserV2 extends VivamedBigBaseEntity {
 
     @OneToOne(() => ProfileV2, profile => profile.user, { cascade: true })
     profile: ProfileV2;
+
+    @OneToMany(() => OrderV2, (otm) => otm.user)
+    orders: OrderV2[];
 
     public toDto(): UserV2Dto {
         return plainToClass(UserV2Dto, {

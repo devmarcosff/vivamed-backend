@@ -45,6 +45,7 @@ import { MainModule } from './app/v2/main.module';
                 database: configService.get<string>('DB_DATABASE'),
                 autoLoadEntities: true,
                 synchronize: true,
+                logging: true,
                 ssl: false
             }),
             inject: [ConfigService],

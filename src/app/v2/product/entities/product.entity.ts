@@ -1,7 +1,7 @@
 import { VivamedBigBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
 import { Column, Entity, OneToMany } from 'typeorm';
+import { StockProductV2 } from '../../stock-product/entities/stock-product.entity';
 import { ProductV2Dto } from '../dto/product.dto';
-import { StockProductV2 } from './stock-product.entity';
 
 @Entity('product_v2')
 export class ProductV2 extends VivamedBigBaseEntity {

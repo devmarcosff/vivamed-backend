@@ -1,5 +1,6 @@
 import { VivamedMediumBaseEntity } from 'src/shared/entities/vivamed-medium-entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { OrderItemV2 } from '../../order-item/entities/order-item-v2.entity';
 import { ProductV2 } from '../../product/entities/product.entity';
 import { ReceiptProduct } from '../../receipt/entities/receipt-product.entity';
 import { StockMovement } from '../../stock-movment/entities/stock-movment.entity';
@@ -37,6 +38,9 @@ export class StockProductV2 extends VivamedMediumBaseEntity {
 
     @OneToMany(() => StockMovement, (movement) => movement.stockProduct)
     movements: StockMovement[];
+
+    @OneToMany(() => OrderItemV2, (otm) => otm.stockProduct)
+    orderItens: OrderItemV2[];
 
     toDto(): StockProductV2Dto {
         return {

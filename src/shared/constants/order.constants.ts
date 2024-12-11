@@ -12,3 +12,9 @@ export enum PaymentStatus {
 //     ENFERMEIRO = 'enfermeiro',
 //     MEDICO = 'medico',
 // }
+
+export enum OrderStatus {
+    INIT = 'Pedido iniciado',
+    COMPLETED = 'COMPLETO',
+    CANCELED = 'CANCELADO',
+}

@@ -1,6 +1,6 @@
 import { VivamedSmallBaseEntity } from 'src/shared/entities/vivamed-small-base-entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { StockProductV2 } from '../../product/entities/stock-product.entity';
+import { StockProductV2 } from '../../stock-product/entities/stock-product.entity';
 import { ReceiptProductDto } from '../dto/receipt-product.dto';
 import { Receipt } from './receipt.entity';
 
