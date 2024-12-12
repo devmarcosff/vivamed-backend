@@ -1314,6 +1314,541 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "StockMovement",
+			"item": [
+				{
+					"name": "/v2/stock-movements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/stock-movements",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"stock-movements"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "productName",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "IN",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "StockProduct",
+			"item": [
+				{
+					"name": "/v2/stock-products/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/stock-products/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"stock-products",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/stock-products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/stock-products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"stock-products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "batch",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "productId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "productName",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "/v2/orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firmId\": \"string\",\n  \"items\": [\n    {\n      \"orderId\": \"uuid\",\n      \"stockProductId\": \"uuid\",\n      \"quantity\": 5\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "number",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Pedido iniciado",
+									"disabled": true
+								},
+								{
+									"key": "paymentStatus",
+									"value": "PENDENTE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/orders/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/orders/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"orders",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/orders/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"Pedido iniciado\",\n  \"paymentStatus\": \"PENDENTE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/orders/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"orders",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/orders/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/orders/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"orders",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderItem",
+			"item": [
+				{
+					"name": "/v2/order-items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\": \"uuid\",\n  \"stockProductId\": \"uuid\",\n  \"quantity\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/order-items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"order-items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/order-items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/order-items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"order-items"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "orderId",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "stockProductId",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "productName",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/order-items/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/order-items/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"order-items",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/order-items/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\": \"uuid\",\n  \"stockProductId\": \"uuid\",\n  \"quantity\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/order-items/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"order-items",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/v2/order-items/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v2/order-items/6119bc7c-1483-4326-acc8-c911c36ec669",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"order-items",
+								"6119bc7c-1483-4326-acc8-c911c36ec669"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
