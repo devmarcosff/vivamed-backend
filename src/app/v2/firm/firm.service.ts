@@ -82,6 +82,9 @@ export class FirmService {
 
         const [items, total] = await this.firmRepository.findAndCount({
             where,
+            relations: {
+                address: true
+            },
             take: limit,
             skip: skip,
             order: {
@@ -103,7 +106,15 @@ export class FirmService {
     }
 
     async findOne(id: string): Promise<FirmDto> {
-        const firm = await this.firmRepository.findOneBy({ id, enabled: true });
+        const firm = await this.firmRepository.findOne({
+            where: {
+                id,
+                enabled: true
+            },
+            relations: {
+                address: true
+            },
+        });
         if (!firm) {
             throw new NotFoundException(`Firm not found.`);
         }

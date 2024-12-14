@@ -1,4 +1,3 @@
-import { plainToClass } from 'class-transformer';
 import { VivamedBigBaseEntity } from 'src/shared/entities/vivamed-full-base-entity';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { AddressV2 } from '../../address/entities/address-v2.entity';
@@ -42,8 +41,8 @@ export class Firm extends VivamedBigBaseEntity {
     @OneToMany(() => OrderV2, otm => otm.recipientFirm, { cascade: false })
     order: OrderV2;
 
-    public toDto(): FirmDto {
-        return plainToClass(FirmDto, {
+    toDto(): FirmDto {
+        return {
             id: this.id,
             businessName: this.businessName,
             fantasyName: this.fantasyName,
@@ -52,6 +51,7 @@ export class Firm extends VivamedBigBaseEntity {
             email: this.email,
             stateRegistration: this.stateRegistration,
             municipalRegistration: this.municipalRegistration,
-        });
+            address: this.address.toDto()
+        } as FirmDto;
     }
 }
